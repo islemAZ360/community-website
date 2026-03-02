@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { db } from '../lib/firebase';
 import { doc, updateDoc, arrayRemove, collection, addDoc, serverTimestamp, query, getDocs } from 'firebase/firestore';
 import { useAuthStore } from '../store/authStore';
-import { X, Search, Shield, UserX, Send, Loader2 } from 'lucide-react';
+import { X, Search, Shield, UserX, Send, Loader2, Users, Crown, Activity } from 'lucide-react';
 
 interface RoomMembersModalProps {
     isOpen: boolean;
@@ -28,7 +28,6 @@ export function RoomMembersModal({ isOpen, onClose, roomId, roomData }: RoomMemb
         const fetchData = async () => {
             setLoading(true);
             try {
-                // Fetch All Users for search / member names
                 const usersSnap = await getDocs(query(collection(db, 'users')));
                 const usersMap = new Map();
                 const usersList: any[] = [];
@@ -41,20 +40,18 @@ export function RoomMembersModal({ isOpen, onClose, roomId, roomData }: RoomMemb
 
                 setAllUsers(usersList);
 
-                // Map current participants
                 const currentMembers = (roomData.participants || []).map((uid: string) => ({
                     uid,
-                    nickname: usersMap.get(uid)?.nickname || 'Unknown User',
+                    nickname: usersMap.get(uid)?.nickname || 'Unknown Agent',
                     isAdmin: roomData.admins?.includes(uid)
                 }));
 
-                // Sort admins first
                 currentMembers.sort((a: any, b: any) => (a.isAdmin === b.isAdmin) ? 0 : a.isAdmin ? -1 : 1);
 
                 setMembers(currentMembers);
             } catch (err: any) {
                 console.error("Error fetching members:", err);
-                setError("Failed to load members");
+                setError("Protocol interruption: Payload failed");
             } finally {
                 setLoading(false);
             }
@@ -67,18 +64,18 @@ export function RoomMembersModal({ isOpen, onClose, roomId, roomData }: RoomMemb
 
     const handleKickUser = async (targetUid: string) => {
         if (!isAdmin || !roomId) return;
-        if (!window.confirm("Are you sure you want to kick this user?")) return;
+        if (!window.confirm("ARE YOU SURE YOU WANT TO TERMINATE THIS ACCESS?")) return;
 
         setActionLoading(targetUid);
         try {
             await updateDoc(doc(db, 'rooms', roomId), {
                 participants: arrayRemove(targetUid),
-                admins: arrayRemove(targetUid) // Optional: also remove from admins
+                admins: arrayRemove(targetUid)
             });
             setMembers(prev => prev.filter(m => m.uid !== targetUid));
         } catch (err: any) {
             console.error("Kick error:", err);
-            setError("Failed to kick user.");
+            setError("Termination failed. Command rejected.");
         } finally {
             setActionLoading(null);
         }
@@ -98,11 +95,10 @@ export function RoomMembersModal({ isOpen, onClose, roomId, roomData }: RoomMemb
                 status: 'pending',
                 createdAt: serverTimestamp()
             });
-            // Show some success feedback
-            alert(`Invited ${targetUser.nickname}!`);
+            setSearchQuery('');
         } catch (err: any) {
             console.error("Invite error:", err);
-            alert("Failed to send invitation.");
+            setError("Invitation signal lost.");
         } finally {
             setActionLoading(null);
         }
@@ -113,47 +109,61 @@ export function RoomMembersModal({ isOpen, onClose, roomId, roomData }: RoomMemb
             u.nickname.toLowerCase().includes(searchQuery.toLowerCase()) &&
             u.uid !== user?.uid &&
             !roomData.participants?.includes(u.uid)
-        )
+        ).slice(0, 5)
         : [];
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-            <div className="glass-panel w-full max-w-lg rounded-2xl p-6 relative animate-in fade-in zoom-in duration-200 max-h-[80vh] flex flex-col">
-                <button
-                    onClick={onClose}
-                    className="absolute top-4 right-4 text-zinc-400 hover:text-white transition-colors"
-                >
-                    <X size={20} />
-                </button>
-
-                <h2 className="text-xl font-bold mb-6">Room Members</h2>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300">
+            <div className="glass-panel w-full max-w-xl rounded-[40px] p-0 relative animate-in fade-in zoom-in duration-500 border-white/[0.05] shadow-[0_0_100px_rgba(99,102,241,0.1)] overflow-hidden flex flex-col max-h-[85vh]">
+                {/* Header */}
+                <div className="p-8 md:p-10 border-b border-white/[0.03] flex items-center justify-between">
+                    <div className="space-y-1">
+                        <div className="flex items-center gap-3 text-white">
+                            <Users size={24} className="text-indigo-400" />
+                            <h2 className="text-2xl font-black uppercase tracking-tighter holographic-text">Manifest</h2>
+                        </div>
+                        <p className="text-[10px] font-black text-zinc-600 uppercase tracking-widest ml-1 inline-flex items-center gap-2">
+                            <Activity size={12} className="text-emerald-500/50" /> {members.length} Registered Agents
+                        </p>
+                    </div>
+                    <button
+                        onClick={onClose}
+                        className="text-zinc-600 hover:text-white transition-all p-2 rounded-xl hover:bg-white/5"
+                    >
+                        <X size={20} />
+                    </button>
+                </div>
 
                 {error && (
-                    <div className="bg-red-500/10 border border-red-500/20 text-red-400 p-3 rounded-lg mb-4 text-sm">
+                    <div className="mx-8 mt-6 bg-red-500/10 border border-red-500/20 text-red-500 px-5 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest">
                         {error}
                     </div>
                 )}
 
-                <div className="flex-1 overflow-y-auto pr-2 space-y-6">
+                <div className="flex-1 overflow-y-auto p-8 pt-6 space-y-10 custom-scrollbar">
                     {/* Member List */}
-                    <div>
-                        <h3 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-3">
-                            Current Members ({members.length})
-                        </h3>
+                    <div className="space-y-4">
                         {loading ? (
-                            <div className="flex justify-center py-4"><Loader2 className="animate-spin text-zinc-500" /></div>
+                            <div className="flex flex-col items-center justify-center py-12 gap-3">
+                                <Loader2 className="animate-spin text-indigo-400" size={32} />
+                                <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Scanning Network...</p>
+                            </div>
                         ) : (
-                            <div className="space-y-2">
+                            <div className="grid gap-3">
                                 {members.map((m) => (
-                                    <div key={m.uid} className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5">
-                                        <div className="flex items-center gap-3">
-                                            <div className="h-10 w-10 flexitems-center justify-center rounded-full bg-indigo-500/20 text-indigo-400 font-bold flex items-center">
-                                                <span className="w-full text-center">{m.nickname.charAt(0).toUpperCase()}</span>
+                                    <div key={m.uid} className="flex items-center justify-between p-4 rounded-[24px] bg-white/[0.02] border border-white/[0.03] group hover:bg-white/[0.04] transition-all duration-300">
+                                        <div className="flex items-center gap-4">
+                                            <div className="h-12 w-12 flex items-center justify-center rounded-[18px] bg-gradient-to-br from-indigo-500/10 to-emerald-500/10 border border-white/5 text-sm font-black text-white shadow-inner">
+                                                {m.nickname.charAt(0).toUpperCase()}
                                             </div>
                                             <div>
-                                                <div className="flex items-center gap-2">
-                                                    <span className="font-medium text-white">{m.nickname}</span>
-                                                    {m.isAdmin && <Shield size={14} className="text-amber-400" />}
+                                                <div className="flex items-center gap-3">
+                                                    <span className="font-bold text-white uppercase tracking-tight text-sm">{m.nickname}</span>
+                                                    {m.isAdmin && (
+                                                        <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-500 border border-amber-500/10 text-[9px] font-black uppercase tracking-widest">
+                                                            <Crown size={10} /> Root
+                                                        </span>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>
@@ -162,10 +172,10 @@ export function RoomMembersModal({ isOpen, onClose, roomId, roomData }: RoomMemb
                                             <button
                                                 onClick={() => handleKickUser(m.uid)}
                                                 disabled={actionLoading === m.uid}
-                                                className="text-zinc-500 hover:text-red-400 transition-colors p-2 hover:bg-white/5 rounded-lg"
-                                                title="Kick User"
+                                                className="text-zinc-700 hover:text-red-500 transition-all p-3 hover:bg-red-500/5 rounded-xl border border-transparent hover:border-red-500/10"
+                                                title="Terminate Access"
                                             >
-                                                {actionLoading === m.uid ? <Loader2 size={16} className="animate-spin" /> : <UserX size={16} />}
+                                                {actionLoading === m.uid ? <Loader2 size={18} className="animate-spin" /> : <UserX size={18} />}
                                             </button>
                                         )}
                                     </div>
@@ -174,38 +184,40 @@ export function RoomMembersModal({ isOpen, onClose, roomId, roomData }: RoomMemb
                         )}
                     </div>
 
-                    {/* Invite Section (Only for Private Rooms or Admins) */}
+                    {/* Invite Section */}
                     {(roomData.isPrivate || isAdmin) && (
-                        <div className="border-t border-white/10 pt-6">
-                            <h3 className="text-sm font-semibold text-zinc-400 uppercase tracking-wider mb-3">
-                                Invite Users
-                            </h3>
-                            <div className="relative mb-4">
-                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" size={18} />
-                                <input
-                                    type="text"
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder="Search by nickname to invite..."
-                                    className="w-full bg-black/20 border border-white/10 rounded-xl py-2.5 pl-10 pr-4 text-white placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500/50"
-                                />
+                        <div className="border-t border-white/[0.03] pt-10 space-y-6">
+                            <div className="space-y-4">
+                                <label className="block text-[10px] font-black text-white/40 uppercase tracking-[0.2em] ml-1">Enlist New Agents</label>
+                                <div className="relative group">
+                                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600 group-focus-within:text-indigo-400 transition-colors" size={18} />
+                                    <input
+                                        type="text"
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        placeholder="SEARCH_QUERY_INIT"
+                                        className="w-full bg-white/[0.02] border border-white/5 rounded-[20px] py-4 pl-12 pr-6 text-sm font-medium text-white placeholder:text-zinc-800 focus:outline-none focus:border-indigo-500/30 focus:bg-white/[0.04] transition-all"
+                                    />
+                                </div>
                             </div>
 
                             {searchQuery.trim() && (
-                                <div className="space-y-2 max-h-40 overflow-y-auto">
+                                <div className="grid gap-3 animate-in fade-in slide-in-from-top-4 duration-300">
                                     {searchResults.length === 0 ? (
-                                        <div className="text-sm text-zinc-500 text-center py-2">No users found</div>
+                                        <div className="text-[10px] font-black text-zinc-700 text-center py-6 uppercase tracking-widest italic border border-dashed border-zinc-800 rounded-2xl">
+                                            No matching frequencies detected
+                                        </div>
                                     ) : (
                                         searchResults.map(u => (
-                                            <div key={u.uid} className="flex items-center justify-between p-2 rounded-xl hover:bg-white/5 transition-colors">
-                                                <span className="text-sm text-zinc-300 font-medium">{u.nickname}</span>
+                                            <div key={u.uid} className="flex items-center justify-between p-4 rounded-[22px] bg-white/[0.01] border border-white/[0.02] hover:bg-indigo-500/5 hover:border-indigo-500/10 transition-all group/item">
+                                                <span className="text-xs text-zinc-300 font-bold uppercase tracking-tight">{u.nickname}</span>
                                                 <button
                                                     onClick={() => handleInviteUser(u)}
                                                     disabled={actionLoading === `invite_${u.uid}`}
-                                                    className="flex items-center gap-2 text-xs bg-indigo-500/20 text-indigo-300 hover:bg-indigo-500 hover:text-white px-3 py-1.5 rounded-lg transition-all"
+                                                    className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest bg-indigo-500/10 text-indigo-400 hover:bg-indigo-500 hover:text-white px-5 py-2.5 rounded-xl transition-all border border-indigo-500/10 group-hover/item:shadow-lg group-hover/item:shadow-indigo-500/20"
                                                 >
                                                     {actionLoading === `invite_${u.uid}` ? <Loader2 size={14} className="animate-spin" /> : <Send size={14} />}
-                                                    Invite
+                                                    Send Intel
                                                 </button>
                                             </div>
                                         ))

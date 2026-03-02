@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../lib/firebase';
 import { useAuthStore } from '../store/authStore';
 import { doc, getDoc, collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, deleteDoc } from 'firebase/firestore';
-import { Send, Hash, Settings, Users, ArrowLeft, Trash2, AlertCircle } from 'lucide-react';
+import { Send, Hash, Settings, Users, ArrowLeft, Trash2, AlertCircle, ShieldCheck, Sparkles, MessageSquare } from 'lucide-react';
 import { format } from 'date-fns';
 import { RoomMembersModal } from '../components/RoomMembersModal';
 
@@ -46,21 +46,19 @@ export function Room() {
             try {
                 const roomDoc = await getDoc(doc(db, 'rooms', roomId));
                 if (!roomDoc.exists()) {
-                    setError("Room not found");
+                    setError("HUB_NOT_FOUND");
                     return;
                 }
 
                 const data = roomDoc.data() as RoomData;
 
-                // Privacy check
                 if (data.isPrivate && !data.participants.includes(user.uid) && !data.admins.includes(user.uid)) {
-                    setError("You do not have access to this private room");
+                    setError("AUTHENTICATION_REQUIRED_PRIVATE_LINK");
                     return;
                 }
 
                 setRoom(data);
 
-                // Subscribe to messages
                 const q = query(
                     collection(db, 'rooms', roomId, 'messages'),
                     orderBy('createdAt', 'asc')
@@ -78,7 +76,7 @@ export function Room() {
                 return () => unsubscribe();
             } catch (err: any) {
                 console.error("Room fetch error:", err);
-                setError("Failed to load room");
+                setError("TRANSMISSION_FAILURE");
             } finally {
                 setLoading(false);
             }
@@ -113,7 +111,7 @@ export function Room() {
 
     const handleDeleteMessage = async (messageId: string) => {
         if (!roomId || !isAdmin) return;
-        if (window.confirm("Delete this message?")) {
+        if (window.confirm("TERMINATE THIS DATA SLICE?")) {
             try {
                 await deleteDoc(doc(db, 'rooms', roomId, 'messages', messageId));
             } catch (err) {
@@ -129,7 +127,7 @@ export function Room() {
             await addDoc(collection(db, 'rooms', roomId, 'messages'), {
                 text: newMessage.trim(),
                 senderId: user.uid,
-                senderNickname: `⭐ ${userData?.nickname} (Admin)`,
+                senderNickname: `${userData?.nickname}`,
                 createdAt: serverTimestamp(),
                 type: 'admin_announcement'
             });
@@ -140,18 +138,25 @@ export function Room() {
         }
     };
 
-    if (loading) return <div className="p-8 text-center text-zinc-500 animate-pulse">Loading Room...</div>;
+    if (loading) return (
+        <div className="h-[calc(100vh-100px)] flex flex-col items-center justify-center gap-4">
+            <Loader2 className="animate-spin text-emerald-500" size={40} />
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Establishing Frequency...</p>
+        </div>
+    );
 
     if (error) return (
-        <div className="max-w-xl mx-auto mt-20 p-6 glass-panel rounded-2xl text-center space-y-4">
-            <AlertCircle size={48} className="mx-auto text-red-400" />
-            <h2 className="text-xl font-bold text-white">Access Denied</h2>
-            <p className="text-zinc-400">{error}</p>
+        <div className="max-w-2xl mx-auto mt-20 p-12 glass-panel rounded-[40px] text-center space-y-8 animate-in fade-in zoom-in duration-700">
+            <AlertCircle size={64} className="mx-auto text-red-500/50" />
+            <div className="space-y-3">
+                <h2 className="text-3xl font-black text-white uppercase tracking-tighter">Connection Rejected</h2>
+                <p className="text-zinc-500 font-bold uppercase tracking-widest text-[11px]">{error}</p>
+            </div>
             <button
                 onClick={() => navigate('/community')}
-                className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-2 rounded-xl transition-colors"
+                className="premium-button premium-button-secondary px-10"
             >
-                Return to Community
+                <ArrowLeft size={16} /> Return to Community
             </button>
         </div>
     );
@@ -159,25 +164,28 @@ export function Room() {
     const isAdmin = room?.admins.includes(user?.uid || '');
 
     return (
-        <div className="max-w-5xl mx-auto h-[calc(100vh-80px)] py-4 px-4 md:px-0 flex flex-col">
+        <div className="max-w-6xl mx-auto h-[calc(100vh-120px)] flex flex-col pt-4 px-6 animate-in fade-in duration-700">
             {/* Room Header */}
-            <header className="glass-panel p-4 rounded-t-2xl flex items-center justify-between border-b border-white/5 sticky top-0 z-10 shrink-0">
-                <div className="flex items-center gap-4">
+            <header className="glass-panel p-6 rounded-t-[32px] flex items-center justify-between border-b border-white/[0.03] sticky top-0 z-10 shrink-0 shadow-lg">
+                <div className="flex items-center gap-6">
                     <button
                         onClick={() => navigate('/community')}
-                        className="p-2 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl transition-colors"
+                        className="p-3 text-zinc-600 hover:text-white hover:bg-white/5 rounded-2xl transition-all"
                     >
-                        <ArrowLeft size={20} />
+                        <ArrowLeft size={22} />
                     </button>
 
-                    <div className="flex items-center gap-3">
-                        <div className="h-12 w-12 bg-indigo-500/10 rounded-xl flex items-center justify-center text-indigo-400 border border-indigo-500/20">
-                            <Hash size={24} />
+                    <div className="flex items-center gap-5">
+                        <div className="h-14 w-14 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-400 border border-emerald-500/20 shadow-inner">
+                            <Hash size={28} />
                         </div>
                         <div>
-                            <h1 className="font-bold text-lg text-white leading-tight">{room?.name}</h1>
-                            <p className="text-xs text-zinc-500 flex items-center gap-1">
-                                {room?.isPrivate ? 'Private Room' : 'Public Room'} • Created by {room?.creatorNickname}
+                            <div className="flex items-center gap-3">
+                                <h1 className="font-black text-2xl text-white uppercase tracking-tight holographic-text">{room?.name}</h1>
+                                {room?.isPrivate && <ShieldCheck size={16} className="text-indigo-400/50" />}
+                            </div>
+                            <p className="text-[10px] font-black text-zinc-600 uppercase tracking-widest mt-0.5 flex items-center gap-2">
+                                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> Host: {room?.creatorNickname}
                             </p>
                         </div>
                     </div>
@@ -186,31 +194,31 @@ export function Room() {
                 <div className="relative">
                     <button
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
-                        className="p-2 text-zinc-400 hover:text-white hover:bg-white/5 rounded-xl transition-colors"
+                        className="p-3 text-zinc-600 hover:text-white hover:bg-white/5 rounded-2xl transition-all border border-transparent hover:border-white/5"
                     >
-                        <Settings size={20} />
+                        <Settings size={22} />
                     </button>
 
                     {isMenuOpen && (
-                        <div className="absolute top-full right-0 mt-2 w-48 glass-panel rounded-xl border border-white/10 shadow-2xl overflow-hidden py-1 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-                            <div className="px-3 py-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-1">
-                                Room Settings
+                        <div className="absolute top-full right-0 mt-3 w-56 glass-panel rounded-2xl border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] overflow-hidden py-2 z-50 animate-in fade-in slide-in-from-top-4 duration-300">
+                            <div className="px-4 py-2 text-[9px] font-black text-zinc-500 uppercase tracking-[0.3em] mb-1">
+                                Command Center
                             </div>
                             <button
                                 onClick={() => {
                                     setIsMembersModalOpen(true);
                                     setIsMenuOpen(false);
                                 }}
-                                className="w-full text-left px-4 py-2 text-sm text-zinc-300 hover:bg-white/5 hover:text-white transition-colors flex items-center gap-2"
+                                className="w-full text-left px-5 py-3 text-xs font-bold text-zinc-300 hover:bg-emerald-500/10 hover:text-emerald-400 transition-all flex items-center gap-3 uppercase tracking-widest"
                             >
-                                <Users size={16} /> View Members
+                                <Users size={16} /> Hub Manifest
                             </button>
                             {isAdmin && (
                                 <button
                                     onClick={handleSendAdminAnnouncement}
-                                    className="w-full text-left px-4 py-2 text-sm text-amber-400 hover:bg-amber-400/10 transition-colors flex items-center gap-2"
+                                    className="w-full text-left px-5 py-3 text-xs font-black text-amber-500 hover:bg-amber-500/10 transition-all flex items-center gap-3 uppercase tracking-widest border-t border-white/[0.03]"
                                 >
-                                    <AlertCircle size={16} /> Send as Announcement
+                                    <Sparkles size={16} /> Broadcast Core
                                 </button>
                             )}
                         </div>
@@ -219,11 +227,14 @@ export function Room() {
             </header>
 
             {/* Chat Area */}
-            <div className="flex-1 glass-panel rounded-none border-x border-y-0 border-white/5 overflow-y-auto p-4 space-y-4">
+            <div className="flex-1 glass-panel rounded-none border-x border-y-0 border-white/[0.03] overflow-y-auto p-8 space-y-8 custom-scrollbar bg-black/20">
                 {messages.length === 0 ? (
-                    <div className="h-full flex flex-col items-center justify-center text-zinc-500 space-y-2">
-                        <Hash size={48} className="text-zinc-700" />
-                        <p>This is the start of the #{room?.name} room.</p>
+                    <div className="h-full flex flex-col items-center justify-center text-zinc-800 space-y-6">
+                        <MessageSquare size={64} className="opacity-20 animate-pulse" />
+                        <div className="text-center space-y-2">
+                            <p className="text-[10px] font-black uppercase tracking-[0.4em]">Hub Initialized</p>
+                            <p className="text-sm font-medium italic">Begin data transmission for #{room?.name}.</p>
+                        </div>
                     </div>
                 ) : (
                     messages.map((msg, index) => {
@@ -231,32 +242,32 @@ export function Room() {
                         const showNickname = !isMe && (index === 0 || messages[index - 1].senderId !== msg.senderId);
 
                         return (
-                            <div key={msg.id} className={`flex ${isMe ? 'justify-end' : 'justify-start'} group`}>
-                                <div className={`max-w-[75%] flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
+                            <div key={msg.id} className={`flex ${isMe ? 'justify-end' : 'justify-start'} group animate-in slide-in-from-bottom-2 duration-300`}>
+                                <div className={`max-w-[80%] flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
                                     {showNickname && (
-                                        <span className="text-xs text-zinc-500 mb-1 ml-1">{msg.senderNickname}</span>
+                                        <span className="text-[9px] font-black text-indigo-400/60 uppercase tracking-widest mb-2 ml-1">{msg.senderNickname}</span>
                                     )}
-                                    <div className="flex items-center gap-2 relative">
+                                    <div className="flex items-center gap-4 relative">
                                         {isAdmin && !isMe && (
                                             <button
                                                 onClick={() => handleDeleteMessage(msg.id)}
-                                                className="absolute -right-8 opacity-0 group-hover:opacity-100 p-1 text-red-400 hover:text-red-300 transition-opacity"
-                                                title="Delete Message"
+                                                className="opacity-0 group-hover:opacity-100 p-2 text-zinc-700 hover:text-red-500 transition-all hover:bg-red-500/5 rounded-lg"
+                                                title="Purge Slice"
                                             >
-                                                <Trash2 size={14} />
+                                                <Trash2 size={16} />
                                             </button>
                                         )}
                                         <div
-                                            className={`px-4 py-2.5 rounded-2xl text-sm ${msg.type === 'admin_announcement' ? 'bg-amber-500/20 text-amber-200 border border-amber-500/30' :
-                                                isMe ? 'bg-indigo-500 text-white rounded-br-sm' :
-                                                    'bg-white/5 text-zinc-200 border border-white/5 rounded-bl-sm'
+                                            className={`px-6 py-4 rounded-[24px] text-sm font-medium leading-relaxed ${msg.type === 'admin_announcement' ? 'bg-amber-500/10 text-amber-200 border border-amber-500/20 shadow-[0_0_20px_rgba(245,158,11,0.05)] italic' :
+                                                isMe ? 'bg-emerald-500 text-white shadow-[0_10px_30px_rgba(16,185,129,0.1)] rounded-tr-none' :
+                                                    'bg-white/[0.03] text-zinc-300 border border-white/[0.03] rounded-tl-none'
                                                 }`}
                                         >
                                             {msg.text}
                                         </div>
                                     </div>
-                                    <span className="text-[10px] text-zinc-600 mt-1 mx-1">
-                                        {msg.createdAt?.toDate ? format(msg.createdAt.toDate(), 'h:mm a') : 'Now'}
+                                    <span className="text-[9px] font-bold text-zinc-700 mt-2 mx-1 uppercase tracking-tighter">
+                                        {msg.createdAt?.toDate ? format(msg.createdAt.toDate(), 'HH:mm:ss') : 'SYNCING'}
                                     </span>
                                 </div>
                             </div>
@@ -267,21 +278,26 @@ export function Room() {
             </div>
 
             {/* Input Area */}
-            <div className="glass-panel p-4 rounded-b-2xl border-t border-white/5 shrink-0 bg-zinc-900/50 backdrop-blur-xl">
-                <form onSubmit={handleSendMessage} className="flex items-center gap-2">
-                    <input
-                        type="text"
-                        value={newMessage}
-                        onChange={(e) => setNewMessage(e.target.value)}
-                        placeholder={`Message #${room?.name}...`}
-                        className="flex-1 bg-black/20 border border-white/10 rounded-xl py-3 px-4 text-white placeholder:text-zinc-500 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 transition-all"
-                    />
+            <div className="glass-panel p-6 rounded-b-[32px] border-t border-white/[0.03] shrink-0 bg-zinc-950/30 backdrop-blur-2xl">
+                <form onSubmit={handleSendMessage} className="flex items-center gap-4">
+                    <div className="flex-1 relative group">
+                        <input
+                            type="text"
+                            value={newMessage}
+                            onChange={(e) => setNewMessage(e.target.value)}
+                            placeholder={`COMMAND_INPUT_#${room?.name?.toUpperCase()}...`}
+                            className="w-full bg-white/[0.02] border border-white/5 rounded-[22px] py-5 px-8 text-sm font-medium text-white placeholder:text-zinc-800 focus:outline-none focus:border-emerald-500/30 focus:bg-white/[0.04] transition-all"
+                        />
+                        <div className="absolute right-6 top-1/2 -translate-y-1/2 text-[10px] font-black text-zinc-800 pointer-events-none group-focus-within:text-emerald-500/30 transition-colors">
+                            RT_V2.0.4
+                        </div>
+                    </div>
                     <button
                         type="submit"
                         disabled={!newMessage.trim()}
-                        className="p-3 bg-indigo-500 hover:bg-indigo-600 disabled:opacity-50 disabled:hover:bg-indigo-500 text-white rounded-xl transition-all shadow-lg shadow-indigo-500/20"
+                        className="h-14 w-14 flex items-center justify-center bg-emerald-500 hover:bg-emerald-400 disabled:opacity-20 disabled:hover:bg-emerald-500 text-white rounded-[20px] transition-all shadow-[0_10px_30px_rgba(16,185,129,0.2)] active:scale-95 group"
                     >
-                        <Send size={20} />
+                        <Send size={24} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                     </button>
                 </form>
             </div>

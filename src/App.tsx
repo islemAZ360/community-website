@@ -33,55 +33,65 @@ function App() {
 
     return (
         <Router>
-            <div className="min-h-screen bg-zinc-950 text-zinc-50 flex flex-col font-sans">
+            <div className="min-h-screen bg-[#070708] text-zinc-50 flex flex-col font-sans relative overflow-hidden">
+                {/* Holographic Background Elements */}
+                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none animate-pulse" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-500/10 blur-[120px] rounded-full pointer-events-none animate-pulse" style={{ animationDelay: '2s' }} />
+
                 {/* Navbar */}
-                <header className="h-16 border-b border-white/5 bg-zinc-900/50 backdrop-blur-md sticky top-0 z-40 flex items-center px-6 justify-between transition-all">
-                    <div className="flex items-center gap-8">
-                        <Link to="/" className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent hover:opacity-80 transition-opacity">
-                            Interview Coder
+                <header className="h-20 border-b border-white/[0.03] bg-zinc-900/40 backdrop-blur-3xl sticky top-0 z-50 flex items-center px-8 justify-between transition-all">
+                    <div className="flex items-center gap-12">
+                        <Link to="/" className="group flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-indigo-500 flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-transform">
+                                <Rocket size={20} className="text-white" />
+                            </div>
+                            <span className="text-xl font-black uppercase tracking-tighter holographic-text">
+                                iDIDDY <span className="text-white/40 font-light">Hub</span>
+                            </span>
                         </Link>
 
-                        <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-zinc-400">
-                            <Link to="/" className="hover:text-white transition-colors flex items-center gap-2">
+                        <nav className="hidden lg:flex items-center gap-8 text-[13px] font-bold uppercase tracking-widest text-white/40">
+                            <Link to="/" className="hover:text-emerald-400 transition-colors flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-white/[0.03]">
                                 <HomeIcon size={16} /> Home
                             </Link>
-                            <Link to="/community" className="hover:text-white transition-colors flex items-center gap-2">
+                            <Link to="/community" className="hover:text-emerald-400 transition-colors flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-white/[0.03]">
                                 <Users size={16} /> Community
                             </Link>
-                            <Link to="/news" className="hover:text-white transition-colors flex items-center gap-2">
+                            <Link to="/news" className="hover:text-emerald-400 transition-colors flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-white/[0.03]">
                                 <Newspaper size={16} /> News
                             </Link>
                             {user && (
-                                <Link to="/invitations" className="hover:text-white transition-colors flex items-center gap-2">
+                                <Link to="/invitations" className="hover:text-emerald-400 transition-colors flex items-center gap-2.5 px-3 py-2 rounded-lg hover:bg-white/[0.03]">
                                     <Mail size={16} /> Inbox
                                 </Link>
                             )}
                         </nav>
                     </div>
 
-                    <div className="flex items-center gap-4">
-                        <Link to="/support" className="hidden md:flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/5 rounded-xl transition-colors text-sm font-medium text-zinc-300">
+                    <div className="flex items-center gap-6">
+                        <Link to="/support" className="hidden md:flex items-center gap-2.5 px-5 py-2.5 bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.05] rounded-xl transition-all text-xs font-black uppercase tracking-widest text-zinc-300 active:scale-95">
                             <LifeBuoy size={16} className="text-emerald-400" />
                             Support
                         </Link>
+
                         {user ? (
-                            <div className="flex items-center gap-4">
-                                <div className="flex items-center gap-2 text-sm text-zinc-300 bg-white/5 px-3 py-1.5 rounded-full border border-white/5">
+                            <div className="flex items-center gap-5">
+                                <div className="flex items-center gap-3 text-xs text-zinc-300 bg-white/[0.03] px-4 py-2 rounded-xl border border-white/[0.05] shadow-inner font-bold">
                                     <UserIcon size={14} className="text-indigo-400" />
-                                    <span className="font-medium text-white">{userData?.nickname || 'User'}</span>
+                                    <span className="text-white">{userData?.nickname || 'Explorer'}</span>
                                 </div>
                                 <button
                                     onClick={handleLogout}
-                                    className="text-zinc-400 hover:text-red-400 transition-colors p-2 rounded-full hover:bg-white/5"
+                                    className="text-white/30 hover:text-red-400 transition-all p-2.5 rounded-xl hover:bg-red-500/10 border border-transparent hover:border-red-500/20 active:scale-90"
                                     title="Sign Out"
                                 >
-                                    <LogOut size={18} />
+                                    <LogOut size={20} />
                                 </button>
                             </div>
                         ) : (
                             <button
                                 onClick={() => setIsAuthModalOpen(true)}
-                                className="bg-indigo-500 hover:bg-indigo-600 text-white px-5 py-2 rounded-xl font-medium transition-all shadow-lg shadow-indigo-500/20 text-sm"
+                                className="premium-button premium-button-primary text-xs uppercase tracking-[0.2em] px-8"
                             >
                                 Sign In
                             </button>
@@ -90,7 +100,7 @@ function App() {
                 </header>
 
                 {/* Main Content */}
-                <main className="flex-1">
+                <main className="flex-1 relative z-10">
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/community" element={<Community />} />

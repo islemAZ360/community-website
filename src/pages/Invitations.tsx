@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { db } from '../lib/firebase';
 import { collection, query, where, onSnapshot, doc, updateDoc, arrayUnion, deleteDoc } from 'firebase/firestore';
 import { useAuthStore } from '../store/authStore';
-import { Mail, Check, X, Loader2, UserPlus, Hash } from 'lucide-react';
+import { Mail, Check, X, Loader2, UserPlus, Hash, Sparkles } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 
@@ -27,7 +27,6 @@ export function Invitations() {
             snapshot.forEach((doc) => {
                 list.push({ id: doc.id, ...doc.data() });
             });
-            // We sort manually since Firestore needs composite index for orderBy with where(==)
             list.sort((a, b) => b.createdAt?.toMillis() - a.createdAt?.toMillis());
 
             setInvitations(list);
@@ -41,22 +40,19 @@ export function Invitations() {
         if (!user) return;
         setActionLoading(`accept_${invitation.id}`);
         try {
-            // Join the room
             const roomRef = doc(db, 'rooms', invitation.roomId);
             await updateDoc(roomRef, {
                 participants: arrayUnion(user.uid)
             });
 
-            // Mark invitation as accepted
             await updateDoc(doc(db, 'invitations', invitation.id), {
                 status: 'accepted'
             });
 
-            // Navigate to room
             navigate(`/room/${invitation.roomId}`);
         } catch (err) {
             console.error("Error accepting invitation:", err);
-            alert("Failed to accept invitation.");
+            alert("Protocol failure: Acceptance rejected.");
         } finally {
             setActionLoading(null);
         }
@@ -65,71 +61,81 @@ export function Invitations() {
     const handleDecline = async (invitationId: string) => {
         setActionLoading(`decline_${invitationId}`);
         try {
-            // Either delete it or mark as declined. Deleting preserves space.
             await deleteDoc(doc(db, 'invitations', invitationId));
         } catch (err) {
             console.error("Error declining invitation:", err);
-            alert("Failed to decline invitation.");
+            alert("Protocol failure: Termination rejected.");
         } finally {
             setActionLoading(null);
         }
     };
 
-    if (loading) return <div className="p-8 text-center text-zinc-500 flex justify-center"><Loader2 className="animate-spin" /></div>;
+    if (loading) return (
+        <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4">
+            <Loader2 className="animate-spin text-indigo-500" size={40} />
+            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20">Decrypting Invites...</p>
+        </div>
+    );
 
     return (
-        <div className="max-w-4xl mx-auto space-y-8 py-8 animate-in fade-in duration-500">
-            <header className="flex items-center gap-4 glass-panel p-6 rounded-2xl">
-                <div className="h-16 w-16 bg-indigo-500/20 rounded-2xl flex items-center justify-center text-indigo-400">
-                    <Mail size={32} />
-                </div>
-                <div>
-                    <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">Room Invitations</h1>
-                    <p className="text-zinc-400 mt-1">
-                        You have {invitations.length} pending {invitations.length === 1 ? 'invitation' : 'invitations'}.
-                    </p>
+        <div className="max-w-5xl mx-auto px-6 py-12 space-y-16 animate-in fade-in duration-700">
+            <header className="flex flex-col md:flex-row items-center justify-between gap-8">
+                <div className="flex items-center gap-6">
+                    <div className="h-20 w-20 bg-indigo-500/10 rounded-[24px] flex items-center justify-center text-indigo-400 border border-indigo-500/20 shadow-[0_0_30px_rgba(99,102,241,0.1)]">
+                        <Mail size={40} />
+                    </div>
+                    <div>
+                        <h1 className="text-4xl font-black uppercase tracking-tighter holographic-text">Signal <span className="text-white/40 font-light">Inbox</span></h1>
+                        <p className="text-sm font-bold text-zinc-500 mt-1 uppercase tracking-widest">
+                            {invitations.length} pending authentication {invitations.length === 1 ? 'request' : 'requests'}.
+                        </p>
+                    </div>
                 </div>
             </header>
 
             {invitations.length === 0 ? (
-                <div className="glass-panel p-12 rounded-2xl text-center flex flex-col items-center justify-center space-y-4 border border-white/5 border-dashed">
-                    <UserPlus size={48} className="text-zinc-600" />
-                    <p className="text-zinc-400">You don't have any pending invitations.</p>
+                <div className="glass-panel p-20 rounded-[40px] text-center flex flex-col items-center justify-center space-y-8 border-dashed border-zinc-800">
+                    <UserPlus size={64} className="text-zinc-800" />
+                    <div className="space-y-2">
+                        <p className="text-zinc-500 font-bold uppercase tracking-widest text-xs">Frequencies Clear</p>
+                        <p className="text-zinc-700 font-medium text-sm">No external nodes are requesting connection.</p>
+                    </div>
                 </div>
             ) : (
-                <div className="grid gap-4">
+                <div className="grid gap-6">
                     {invitations.map(inv => (
-                        <div key={inv.id} className="glass-panel p-5 rounded-2xl flex items-center justify-between group border border-white/5 hover:bg-white/[0.04] transition-all">
-                            <div className="flex items-center gap-4">
-                                <div className="h-12 w-12 bg-indigo-500/10 rounded-xl flex items-center justify-center text-indigo-400 border border-indigo-500/20">
-                                    <Hash size={24} />
+                        <div key={inv.id} className="glass-panel p-8 rounded-[32px] flex flex-col md:flex-row items-center justify-between gap-8 group hover:bg-white/[0.04] transition-all duration-500 border-white/[0.03]">
+                            <div className="flex items-center gap-6">
+                                <div className="h-16 w-16 bg-indigo-500/10 rounded-[20px] flex items-center justify-center text-indigo-400 border border-indigo-500/20 group-hover:scale-110 transition-transform duration-500">
+                                    <Hash size={28} />
                                 </div>
-                                <div>
-                                    <h3 className="font-bold text-lg text-white">
-                                        <span className="text-indigo-400">{inv.fromNickname}</span> invited you to <span className="text-white">#{inv.roomName}</span>
+                                <div className="space-y-1.5">
+                                    <h3 className="font-black text-xl text-white uppercase tracking-tight">
+                                        <span className="text-emerald-400">{inv.fromNickname}</span> <span className="text-white/40 font-light lowercase">enlisted you to</span> #{inv.roomName}
                                     </h3>
-                                    <p className="text-sm text-zinc-500 mt-1">
-                                        {inv.createdAt?.toDate ? formatDistanceToNow(inv.createdAt.toDate(), { addSuffix: true }) : 'Recently'}
-                                    </p>
+                                    <div className="flex items-center gap-3 text-[10px] font-black text-zinc-600 uppercase tracking-widest">
+                                        <Sparkles size={12} className="text-indigo-500/50" />
+                                        {inv.createdAt?.toDate ? formatDistanceToNow(inv.createdAt.toDate(), { addSuffix: true }) : 'Recent Sync'}
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-4 w-full md:w-auto">
                                 <button
                                     onClick={() => handleDecline(inv.id)}
                                     disabled={!!actionLoading}
-                                    className="p-2.5 text-zinc-400 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-all disabled:opacity-50"
-                                    title="Decline"
+                                    className="p-4 text-zinc-600 hover:text-red-500 hover:bg-red-500/10 rounded-2xl transition-all disabled:opacity-50 flex-1 md:flex-none flex items-center justify-center"
+                                    title="Decline Signal"
                                 >
-                                    {actionLoading === `decline_${inv.id}` ? <Loader2 size={20} className="animate-spin" /> : <X size={20} />}
+                                    {actionLoading === `decline_${inv.id}` ? <Loader2 size={24} className="animate-spin" /> : <X size={24} />}
                                 </button>
                                 <button
                                     onClick={() => handleAccept(inv)}
                                     disabled={!!actionLoading}
-                                    className="flex items-center gap-2 px-6 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl font-medium transition-all shadow-lg shadow-indigo-500/20 disabled:opacity-50"
+                                    className="premium-button premium-button-primary flex-1 md:flex-none px-10 py-4 text-[11px] uppercase tracking-[0.2em]"
                                 >
                                     {actionLoading === `accept_${inv.id}` ? <Loader2 size={18} className="animate-spin" /> : <Check size={18} />}
-                                    Accept
+                                    Establish Link
                                 </button>
                             </div>
                         </div>
