@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../lib/firebase';
 import { useAuthStore } from '../store/authStore';
 import { doc, getDoc, collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, deleteDoc } from 'firebase/firestore';
-import { Send, Hash, Settings, Users, ArrowLeft, Trash2, AlertCircle, ShieldCheck, Sparkles, MessageSquare } from 'lucide-react';
+import { Send, Hash, Settings, Users, ArrowLeft, Trash2, AlertCircle, ShieldCheck, Sparkles, MessageSquare, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { RoomMembersModal } from '../components/RoomMembersModal';
 

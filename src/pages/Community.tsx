@@ -3,7 +3,7 @@ import { db, rtdb } from '../lib/firebase';
 import { useAuthStore } from '../store/authStore';
 import { collection, query, getDocs, orderBy } from 'firebase/firestore';
 import { ref, onValue, set, onDisconnect } from 'firebase/database';
-import { Users, Search, MessageSquarePlus, Circle, Hash, ArrowRight, User as UserIcon, Activity } from 'lucide-react';
+import { Users, Search, MessageSquarePlus, Hash, ArrowRight, User as UserIcon, Activity } from 'lucide-react';
 import { formatDistanceToNow, format } from 'date-fns';
 import { CreateRoomModal } from '../components/CreateRoomModal';
 import { useNavigate } from 'react-router-dom';

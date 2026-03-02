@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Download, CheckCircle2, Star, Sparkles, Rocket, ArrowRight, Shield, Zap, Globe } from 'lucide-react';
+import { Download, Star, Sparkles, Rocket, ArrowRight, Shield, Zap, Globe } from 'lucide-react';
 import { format } from 'date-fns';
 
 interface AppVersion {

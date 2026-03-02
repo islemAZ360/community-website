@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { db } from '../lib/firebase';
 import { doc, updateDoc, arrayRemove, collection, addDoc, serverTimestamp, query, getDocs } from 'firebase/firestore';
 import { useAuthStore } from '../store/authStore';
-import { X, Search, Shield, UserX, Send, Loader2, Users, Crown, Activity } from 'lucide-react';
+import { X, Search, UserX, Send, Loader2, Users, Crown, Activity } from 'lucide-react';
 
 interface RoomMembersModalProps {
     isOpen: boolean;

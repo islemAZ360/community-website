@@ -10,7 +10,7 @@ import { Room } from './pages/Room';
 import { Invitations } from './pages/Invitations';
 import { News } from './pages/News';
 import { Support } from './pages/Support';
-import { LogOut, User as UserIcon, Home as HomeIcon, Users, Newspaper, Mail, LifeBuoy } from 'lucide-react';
+import { LogOut, User as UserIcon, Home as HomeIcon, Users, Newspaper, Mail, LifeBuoy, Rocket } from 'lucide-react';
 
 function App() {
     const { user, userData, setUser, fetchUserData, setLoading } = useAuthStore();
