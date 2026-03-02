@@ -20,7 +20,7 @@ interface AuthState {
 
 
 
-export const useAuthStore = create<AuthState>((set: any) => ({
+export const useAuthStore = create<AuthState>((set: any) => ({ // Fixed Vercel TS Errors
     user: null,
     userData: null,
     loading: true,
