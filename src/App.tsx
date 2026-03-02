@@ -11,6 +11,7 @@ import { Invitations } from './pages/Invitations';
 import { News } from './pages/News';
 import { Support } from './pages/Support';
 import { LogOut, User as UserIcon, Home as HomeIcon, Users, Newspaper, Mail, LifeBuoy, Rocket } from 'lucide-react';
+import communityLogo from './public/community.png';
 
 function App() {
     const { user, userData, setUser, fetchUserData, setLoading } = useAuthStore();
@@ -42,8 +43,8 @@ function App() {
                 <header className="h-20 border-b border-white/[0.03] bg-zinc-900/40 backdrop-blur-3xl sticky top-0 z-50 flex items-center px-8 justify-between transition-all">
                     <div className="flex items-center gap-12">
                         <Link to="/" className="group flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-indigo-500 flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-transform">
-                                <Rocket size={20} className="text-white" />
+                            <div className="w-10 h-10 rounded-xl overflow-hidden border border-white/10 shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-transform">
+                                <img src={communityLogo} alt="iDIDDY" className="w-full h-full object-cover" />
                             </div>
                             <span className="text-xl font-black uppercase tracking-tighter holographic-text">
                                 iDIDDY <span className="text-white/40 font-light">Hub</span>

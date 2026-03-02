@@ -105,16 +105,6 @@ export function Home() {
         <div className="max-w-7xl mx-auto px-6 py-20 space-y-40">
             {/* Hero Section */}
             <section className="relative text-center space-y-16 py-12">
-                <div className="flex justify-center animate-in fade-in zoom-in duration-1000">
-                    <div className="relative group">
-                        <div className="absolute -inset-8 bg-emerald-500/20 rounded-full blur-[80px] opacity-50 group-hover:opacity-80 transition-opacity duration-1000"></div>
-                        <img
-                            src={communityLogo}
-                            alt="iDIDDY Community"
-                            className="relative w-40 h-40 md:w-56 md:h-56 object-cover rounded-[60px] border-2 border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] group-hover:scale-105 transition-transform duration-700"
-                        />
-                    </div>
-                </div>
 
                 <div className="inline-flex items-center gap-2.5 px-6 py-2 rounded-full border border-white/5 bg-white/[0.02] text-zinc-500 text-[10px] font-black uppercase tracking-[0.4em] animate-in fade-in slide-in-from-top-4 duration-1000">
                     <Sparkles size={14} className="text-emerald-500 animate-pulse" />
