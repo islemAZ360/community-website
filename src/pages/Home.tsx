@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Download, Star, Sparkles, Rocket, ArrowRight, Shield, Zap, Globe } from 'lucide-react';
+import { Download, Star, Sparkles, Rocket, ArrowRight, Shield, Zap, Globe, Cpu, BrainCircuit, Code2, Layers, User as UserIcon } from 'lucide-react';
 import { format } from 'date-fns';
 
 interface AppVersion {
@@ -23,14 +23,20 @@ export function Home() {
                 if (!response.ok) throw new Error('Failed to fetch releases');
                 const data = await response.json();
 
-                const versions: AppVersion[] = data.map((release: any) => ({
-                    id: release.id.toString(),
-                    version: release.tag_name || release.name,
-                    releaseNotes: release.body || 'No release notes provided.',
-                    downloadUrl: release.assets?.find((a: any) => a.name.endsWith('.exe'))?.browser_download_url || release.html_url,
-                    releaseDate: new Date(release.published_at),
-                    isLatest: false
-                }));
+                const versions: AppVersion[] = data.map((release: any) => {
+                    const rawVersion = release.tag_name || release.name;
+                    // Clean version to avoid "VV" bug
+                    const cleanVersion = rawVersion.startsWith('v') ? rawVersion.slice(1) : rawVersion;
+
+                    return {
+                        id: release.id.toString(),
+                        version: cleanVersion,
+                        releaseNotes: release.body || 'No release notes provided.',
+                        downloadUrl: release.assets?.find((a: any) => a.name.endsWith('.exe'))?.browser_download_url || release.html_url,
+                        releaseDate: new Date(release.published_at),
+                        isLatest: false
+                    };
+                });
 
                 if (versions.length > 0) {
                     versions[0].isLatest = true;
@@ -48,12 +54,12 @@ export function Home() {
     }, []);
 
     return (
-        <div className="max-w-7xl mx-auto px-6 py-20 space-y-32">
+        <div className="max-w-7xl mx-auto px-6 py-20 space-y-40">
             {/* Hero Section */}
             <section className="relative text-center space-y-12 py-12">
                 <div className="inline-flex items-center gap-2.5 px-6 py-2 rounded-full border border-emerald-500/20 bg-emerald-500/5 text-emerald-400 text-xs font-black uppercase tracking-[0.2em] animate-in fade-in slide-in-from-top-4 duration-1000">
                     <Sparkles size={14} className="animate-pulse" />
-                    <span>The Future of Interview Prep</span>
+                    <span>Revolutionizing Technical Success</span>
                 </div>
 
                 <div className="space-y-6 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
@@ -62,7 +68,7 @@ export function Home() {
                         <span className="holographic-text">Coding Craft.</span>
                     </h1>
                     <p className="text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed font-medium">
-                        Elevate your performance with the most advanced companion app for developers. Join a global community of elite engineers.
+                        Elevate your performance with iDIDDY, the most advanced companion app for developers. Powered by Google's Gemini AI for unmatched real-time intelligence.
                     </p>
                 </div>
 
@@ -103,41 +109,130 @@ export function Home() {
                 </div>
             </section>
 
-            {/* Features Matrix */}
-            <section className="grid md:grid-cols-3 gap-8">
-                {[
-                    {
-                        title: "Elite Community",
-                        desc: "Engage with a network of high-performing developers. Exchange insights, peer-review code, and excel together.",
-                        icon: Star,
-                        gradient: "from-emerald-400 to-emerald-600"
-                    },
-                    {
-                        title: "Real-time Intelligence",
-                        desc: "Get immediate support and tracking for your coding sessions. Built-in diagnostics ensure peak performance.",
-                        icon: Zap,
-                        gradient: "from-indigo-400 to-indigo-600"
-                    },
-                    {
-                        title: "Automated Updates",
-                        desc: "Our zero-day update system ensures you're always running the latest features without manual intervention.",
-                        icon: Rocket,
-                        gradient: "from-cyan-400 to-cyan-600"
-                    },
-                ].map((feat, i) => (
-                    <div key={i} className="glass-panel p-10 rounded-[32px] group hover:bg-white/[0.05] transition-all duration-500 border-white/[0.03] hover:translate-y-[-8px]">
-                        <div className={`h-16 w-16 rounded-2xl bg-gradient-to-br ${feat.gradient} text-white flex items-center justify-center mb-8 shadow-2xl group-hover:scale-110 transition-transform duration-500`}>
-                            <feat.icon size={32} />
+            {/* Core Intelligence Section (Gemini Studio API) */}
+            <section className="glass-panel p-12 md:p-20 rounded-[60px] relative overflow-hidden border-white/[0.03]">
+                <div className="absolute top-0 right-0 w-[40%] h-full bg-indigo-500/5 blur-[100px] pointer-events-none" />
+                <div className="grid lg:grid-cols-2 gap-16 items-center">
+                    <div className="space-y-10">
+                        <div className="space-y-4">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-indigo-500/10 text-indigo-400 text-[10px] font-black uppercase tracking-widest border border-indigo-500/20">
+                                <BrainCircuit size={12} /> Neural Core
+                            </div>
+                            <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter leading-tight">
+                                Powered by <br />
+                                <span className="text-indigo-400">Gemini Studio API</span>
+                            </h2>
+                            <p className="text-zinc-400 text-lg leading-relaxed font-medium">
+                                iDIDDY integrates the state-of-the-art <span className="text-white">Gemini 1.5 Pro</span> model directly into your workflow. By leveraging the low-latency Gemini Studio API, we provide deep contextual analysis of your coding challenges in real-time.
+                            </p>
                         </div>
-                        <h3 className="text-2xl font-black text-white mb-4 uppercase tracking-tight">{feat.title}</h3>
-                        <p className="text-zinc-400 leading-relaxed font-medium">{feat.desc}</p>
-                        <div className="mt-8 pt-8 border-t border-white/[0.03] opacity-0 group-hover:opacity-100 transition-opacity">
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-400 flex items-center gap-2">
-                                Learn More <ArrowRight size={12} />
-                            </span>
+
+                        <div className="grid sm:grid-cols-2 gap-8">
+                            <div className="space-y-3">
+                                <div className="h-10 w-10 rounded-xl bg-white/5 flex items-center justify-center text-emerald-400 border border-white/5">
+                                    <Code2 size={20} />
+                                </div>
+                                <h4 className="font-bold text-white uppercase tracking-tight">Contextual Insight</h4>
+                                <p className="text-xs text-zinc-500 leading-relaxed">Gemini analyzes your entire code block to provide solutions that are context-aware and optimized.</p>
+                            </div>
+                            <div className="space-y-3">
+                                <div className="h-10 w-10 rounded-xl bg-white/5 flex items-center justify-center text-indigo-400 border border-white/5">
+                                    <Layers size={20} />
+                                </div>
+                                <h4 className="font-bold text-white uppercase tracking-tight">Multi-Modal Logic</h4>
+                                <p className="text-xs text-zinc-500 leading-relaxed">Processing text, logic, and patterns simultaneously for high-accuracy interview performance.</p>
+                            </div>
                         </div>
                     </div>
-                ))}
+
+                    <div className="relative group">
+                        <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-emerald-500/20 rounded-[40px] blur-3xl group-hover:blur-[100px] transition-all duration-1000 opacity-50" />
+                        <div className="relative glass-panel rounded-[40px] p-8 border-white/10 shadow-2xl overflow-hidden aspect-video flex flex-col items-center justify-center gap-6">
+                            <div className="h-24 w-24 rounded-3xl bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20 animate-bounce duration-[3000ms]">
+                                <Cpu size={48} className="text-indigo-400" />
+                            </div>
+                            <div className="text-center space-y-2">
+                                <p className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.3em]">Processing Token...</p>
+                                <div className="h-1.5 w-48 bg-white/5 rounded-full overflow-hidden border border-white/5">
+                                    <div className="h-full bg-indigo-500 w-[65%] animate-pulse" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Features Matrix */}
+            <section className="space-y-20">
+                <div className="text-center space-y-4">
+                    <h2 className="text-4xl font-black uppercase tracking-tighter">System <span className="text-white/40">Capabilities</span></h2>
+                    <p className="text-zinc-500 uppercase tracking-widest text-[11px] font-black">Elite Features for Modern Engineers</p>
+                </div>
+                <div className="grid md:grid-cols-3 gap-8">
+                    {[
+                        {
+                            title: "Elite Community",
+                            desc: "Engage with a network of high-performing developers. Exchange insights, peer-review code, and excel together in private hubs.",
+                            icon: Star,
+                            gradient: "from-emerald-400 to-emerald-600"
+                        },
+                        {
+                            title: "Real-time Intelligence",
+                            desc: "Powered by Gemini Studio, get immediate support and tracking. Built-in diagnostics ensure peak performance during pressure.",
+                            icon: Zap,
+                            gradient: "from-indigo-400 to-indigo-600"
+                        },
+                        {
+                            title: "Automated Updates",
+                            desc: "Our zero-day update system ensures you're always running the latest features without manual intervention or data loss.",
+                            icon: Rocket,
+                            gradient: "from-cyan-400 to-cyan-600"
+                        },
+                    ].map((feat, i) => (
+                        <div key={i} className="glass-panel p-10 rounded-[32px] group hover:bg-white/[0.05] transition-all duration-500 border-white/[0.03] hover:translate-y-[-8px]">
+                            <div className={`h-16 w-16 rounded-2xl bg-gradient-to-br ${feat.gradient} text-white flex items-center justify-center mb-8 shadow-2xl group-hover:scale-110 transition-transform duration-500`}>
+                                <feat.icon size={32} />
+                            </div>
+                            <h3 className="text-2xl font-black text-white mb-4 uppercase tracking-tight">{feat.title}</h3>
+                            <p className="text-zinc-400 leading-relaxed font-medium">{feat.desc}</p>
+                            <div className="mt-8 pt-8 border-t border-white/[0.03] opacity-0 group-hover:opacity-100 transition-opacity">
+                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-400 flex items-center gap-2">
+                                    Learn More <ArrowRight size={12} />
+                                </span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* How It Works (Usage Flow) */}
+            <section className="space-y-20">
+                <div className="text-center space-y-4">
+                    <h2 className="text-4xl font-black uppercase tracking-tighter">Usage <span className="text-white/40">Protocol</span></h2>
+                    <p className="text-zinc-500 uppercase tracking-widest text-[11px] font-black">Step-by-Step Integration</p>
+                </div>
+
+                <div className="relative">
+                    <div className="absolute top-1/2 left-0 w-full h-px bg-white/[0.05] hidden lg:block -translate-y-1/2 z-0" />
+                    <div className="grid lg:grid-cols-4 gap-12 relative z-10">
+                        {[
+                            { step: "01", title: "Registration", desc: "Create your agent profile on this hub and secure your encrypted key.", icon: UserIcon },
+                            { step: "02", title: "App Launch", desc: "Download and install iDIDDY. Authenticate using your community credentials.", icon: Download },
+                            { step: "03", title: "Studio Access", desc: "Input your Gemini Studio API key to activate the core intelligence layer.", icon: Cpu },
+                            { step: "04", title: "Execute", desc: "Begin your session. Gemini will handle the heavy lifting while you dominate.", icon: Sparkles }
+                        ].map((item, i) => (
+                            <div key={i} className="space-y-6 text-center lg:text-left">
+                                <div className="h-16 w-16 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center text-white font-black text-xl mx-auto lg:mx-0 shadow-xl group hover:border-emerald-500/30 transition-colors">
+                                    {item.step}
+                                </div>
+                                <div className="space-y-2">
+                                    <h4 className="text-lg font-bold text-white uppercase tracking-tight">{item.title}</h4>
+                                    <p className="text-xs text-zinc-500 leading-relaxed font-medium">{item.desc}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </section>
 
             {/* Repository Timeline */}
