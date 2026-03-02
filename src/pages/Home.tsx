@@ -56,19 +56,30 @@ export function Home() {
     return (
         <div className="max-w-7xl mx-auto px-6 py-20 space-y-40">
             {/* Hero Section */}
-            <section className="relative text-center space-y-12 py-12">
-                <div className="inline-flex items-center gap-2.5 px-6 py-2 rounded-full border border-emerald-500/20 bg-emerald-500/5 text-emerald-400 text-xs font-black uppercase tracking-[0.2em] animate-in fade-in slide-in-from-top-4 duration-1000">
-                    <Sparkles size={14} className="animate-pulse" />
-                    <span>Revolutionizing Technical Success</span>
+            <section className="relative text-center space-y-16 py-12">
+                <div className="flex justify-center animate-in fade-in zoom-in duration-1000">
+                    <div className="relative group">
+                        <div className="absolute -inset-8 bg-emerald-500/20 rounded-full blur-[80px] opacity-50 group-hover:opacity-80 transition-opacity duration-1000"></div>
+                        <img
+                            src="/community.png"
+                            alt="iDIDDY Community"
+                            className="relative w-40 h-40 md:w-56 md:h-56 object-cover rounded-[60px] border-2 border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] group-hover:scale-105 transition-transform duration-700"
+                        />
+                    </div>
+                </div>
+
+                <div className="inline-flex items-center gap-2.5 px-6 py-2 rounded-full border border-white/5 bg-white/[0.02] text-zinc-500 text-[10px] font-black uppercase tracking-[0.4em] animate-in fade-in slide-in-from-top-4 duration-1000">
+                    <Sparkles size={14} className="text-emerald-500 animate-pulse" />
+                    <span>Next-Generation Development Hub</span>
                 </div>
 
                 <div className="space-y-6 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
-                    <h1 className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.9] uppercase">
-                        Master Your <br />
-                        <span className="holographic-text">Coding Craft.</span>
+                    <h1 className="text-6xl md:text-9xl font-black tracking-tighter leading-[0.85] uppercase italic">
+                        Forge Your <br />
+                        <span className="holographic-text">Legacy.</span>
                     </h1>
-                    <p className="text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed font-medium">
-                        Elevate your performance with iDIDDY, the most advanced companion app for developers. Powered by Google's Gemini AI for unmatched real-time intelligence.
+                    <p className="text-xl text-zinc-500 max-w-2xl mx-auto leading-relaxed font-bold uppercase tracking-tight">
+                        The definitive ecosystem for engineered success. Join the global vanguard of elite software architects.
                     </p>
                 </div>
 
