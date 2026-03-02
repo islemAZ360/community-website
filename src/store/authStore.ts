@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { User } from 'firebase/auth';
-import { auth, db } from '../lib/firebase';
+import { db } from '../lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 
 interface UserData {
@@ -18,7 +18,7 @@ interface AuthState {
     setLoading: (loading: boolean) => void;
 }
 
-import { StateCreator } from 'zustand';
+
 
 export const useAuthStore = create<AuthState>((set: any) => ({
     user: null,
