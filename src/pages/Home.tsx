@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Download, Star, Sparkles, Rocket, ArrowRight, Shield, Zap, Globe, Cpu, Code2, Layers, User as UserIcon, Terminal, Monitor, Key, Info, CheckCircle2 } from 'lucide-react';
 import { format } from 'date-fns';
-import communityLogo from '../public/community.png';
+
 
 interface AppVersion {
     id: string;
@@ -76,18 +76,6 @@ export function Home() {
             ]
         },
         {
-            title: "Real-time Intelligence",
-            desc: "Experience zero-latency transcription and analysis tailored for high-pressure technical sessions.",
-            icon: Zap,
-            gradient: "from-indigo-400 to-indigo-600",
-            longDesc: [
-                "High-fidelity audio capture system with noise isolation.",
-                "Real-time visual transcription feedback via a modular sub-window.",
-                "Seamless integration with external LLM providers for deep logic analysis.",
-                "Optimized for minimal CPU footprint to preserve system performance."
-            ]
-        },
-        {
             title: "Proprietary Architecture",
             desc: "Built from the ground up for stability, security, and maximum developer empowerment.",
             icon: Cpu,
@@ -97,6 +85,18 @@ export function Home() {
                 "Secure license management system with encrypted key validation.",
                 "Dynamic PWA support for instant access across multiple devices.",
                 "Modular code structure allowing for rapid feature expansion and iteration."
+            ]
+        },
+        {
+            title: "Global Neural Bridge",
+            desc: "Seamlessly integrate with world-class intelligence providers for real-time problem solving.",
+            icon: Globe,
+            gradient: "from-indigo-400 to-indigo-600",
+            longDesc: [
+                "Multi-provider support including Google, OpenAI, Anthropic, and more.",
+                "Redundant neural node failover for uninterrupted interview support.",
+                "Intelligent context-aware RAG memory for consistent technical answers.",
+                "Encrypted API vault for high-security credential management."
             ]
         },
     ];
@@ -229,11 +229,13 @@ export function Home() {
                             <h3 className="text-2xl font-black text-white mb-4 uppercase tracking-tight">{feat.title}</h3>
                             <p className="text-zinc-400 leading-relaxed font-medium mb-6">{feat.desc}</p>
 
-                            <div className={`space-y-4 overflow-hidden transition-all duration-700 ${selectedFeature === i ? 'max-h-96 opacity-100 mb-8' : 'max-h-0 opacity-0'}`}>
+                            <div className={`space-y-4 overflow-hidden transition-all duration-1000 ease-in-out ${selectedFeature === i ? 'max-h-[800px] opacity-100 mb-8 pointer-events-auto' : 'max-h-0 opacity-0 pointer-events-none'}`}>
                                 {feat.longDesc.map((item, idx) => (
-                                    <div key={idx} className="flex items-center gap-3 text-xs text-zinc-500 font-bold uppercase tracking-tight">
-                                        <CheckCircle2 size={16} className="text-emerald-500" />
-                                        {item}
+                                    <div key={idx} className="flex items-start gap-4 text-xs text-zinc-400 font-bold uppercase tracking-tight group/item">
+                                        <div className="mt-1 h-3 w-3 flex-shrink-0">
+                                            <CheckCircle2 size={12} className="text-emerald-500 group-hover/item:scale-125 transition-transform" />
+                                        </div>
+                                        <span className="leading-relaxed">{item}</span>
                                     </div>
                                 ))}
                             </div>
@@ -262,43 +264,43 @@ export function Home() {
                             title: "Account Provisioning",
                             icon: UserIcon,
                             details: [
-                                "Create a Hub Profile to access the community features.",
-                                "Request an access key from the Admin Dashboard.",
-                                "Once approved, your key will be visible in your profile.",
-                                "Your key is tethered to your account for maximum security."
+                                "Create a Hub Profile via the 'Sign In' portal to access the elite developer ecosystem.",
+                                "Navigate to your Personal Profile and trigger the 'Request Access Key' protocol.",
+                                "Authorized keys are typically provisioned within 24 hours after manual vetting.",
+                                "Once approved, your unique encrypted hardware key will manifest in your dashboard."
                             ]
                         },
                         {
                             step: "02",
-                            title: "Environment Setup",
+                            title: "Infrastructure Setup",
                             icon: Download,
                             details: [
-                                "Download the latest native Windows binary (V1.0.5+ recommended).",
-                                "Launch iDIDDY.exe and authenticate with Hub credentials.",
-                                "The app will automatically sync your license status from the cloud.",
-                                "Check for 'System Ready' status in the header."
+                                "Download the latest native iDIDDY production build from the Release Archive.",
+                                "Execute the installer to deploy the core engine and frontend assets locally.",
+                                "Launch the application and authenticate using your Hub credentials to prime the system.",
+                                "The engine will verify your hardware fingerprint against our secure blockchain-linked registry."
                             ]
                         },
                         {
                             step: "03",
-                            title: "AI Layer Configuration",
+                            title: "Neural Engine Calibration",
                             icon: Key,
                             details: [
-                                "Locate your API key from the external intelligence provider.",
-                                "Navigate to 'Settings' in the iDIDDY desktop application.",
-                                "Input your key into the encrypted vault section.",
-                                "Test connection to ensure real-time analysis is active."
+                                "Configure your primary intelligence node in settings (Google Gemini or OpenAI recommended).",
+                                "Insert your LLM API key into the local encrypted vault; credentials never leave your machine.",
+                                "Run the 'Neural Bridge Diagnostic' to confirm connectivity and response latency.",
+                                "Calibrate audio sensitivity thresholds for optimal system-level transcription accuracy."
                             ]
                         },
                         {
                             step: "04",
-                            title: "Session Execution",
+                            title: "Operational Mastery",
                             icon: Sparkles,
                             details: [
-                                "Start your technical session or mock interview.",
-                                "Toggle the transcription window using the modular controls.",
-                                "The system will begin parsing audio and providing logic prompts.",
-                                "Review your session history afterward in the dashboard."
+                                "Initiate your capture session; iDIDDY will autohijack system audio streams for processing.",
+                                "Deploy the sidecar transcription window to monitor real-time node outputs silently.",
+                                "Activate 'Stealth Mode' to minimize visual footprints while maintaining full cognitive support.",
+                                "Use global shortcuts (Ctrl+H, Alt+S) to command the AI without breaking your coding flow."
                             ]
                         }
                     ].map((item, i) => (
