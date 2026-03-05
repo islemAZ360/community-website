@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { db } from '../lib/firebase';
 import { collection, addDoc, serverTimestamp, query, where, orderBy, onSnapshot } from 'firebase/firestore';
 import { useAuthStore } from '../store/authStore';
 import { LifeBuoy, Send, Loader2, CheckCircle2, ShieldAlert, Sparkles, ArrowLeft } from 'lucide-react';
+import { format } from 'date-fns';
 
 export function Support() {
     const { user, userData } = useAuthStore();
