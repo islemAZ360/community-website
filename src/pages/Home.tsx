@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Download, Star, Sparkles, Rocket, ArrowRight, Shield, Zap, Globe, Cpu, Code2, Layers, User as UserIcon, Terminal, Monitor, Key, Info, CheckCircle2 } from 'lucide-react';
+import { Download, Star, Sparkles, Rocket, ArrowRight, Shield, Zap, Globe, Cpu, Code2, User as UserIcon, Terminal, Monitor, Key, Info, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { format } from 'date-fns';
 
 
@@ -25,6 +25,21 @@ export function Home() {
     const [olderVersions, setOlderVersions] = useState<AppVersion[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedFeature, setSelectedFeature] = useState<number | null>(null);
+    const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+
+    const instructionalVideos = [
+        { src: "/system_core.mp4", title: "System Capabilities Showcase" },
+        { src: "/system_core1.mp4", title: "How to Use iDIDDY" },
+        { src: "/system_core2.mp4", title: "Getting a Free API Key" }
+    ];
+
+    const nextVideo = () => {
+        setCurrentVideoIndex((prev) => (prev + 1) % instructionalVideos.length);
+    };
+
+    const prevVideo = () => {
+        setCurrentVideoIndex((prev) => (prev - 1 + instructionalVideos.length) % instructionalVideos.length);
+    };
 
     useEffect(() => {
         const fetchVersions = async () => {
@@ -102,71 +117,88 @@ export function Home() {
     ];
 
     return (
-        <div className="max-w-7xl mx-auto px-6 py-20 space-y-40">
-            {/* Hero Section */}
-            <section className="relative text-center space-y-16 py-12">
+        <div className="max-w-7xl mx-auto px-4 py-8 space-y-16">
+            {/* Compact High-Performance Hero Section */}
+            <section className="relative min-h-[50vh] flex flex-col items-center justify-center text-center py-10 px-4 overflow-hidden -mx-4 rounded-[2rem] border border-white/[0.02] bg-[#050505]">
 
-                <div className="inline-flex items-center gap-2.5 px-6 py-2 rounded-full border border-white/5 bg-white/[0.02] text-zinc-500 text-[10px] font-black uppercase tracking-[0.4em] animate-in fade-in slide-in-from-top-4 duration-1000">
-                    <Sparkles size={14} className="text-emerald-500 animate-pulse" />
-                    <span>The Ultimate Developer Vanguard</span>
-                </div>
+                {/* Lightweight Static Backgrounds */}
+                <div className="absolute inset-0 bg-grid-moving opacity-10"></div>
 
-                <div className="space-y-6 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
-                    <h1 className="text-6xl md:text-9xl font-black tracking-tighter leading-[0.85] uppercase italic">
-                        OWN THE <br />
-                        <span className="holographic-text">FLOW.</span>
-                    </h1>
-                    <p className="text-xl text-zinc-500 max-w-2xl mx-auto leading-relaxed font-bold uppercase tracking-tight">
-                        Revolutionizing the technical interview landscape. Built by developers, for the elite.
-                    </p>
-                </div>
+                {/* Simplified Lightweight Glows (No Pulse, Lower Blur) */}
+                <div className="absolute top-0 right-1/4 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
-                <div className="flex flex-col items-center gap-8 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-500">
-                    {loading ? (
-                        <div className="h-16 w-72 bg-white/5 rounded-2xl animate-pulse border border-white/10" />
-                    ) : latestVersion ? (
-                        <div className="space-y-6">
-                            <a
-                                href={latestVersion.downloadUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="premium-button premium-button-primary text-sm uppercase tracking-[0.2em] px-12 py-5 shadow-[0_0_40px_rgba(16,185,129,0.2)] hover:shadow-[0_0_60px_rgba(16,185,129,0.4)]"
-                            >
-                                <Download size={20} />
-                                GET LATEST V{latestVersion.version}
-                            </a>
-                            <div className="flex items-center justify-center gap-6 text-[11px] font-black uppercase tracking-widest text-white/30">
-                                <span className="flex items-center gap-2">
-                                    <Shield size={14} className="text-emerald-500/50" /> Encrypted Build
-                                </span>
-                                <span className="w-1 h-1 rounded-full bg-white/10" />
-                                <span className="flex items-center gap-2">
-                                    <Zap size={14} className="text-indigo-500/50" /> Fast Execution
-                                </span>
-                                <span className="w-1 h-1 rounded-full bg-white/10" />
-                                <span className="flex items-center gap-2">
-                                    <Globe size={14} className="text-emerald-500/50" /> Win 10/11 Native
-                                </span>
+                <div className="relative z-10 w-full max-w-3xl mx-auto space-y-6">
+                    {/* Badge */}
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/5 text-emerald-400 text-[10px] font-bold uppercase tracking-widest shadow-sm">
+                        <Zap size={12} className="text-emerald-500" />
+                        <span>The Ultimate Developer Vanguard</span>
+                    </div>
+
+                    {/* Compact Typography */}
+                    <div className="space-y-3">
+                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-none uppercase italic text-white drop-shadow-md">
+                            OWN THE <br />
+                            <span className="holographic-text inline-block pb-2">FLOW.</span>
+                        </h1>
+                        <p className="text-sm md:text-base text-zinc-400 max-w-xl mx-auto font-medium uppercase tracking-normal">
+                            Revolutionizing the technical interview landscape. <span className="text-white">Built by developers, for the elite.</span>
+                        </p>
+                    </div>
+
+                    {/* High-Impact CTA */}
+                    <div className="pt-4 flex flex-col items-center gap-6 animate-in fade-in slide-in-from-bottom-16 duration-1000 delay-700 relative z-20">
+                        {loading ? (
+                            <div className="h-14 w-64 bg-white/5 rounded-xl animate-pulse border border-white/10" />
+                        ) : latestVersion ? (
+                            <div className="space-y-6 flex flex-col items-center">
+                                {/* Magnetic Glow Button - Resized */}
+                                <div className="relative group">
+                                    <div className="absolute -inset-1 bg-gradient-to-r from-emerald-600 to-emerald-400 rounded-xl opacity-50 group-hover:opacity-100 blur-md group-hover:blur-lg transition-all duration-500"></div>
+                                    <a
+                                        href={latestVersion.downloadUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="relative flex items-center gap-2 bg-zinc-950 border border-emerald-500/50 text-white text-xs font-bold uppercase tracking-[0.2em] px-8 py-3 rounded-xl overflow-hidden button-sweep transform hover:-translate-y-1 hover:scale-105 transition-transform duration-300 shadow-md group-hover:shadow-[0_0_30px_rgba(16,185,129,0.3)]"
+                                    >
+                                        <Download size={16} className="text-emerald-400 group-hover:animate-bounce" />
+                                        <span>GET LATEST <span className="text-emerald-400">V{latestVersion.version}</span></span>
+                                    </a>
+                                </div>
+
+                                {/* Security Features Footer */}
+                                <div className="glass-panel px-6 py-3 flex flex-wrap items-center justify-center gap-4 md:gap-8 text-[10px] font-bold uppercase tracking-wider text-zinc-400 rounded-full border-white/10">
+                                    <span className="flex items-center gap-2 hover:text-white transition-colors">
+                                        <div className="p-1 rounded-full bg-emerald-500/20"><Shield size={12} className="text-emerald-500" /></div> Encrypted Build
+                                    </span>
+                                    <span className="w-1 h-1 rounded-full bg-white/10" />
+                                    <span className="flex items-center gap-2 hover:text-white transition-colors">
+                                        <div className="p-1 rounded-full bg-indigo-500/20"><Zap size={12} className="text-indigo-400" /></div> Fast Execution
+                                    </span>
+                                    <span className="w-1 h-1 rounded-full bg-white/10" />
+                                    <span className="flex items-center gap-2 hover:text-white transition-colors">
+                                        <div className="p-1 rounded-full bg-cyan-500/20"><Globe size={12} className="text-cyan-400" /></div> Win 10/11 Native
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                    ) : (
-                        <div className="glass-panel p-8 rounded-3xl border-dashed border-zinc-800">
-                            <Rocket className="mx-auto text-zinc-600 mb-4" size={40} />
-                            <p className="text-zinc-500 font-bold uppercase tracking-widest text-xs">Awaiting Build Deployment</p>
-                        </div>
-                    )}
+                        ) : (
+                            <div className="glass-panel p-6 rounded-2xl border-dashed border-zinc-800 flex flex-col items-center">
+                                <Rocket className="text-zinc-600 mb-3 animate-bounce" size={32} />
+                                <p className="text-zinc-500 font-bold uppercase tracking-wider text-xs">Awaiting Build Deployment</p>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </section>
 
             {/* The iDIDDY Advantage Section */}
-            <section className="glass-panel p-12 md:p-24 rounded-[60px] relative overflow-hidden border-white/5 bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.05),transparent)]">
-                <div className="grid lg:grid-cols-2 gap-20 items-center">
-                    <div className="space-y-12">
-                        <div className="space-y-6">
-                            <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none italic">
+            <section className="glass-panel p-6 md:p-10 rounded-[2rem] relative overflow-hidden border-white/5 bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.05),transparent)]">
+                <div className="grid lg:grid-cols-2 gap-10 items-center">
+                    <div className="space-y-8">
+                        <div className="space-y-4">
+                            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight leading-none italic">
                                 Why <span className="text-emerald-500">iDIDDY?</span>
                             </h2>
-                            <p className="text-zinc-400 text-lg leading-relaxed font-bold uppercase tracking-tight">
+                            <p className="text-zinc-400 text-sm md:text-base leading-relaxed font-bold uppercase tracking-normal">
                                 This isn't just another tool. It's a comprehensive ecosystem designed to bridge the gap between human logic and machine-level speed during technical assessments.
                             </p>
                         </div>
@@ -190,20 +222,61 @@ export function Home() {
                         </div>
                     </div>
 
-                    <div className="relative group perspective-1000">
-                        <div className="absolute -inset-10 bg-emerald-500/10 rounded-full blur-[120px] opacity-30 animate-pulse"></div>
-                        <div className="relative glass-panel rounded-3xl border-white/10 p-2 shadow-2xl overflow-hidden aspect-square flex flex-col items-center justify-center bg-[#050505] transform group-hover:rotate-1 transition-transform duration-700">
-                            <div className="absolute inset-0 bg-grid-emerald/5"></div>
-                            <div className="relative z-10 flex flex-col items-center gap-6">
-                                <div className="h-40 w-40 rounded-full bg-emerald-500 shadow-[0_0_80px_rgba(16,185,129,0.4)] flex items-center justify-center border-4 border-white/20 animate-float">
-                                    <Layers size={80} className="text-white" />
+                    <div className="relative group perspective-1000 w-full mt-8 lg:mt-0">
+                        {/* Removed blur for performance */}
+                        <div
+                            className="relative rounded-2xl border border-white/10 p-2 shadow-[0_0_40px_rgba(0,0,0,0.5)] bg-[#050505] transform transition-transform duration-300 ease-out w-full overflow-hidden hover:scale-[1.01]"
+                        >
+                            <div className="absolute inset-0 bg-grid-emerald/5 opacity-20"></div>
+
+                            {/* Top Bar / Header */}
+                            <div className="relative z-20 flex items-center justify-between mb-3 px-3 pt-2">
+                                <div className="flex items-center gap-2">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                                    <h3
+                                        key={`title-${currentVideoIndex}`}
+                                        className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider"
+                                    >
+                                        {instructionalVideos[currentVideoIndex].title}
+                                    </h3>
                                 </div>
-                                <div className="text-center">
-                                    <p className="text-[12px] font-black text-emerald-400 uppercase tracking-[0.5em] mb-2">System Core</p>
-                                    <div className="flex gap-1 justify-center">
-                                        {[1, 2, 3, 4, 5].map(b => <div key={b} className="h-1 w-6 bg-emerald-500/20 rounded-full overflow-hidden"><div className="h-full bg-emerald-500 w-full animate-loading" style={{ animationDelay: `${b * 200}ms` }}></div></div>)}
-                                    </div>
+                                <div className="flex gap-2">
+                                    {instructionalVideos.map((_, idx) => (
+                                        <button
+                                            key={idx}
+                                            onClick={() => setCurrentVideoIndex(idx)}
+                                            className={`h-1.5 rounded-full transition-all duration-500 ease-spring-heavy ${idx === currentVideoIndex ? 'w-8 bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.8)]' : 'w-2 bg-white/10 hover:bg-white/30'}`}
+                                            title={`Go to video ${idx + 1}`}
+                                        />
+                                    ))}
                                 </div>
+                            </div>
+
+                            {/* Video Screen Container */}
+                            <div className="relative z-10 w-full aspect-[16/9] rounded-xl bg-black border border-white/5 ring-1 ring-emerald-500/20 shadow-[0_0_30px_rgba(16,185,129,0.1)] group/screen overflow-hidden">
+
+                                {/* Single Performant Video Element */}
+                                <video
+                                    controls
+                                    preload="metadata"
+                                    playsInline
+                                    className="absolute inset-0 w-full h-full object-cover bg-black"
+                                    src={instructionalVideos[currentVideoIndex].src}
+                                />
+
+                                {/* Overlay Controls */}
+                                <button
+                                    onClick={prevVideo}
+                                    className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/80 border border-white/10 text-white flex items-center justify-center hover:bg-emerald-500 hover:scale-110 hover:border-emerald-400 transition-all opacity-0 group-hover/screen:opacity-100 z-30 shadow-lg"
+                                >
+                                    <ChevronLeft size={20} />
+                                </button>
+                                <button
+                                    onClick={nextVideo}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/80 border border-white/10 text-white flex items-center justify-center hover:bg-emerald-500 hover:scale-110 hover:border-emerald-400 transition-all opacity-0 group-hover/screen:opacity-100 z-30 shadow-lg"
+                                >
+                                    <ChevronRight size={20} />
+                                </button>
                             </div>
                         </div>
                     </div>
