@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { db } from '../lib/firebase';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, query, where, orderBy, onSnapshot } from 'firebase/firestore';
 import { useAuthStore } from '../store/authStore';
 import { LifeBuoy, Send, Loader2, CheckCircle2, ShieldAlert, Sparkles, ArrowLeft } from 'lucide-react';
 
@@ -11,6 +11,22 @@ export function Support() {
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState('');
+    const [tickets, setTickets] = useState<any[]>([]);
+
+    useEffect(() => {
+        if (!user) return;
+        const q = query(
+            collection(db, 'support_tickets'),
+            where('userId', '==', user.uid),
+            orderBy('createdAt', 'desc')
+        );
+        const unsub = onSnapshot(q, (snapshot) => {
+            const list: any[] = [];
+            snapshot.forEach(doc => list.push({ id: doc.id, ...doc.data() }));
+            setTickets(list);
+        });
+        return () => unsub();
+    }, [user]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -160,6 +176,45 @@ export function Support() {
                     </div>
                 </form>
             </div>
+
+            {/* Ticket History */}
+            {tickets.length > 0 && (
+                <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+                    <div className="flex items-center gap-4">
+                        <div className="h-px flex-1 bg-white/5" />
+                        <h2 className="text-[10px] font-black uppercase tracking-[0.5em] text-white/20">Signal History Manifest</h2>
+                        <div className="h-px flex-1 bg-white/5" />
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-6">
+                        {tickets.map((ticket) => (
+                            <div key={ticket.id} className="glass-panel p-8 rounded-[32px] border-white/[0.03] space-y-6 hover:border-emerald-500/20 transition-all group">
+                                <div className="flex justify-between items-start">
+                                    <span className={`px-3 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest border ${ticket.status === 'resolved' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' : 'bg-yellow-500/10 border-yellow-500/20 text-yellow-500'}`}>
+                                        {ticket.status === 'resolved' ? 'DECRYPTED & RESOLVED' : 'IN_TRANSIT'}
+                                    </span>
+                                    <span className="text-[9px] font-bold text-zinc-600 uppercase tracking-tighter">
+                                        {ticket.createdAt?.toDate ? format(ticket.createdAt.toDate(), 'MMM d, HH:mm') : 'SYNCING'}
+                                    </span>
+                                </div>
+
+                                <div>
+                                    <h4 className="text-white font-black uppercase tracking-tight text-lg mb-2 group-hover:text-emerald-400 transition-colors">{ticket.subject}</h4>
+                                    <p className="text-xs text-zinc-500 leading-relaxed line-clamp-3">{ticket.message}</p>
+                                </div>
+
+                                {ticket.adminResponse && (
+                                    <div className="p-5 bg-emerald-500/5 rounded-2xl border border-emerald-500/10 space-y-3 relative overflow-hidden">
+                                        <div className="absolute top-0 right-0 p-2 text-emerald-500/20"><Sparkles size={14} /></div>
+                                        <div className="text-[9px] font-black text-emerald-500 uppercase tracking-widest">Core response:</div>
+                                        <p className="text-xs text-emerald-100 italic">"{ticket.adminResponse}"</p>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

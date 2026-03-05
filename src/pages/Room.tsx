@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { db } from '../lib/firebase';
 import { useAuthStore } from '../store/authStore';
 import { doc, getDoc, collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, deleteDoc } from 'firebase/firestore';
-import { Send, Hash, Settings, Users, ArrowLeft, Trash2, AlertCircle, ShieldCheck, Sparkles, MessageSquare, Loader2 } from 'lucide-react';
+import { Send, Hash, Settings, Users, ArrowLeft, Trash2, AlertCircle, ShieldCheck, Sparkles, MessageSquare, Loader2, AlertTriangle } from 'lucide-react';
 import { format } from 'date-fns';
 import { RoomMembersModal } from '../components/RoomMembersModal';
 
@@ -120,6 +120,54 @@ export function Room() {
         }
     };
 
+    const handleReportRoom = async () => {
+        if (!roomId || !user) return;
+        const reason = window.prompt("REASON FOR REPORTING THIS HUB?");
+        if (!reason) return;
+
+        try {
+            await addDoc(collection(db, 'reports'), {
+                type: 'room',
+                targetId: roomId,
+                targetName: room?.name,
+                reporterId: user.uid,
+                reporterNickname: userData?.nickname || 'Unknown',
+                reason,
+                status: 'pending',
+                createdAt: serverTimestamp()
+            });
+            alert("Report submitted to Internal Governance.");
+        } catch (err) {
+            console.error("Error reporting room:", err);
+        }
+    };
+
+    const handleReportMessage = async (msg: Message) => {
+        if (!roomId || !user || msg.senderId === user.uid) return;
+        const reason = window.prompt(`REPORT MESSAGE FROM ${msg.senderNickname.toUpperCase()}?`);
+        if (!reason) return;
+
+        try {
+            await addDoc(collection(db, 'reports'), {
+                type: 'message',
+                targetId: msg.id,
+                targetNickname: msg.senderNickname,
+                targetUid: msg.senderId,
+                roomId,
+                roomName: room?.name,
+                messageText: msg.text,
+                reporterId: user.uid,
+                reporterNickname: userData?.nickname || 'Unknown',
+                reason,
+                status: 'pending',
+                createdAt: serverTimestamp()
+            });
+            alert("Manifest violation reported.");
+        } catch (err) {
+            console.error("Error reporting message:", err);
+        }
+    };
+
     const handleSendAdminAnnouncement = async () => {
         if (!newMessage.trim() || !user || !roomId || !isAdmin) return;
 
@@ -221,6 +269,12 @@ export function Room() {
                                     <Sparkles size={16} /> Broadcast Core
                                 </button>
                             )}
+                            <button
+                                onClick={handleReportRoom}
+                                className="w-full text-left px-5 py-3 text-xs font-bold text-red-500 hover:bg-red-500/10 transition-all flex items-center gap-3 uppercase tracking-widest border-t border-white/[0.03]"
+                            >
+                                <AlertTriangle size={16} /> Report Hub
+                            </button>
                         </div>
                     )}
                 </div>
@@ -265,9 +319,22 @@ export function Room() {
                                         >
                                             {msg.text}
                                         </div>
+                                        {!isMe && !isAdmin && (
+                                            <button
+                                                onClick={() => handleReportMessage(msg)}
+                                                className="absolute -right-10 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 p-2 text-zinc-800 hover:text-red-500 transition-all font-black"
+                                                title="Report Violation"
+                                            >
+                                                <AlertTriangle size={14} />
+                                            </button>
+                                        )}
                                     </div>
                                     <span className="text-[9px] font-bold text-zinc-700 mt-2 mx-1 uppercase tracking-tighter">
-                                        {msg.createdAt?.toDate ? format(msg.createdAt.toDate(), 'HH:mm:ss') : 'SYNCING'}
+                                        {(() => {
+                                            if (!msg.createdAt) return 'SYNCING';
+                                            const date = msg.createdAt.toDate ? msg.createdAt.toDate() : new Date(msg.createdAt);
+                                            return format(date, 'HH:mm:ss');
+                                        })()}
                                     </span>
                                 </div>
                             </div>

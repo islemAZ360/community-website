@@ -75,4 +75,13 @@
   .text-glow-indigo {
     text-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
   }
+
+  @keyframes marquee-fast {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .animate-marquee-fast {
+    animation: marquee-fast 20s linear infinite;
+  }
 }

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { db, rtdb } from '../lib/firebase';
 import { useAuthStore } from '../store/authStore';
-import { collection, query, getDocs, orderBy } from 'firebase/firestore';
+import { collection, query, getDocs, orderBy, onSnapshot, doc } from 'firebase/firestore';
 import { ref, onValue, set, onDisconnect } from 'firebase/database';
-import { Users, Search, MessageSquarePlus, Hash, ArrowRight, User as UserIcon, Activity } from 'lucide-react';
+import { Users, Search, MessageSquarePlus, Hash, ArrowRight, User as UserIcon, Activity, Lock, ShieldAlert } from 'lucide-react';
 import { formatDistanceToNow, format } from 'date-fns';
 import { CreateRoomModal } from '../components/CreateRoomModal';
 import { useNavigate } from 'react-router-dom';
@@ -27,6 +27,7 @@ export function Community() {
     const [onlineCount, setOnlineCount] = useState(0);
     const [loading, setLoading] = useState(true);
     const [isCreateRoomOpen, setIsCreateRoomOpen] = useState(false);
+    const [isLocked, setIsLocked] = useState(false);
 
     // Track user's own online presence
     useEffect(() => {
@@ -123,8 +124,18 @@ export function Community() {
             }
         };
 
+        const unsubConfig = onSnapshot(doc(db, 'system', 'config'), (snapshot) => {
+            if (snapshot.exists()) {
+                setIsLocked(snapshot.data().isLocked || false);
+            }
+        });
+
         fetchAllUsers();
         fetchPublicRooms();
+
+        return () => {
+            unsubConfig();
+        };
     }, []);
 
     const filteredUsers = users.filter(u =>
@@ -164,15 +175,26 @@ export function Community() {
                     </div>
                     {user && (
                         <button
-                            onClick={() => setIsCreateRoomOpen(true)}
-                            className="premium-button premium-button-primary text-[11px] uppercase tracking-[0.2em] w-full sm:w-auto px-8"
+                            onClick={() => !isLocked && setIsCreateRoomOpen(true)}
+                            disabled={isLocked}
+                            className={`premium-button ${isLocked ? 'bg-red-500/20 text-red-500 border border-red-500/30' : 'premium-button-primary'} text-[11px] uppercase tracking-[0.2em] w-full sm:w-auto px-8 transition-all duration-500`}
                         >
-                            <MessageSquarePlus size={18} />
-                            Deploy Room
+                            {isLocked ? <Lock size={18} /> : <MessageSquarePlus size={18} />}
+                            {isLocked ? 'Mesh Locked' : 'Deploy Room'}
                         </button>
                     )}
                 </div>
             </header>
+
+            {isLocked && (
+                <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-4 flex items-center gap-4 animate-pulse">
+                    <ShieldAlert className="text-red-500" size={24} />
+                    <div>
+                        <div className="text-xs font-black uppercase tracking-[0.2em] text-red-500">Global Command Lockdown Active</div>
+                        <p className="text-[10px] text-red-400/60 font-medium uppercase tracking-widest mt-0.5">Administrator has restricted new channel deployments across the mesh network.</p>
+                    </div>
+                </div>
+            )}
 
             {/* Navigation Tabs */}
             <div className="flex items-center gap-2 p-1.5 bg-white/[0.02] border border-white/[0.05] rounded-2xl w-fit">
@@ -263,7 +285,11 @@ export function Community() {
                                         </div>
                                     </div>
                                     <span className="text-[10px] font-bold text-zinc-700 uppercase tracking-widest bg-white/[0.02] px-3 py-1.5 rounded-lg border border-white/[0.02]">
-                                        {room.createdAt?.toDate ? format(room.createdAt.toDate(), 'MM.DD.YY') : 'RT'}
+                                        {(() => {
+                                            if (!room.createdAt) return 'RT';
+                                            const date = room.createdAt.toDate ? room.createdAt.toDate() : new Date(room.createdAt);
+                                            return format(date, 'MM.dd.yy');
+                                        })()}
                                     </span>
                                 </div>
 
