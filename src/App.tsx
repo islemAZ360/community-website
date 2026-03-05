@@ -11,12 +11,14 @@ import { Room } from './pages/Room';
 import { Invitations } from './pages/Invitations';
 import { News } from './pages/News';
 import { Support } from './pages/Support';
+import { ProfileModal } from './components/ProfileModal';
 import { LogOut, User as UserIcon, Home as HomeIcon, Users, Newspaper, Mail, LifeBuoy, ShieldAlert, Megaphone, Terminal } from 'lucide-react';
 import communityLogo from './public/community.png';
 
 function App() {
     const { user, userData, setUser, fetchUserData, setLoading } = useAuthStore();
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+    const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [systemAlert, setSystemAlert] = useState<string>('');
     const [licenseInfo, setLicenseInfo] = useState<any>(null);
     const [now, setNow] = useState(new Date());
@@ -167,10 +169,19 @@ function App() {
 
                         {user ? (
                             <div className="flex items-center gap-5">
-                                <div className="flex items-center gap-3 text-xs text-zinc-300 bg-white/[0.03] px-4 py-2 rounded-xl border border-white/[0.05] shadow-inner font-bold">
-                                    <UserIcon size={14} className="text-indigo-400" />
-                                    <span className="text-white">{userData?.nickname || 'Explorer'}</span>
-                                </div>
+                                <button
+                                    onClick={() => setIsProfileOpen(true)}
+                                    className="flex items-center gap-3 text-xs text-zinc-300 bg-white/[0.03] px-4 py-2 rounded-xl border border-white/[0.05] shadow-inner font-bold hover:bg-white/5 transition-all group"
+                                >
+                                    {userData?.profilePicture ? (
+                                        <img src={userData.profilePicture} alt="Avatar" className="w-5 h-5 rounded-md object-cover border border-white/10" />
+                                    ) : (
+                                        <UserIcon size={14} className="text-indigo-400 group-hover:scale-110 transition-transform" />
+                                    )}
+                                    <span className="text-white group-hover:text-indigo-400 transition-colors">
+                                        {userData?.nickname || 'Explorer'}
+                                    </span>
+                                </button>
                                 <button
                                     onClick={handleLogout}
                                     className="text-white/30 hover:text-red-400 transition-all p-2.5 rounded-xl hover:bg-red-500/10 border border-transparent hover:border-red-500/20 active:scale-90"
@@ -232,6 +243,11 @@ function App() {
                 <AuthModal
                     isOpen={isAuthModalOpen}
                     onClose={() => setIsAuthModalOpen(false)}
+                />
+
+                <ProfileModal
+                    isOpen={isProfileOpen}
+                    onClose={() => setIsProfileOpen(false)}
                 />
             </div>
         </Router>

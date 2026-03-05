@@ -6,6 +6,7 @@ import { doc, getDoc } from 'firebase/firestore';
 interface UserData {
     nickname: string;
     email: string;
+    profilePicture?: string;
     licenseKey?: string;
     isBanned?: boolean;
     createdAt: any;
