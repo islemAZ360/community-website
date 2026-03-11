@@ -5,7 +5,7 @@ import {
     signInWithEmailAndPassword
 } from 'firebase/auth';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { X, Mail, Lock, User as UserIcon, Loader2, Sparkles, ShieldCheck } from 'lucide-react';
+
 
 interface AuthModalProps {
     isOpen: boolean;
@@ -78,105 +78,105 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300">
-            <div className="glass-panel w-full max-w-md rounded-[40px] p-10 md:p-12 relative animate-in fade-in zoom-in duration-500 border-white/[0.05] shadow-[0_0_100px_rgba(16,185,129,0.15)] overflow-hidden">
-                {/* Decorative background blur */}
-                <div className="absolute -top-24 -right-24 w-48 h-48 bg-emerald-500/10 blur-[80px] rounded-full pointer-events-none" />
-                <div className="absolute -bottom-24 -left-24 w-48 h-48 bg-indigo-500/10 blur-[80px] rounded-full pointer-events-none" />
-
+            <div className="w-full max-w-[440px] glass rounded-[2rem] shadow-2xl p-8 md:p-12 relative overflow-hidden animate-in zoom-in duration-300 border border-white/10">
+                {/* Logo Area */}
                 <button
                     onClick={onClose}
-                    className="absolute top-8 right-8 text-zinc-600 hover:text-white transition-all p-2 rounded-xl hover:bg-white/5"
+                    className="absolute top-6 right-6 text-slate-500 hover:text-white transition-all p-2 rounded-xl hover:bg-white/5"
                 >
-                    <X size={20} />
+                    <span className="material-symbols-outlined text-xl">close</span>
                 </button>
 
-                <div className="text-center space-y-3 mb-10">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 text-[10px] font-black uppercase tracking-widest border border-emerald-500/20 mb-2">
-                        <ShieldCheck size={12} /> Secure Auth Protocol
+                <div className="flex flex-col items-center mb-10 mt-4">
+                    <div className="size-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 border border-primary/20 shadow-[0_0_40px_rgba(19,236,164,0.1)]">
+                        <span className="material-symbols-outlined text-primary text-3xl">pentagon</span>
                     </div>
-                    <h2 className="text-3xl font-black uppercase tracking-tighter holographic-text">
-                        {isLogin ? 'Access' : 'Registration'} <span className="text-white/40 font-light">Node</span>
-                    </h2>
+                    <h1 className="text-3xl font-bold tracking-tight text-white mb-2">OUR-FIX HUB</h1>
+                    <p className="text-slate-400 text-sm font-medium tracking-wide">
+                        {isLogin ? 'Secure Access Protocol' : 'Identity Registration'}
+                    </p>
                 </div>
 
                 {error && (
-                    <div className="bg-red-500/10 border border-red-500/20 text-red-500 px-5 py-3 rounded-2xl mb-8 text-[11px] font-black uppercase tracking-widest animate-in slide-in-from-top-2">
+                    <div className="bg-red-500/10 border border-red-500/20 text-red-500 px-5 py-3 rounded-2xl mb-8 text-[11px] font-bold uppercase tracking-widest animate-in slide-in-from-top-2 text-center">
                         {error}
                     </div>
                 )}
 
-                <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
+                <form onSubmit={handleSubmit} className="space-y-6">
                     {!isLogin && (
                         <div className="space-y-2">
-                            <label className="block text-[10px] font-black text-white/40 uppercase tracking-[0.2em] ml-1">Identity Tag</label>
-                            <div className="relative group">
-                                <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600 group-focus-within:text-emerald-400 transition-colors" size={18} />
-                                <input
-                                    type="text"
-                                    required
-                                    value={nickname}
-                                    onChange={(e) => setNickname(e.target.value)}
-                                    className="w-full bg-white/[0.02] border border-white/5 rounded-2xl py-4 pl-12 pr-6 text-sm font-medium text-white placeholder:text-zinc-800 focus:outline-none focus:border-emerald-500/30 focus:bg-white/[0.04] transition-all"
-                                    placeholder="NICKNAME_STR_3"
-                                />
-                            </div>
+                            <label className="text-[11px] font-bold uppercase tracking-widest text-slate-500 ml-1">Identity Tag</label>
+                            <input
+                                type="text"
+                                required
+                                value={nickname}
+                                onChange={(e) => setNickname(e.target.value)}
+                                className="w-full bg-white/5 border border-white/10 rounded-xl h-12 px-4 text-slate-100 placeholder:text-slate-600 focus:outline-none input-glow transition-all duration-300"
+                                placeholder="NICKNAME"
+                            />
                         </div>
                     )}
 
                     <div className="space-y-2">
-                        <label className="block text-[10px] font-black text-white/40 uppercase tracking-[0.2em] ml-1">Email Frequency</label>
-                        <div className="relative group">
-                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600 group-focus-within:text-emerald-400 transition-colors" size={18} />
-                            <input
-                                type="email"
-                                required
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className="w-full bg-white/[0.02] border border-white/5 rounded-2xl py-4 pl-12 pr-6 text-sm font-medium text-white placeholder:text-zinc-800 focus:outline-none focus:border-emerald-500/30 focus:bg-white/[0.04] transition-all"
-                                placeholder="IDENT_RELAY@HUB.COM"
-                            />
-                        </div>
+                        <label className="text-[11px] font-bold uppercase tracking-widest text-slate-500 ml-1">Email or Phone</label>
+                        <input
+                            type="email"
+                            required
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="w-full bg-white/5 border border-white/10 rounded-xl h-12 px-4 text-slate-100 placeholder:text-slate-600 focus:outline-none input-glow transition-all duration-300"
+                            placeholder="example@hub.com"
+                        />
                     </div>
 
                     <div className="space-y-2">
-                        <label className="block text-[10px] font-black text-white/40 uppercase tracking-[0.2em] ml-1">Pass-Key</label>
+                        <label className="text-[11px] font-bold uppercase tracking-widest text-slate-500 ml-1">Pass-key</label>
                         <div className="relative group">
-                            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600 group-focus-within:text-emerald-400 transition-colors" size={18} />
                             <input
                                 type="password"
                                 required
                                 minLength={6}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full bg-white/[0.02] border border-white/5 rounded-2xl py-4 pl-12 pr-6 text-sm font-medium text-white placeholder:text-zinc-800 focus:outline-none focus:border-emerald-500/30 focus:bg-white/[0.04] transition-all"
-                                placeholder="••••••••"
+                                className="w-full bg-white/5 border border-white/10 rounded-xl h-12 px-4 pr-12 text-slate-100 placeholder:text-slate-600 focus:outline-none input-glow transition-all duration-300"
+                                placeholder="Enter pass-key"
                             />
+                            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 transition-colors">
+                                <span className="material-symbols-outlined text-xl">fingerprint</span>
+                            </div>
                         </div>
                     </div>
 
                     <button
                         type="submit"
                         disabled={loading}
-                        className="premium-button premium-button-primary w-full py-5 text-sm uppercase tracking-[0.3em] mt-4 shadow-[0_0_30px_rgba(16,185,129,0.15)]"
+                        className="w-full btn-premium text-background-dark font-bold h-12 rounded-xl mt-4 shadow-lg flex items-center justify-center gap-2"
                     >
-                        {loading ? <Loader2 size={24} className="animate-spin" /> : <Sparkles size={18} />}
-                        {loading ? 'Initializing...' : isLogin ? 'Establish Link' : 'Register Core'}
+                        {loading ? <span className="material-symbols-outlined animate-spin text-xl">progress_activity</span> : null}
+                        {loading ? 'Processing...' : isLogin ? 'Sign In' : 'Register'}
                     </button>
                 </form>
 
-                <div className="mt-10 text-center">
-                    <p className="text-[11px] font-black uppercase tracking-widest text-zinc-600">
-                        {isLogin ? "No connection archive? " : "Already registered? "}
+                <div className="text-center mt-8">
+                    <p className="text-slate-400 text-sm">
+                        {isLogin ? "New to Holographic? " : "Already established? "}
                         <button
+                            type="button"
                             onClick={() => {
                                 setIsLogin(!isLogin);
                                 setError('');
                             }}
-                            className="text-emerald-400 hover:text-white hover:underline transition-all underline-offset-4"
+                            className="text-primary hover:text-primary/80 font-semibold ml-1 transition-colors"
                         >
-                            {isLogin ? 'Create Profile' : 'Access Node'}
+                            {isLogin ? 'Create Account' : 'Access Hub'}
                         </button>
                     </p>
+                </div>
+
+                <div className="mt-10 pt-6 border-t border-white/5 flex justify-center gap-8">
+                    <a href="#" className="text-[10px] text-slate-500 hover:text-slate-300 uppercase tracking-widest transition-colors">Forgot Password?</a>
+                    <a href="#" className="text-[10px] text-slate-500 hover:text-slate-300 uppercase tracking-widest transition-colors">Privacy Policy</a>
                 </div>
             </div>
         </div>

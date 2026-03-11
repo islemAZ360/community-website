@@ -80,12 +80,12 @@ export function Invitations() {
     return (
         <div className="max-w-5xl mx-auto px-6 py-12 space-y-16 animate-in fade-in duration-700">
             <header className="flex flex-col md:flex-row items-center justify-between gap-8">
-                <div className="flex items-center gap-6">
-                    <div className="h-20 w-20 bg-indigo-500/10 rounded-[24px] flex items-center justify-center text-indigo-400 border border-indigo-500/20 shadow-[0_0_30px_rgba(99,102,241,0.1)]">
-                        <Mail size={40} />
+                <div className="flex items-center gap-5">
+                    <div className="h-14 w-14 bg-indigo-500/10 rounded-2xl flex items-center justify-center text-indigo-400 border border-indigo-500/20 shadow-[0_0_30px_rgba(99,102,241,0.1)]">
+                        <Mail size={28} />
                     </div>
                     <div>
-                        <h1 className="text-4xl font-black uppercase tracking-tighter holographic-text">Signal <span className="text-white/40 font-light">Inbox</span></h1>
+                        <h1 className="text-3xl font-black uppercase tracking-tighter holographic-text">Signal <span className="text-white/40 font-light">Inbox</span></h1>
                         <p className="text-sm font-bold text-zinc-500 mt-1 uppercase tracking-widest">
                             {invitations.length} pending authentication {invitations.length === 1 ? 'request' : 'requests'}.
                         </p>
@@ -102,15 +102,15 @@ export function Invitations() {
                     </div>
                 </div>
             ) : (
-                <div className="grid gap-6">
+                <div className="grid gap-5">
                     {invitations.map(inv => (
-                        <div key={inv.id} className="glass-panel p-8 rounded-[32px] flex flex-col md:flex-row items-center justify-between gap-8 group hover:bg-white/[0.04] transition-all duration-500 border-white/[0.03]">
+                        <div key={inv.id} className="glass-panel p-6 rounded-[2rem] flex flex-col md:flex-row items-center justify-between gap-6 group hover:bg-white/[0.04] transition-all duration-500 border-white/[0.03]">
                             <div className="flex items-center gap-6">
-                                <div className="h-16 w-16 bg-indigo-500/10 rounded-[20px] flex items-center justify-center text-indigo-400 border border-indigo-500/20 group-hover:scale-110 transition-transform duration-500">
-                                    <Hash size={28} />
+                                <div className="h-12 w-12 bg-indigo-500/10 rounded-2xl flex items-center justify-center text-indigo-400 border border-indigo-500/20 group-hover:scale-110 transition-transform duration-500">
+                                    <Hash size={24} />
                                 </div>
                                 <div className="space-y-1.5">
-                                    <h3 className="font-black text-xl text-white uppercase tracking-tight">
+                                    <h3 className="font-black text-lg text-white uppercase tracking-tight">
                                         <span className="text-emerald-400">{inv.fromNickname}</span> <span className="text-white/40 font-light lowercase">enlisted you to</span> #{inv.roomName}
                                     </h3>
                                     <div className="flex items-center gap-3 text-[10px] font-black text-zinc-600 uppercase tracking-widest">
@@ -132,9 +132,9 @@ export function Invitations() {
                                 <button
                                     onClick={() => handleAccept(inv)}
                                     disabled={!!actionLoading}
-                                    className="premium-button premium-button-primary flex-1 md:flex-none px-10 py-4 text-[11px] uppercase tracking-[0.2em]"
+                                    className="premium-button premium-button-primary flex-1 md:flex-none px-8 py-3 text-[10px] uppercase tracking-[0.2em]"
                                 >
-                                    {actionLoading === `accept_${inv.id}` ? <Loader2 size={18} className="animate-spin" /> : <Check size={18} />}
+                                    {actionLoading === `accept_${inv.id}` ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
                                     Establish Link
                                 </button>
                             </div>

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { db } from '../lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useAuthStore } from '../store/authStore';
-import { X, Lock, Globe, Loader2, Hash, Sparkles, Terminal } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface CreateRoomModalProps {
@@ -56,78 +55,79 @@ export function CreateRoomModal({ isOpen, onClose }: CreateRoomModalProps) {
     };
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-300">
-            <div className="glass-panel w-full max-w-md rounded-[40px] p-10 md:p-12 relative animate-in fade-in zoom-in duration-500 border-white/[0.05] shadow-[0_0_100px_rgba(16,185,129,0.15)] overflow-hidden">
-                <div className="absolute -top-24 -right-24 w-48 h-48 bg-emerald-500/10 blur-[80px] rounded-full pointer-events-none" />
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-in fade-in duration-300">
+            <div className="glass w-full max-w-md rounded-[2.5rem] p-10 md:p-12 relative animate-in fade-in zoom-in duration-500 border-white/[0.05] shadow-[0_0_100px_rgba(19,236,164,0.15)] overflow-hidden">
+                <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/10 blur-[80px] rounded-full pointer-events-none" />
 
                 <button
                     onClick={onClose}
-                    className="absolute top-8 right-8 text-zinc-600 hover:text-white transition-all p-2 rounded-xl hover:bg-white/5"
+                    className="absolute top-8 right-8 text-slate-500 hover:text-white transition-all size-10 rounded-xl hover:bg-white/5 flex items-center justify-center"
                 >
-                    <X size={20} />
+                    <span className="material-symbols-outlined">close</span>
                 </button>
 
                 <div className="text-center space-y-3 mb-10">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-indigo-500/10 text-indigo-400 text-[10px] font-black uppercase tracking-widest border border-indigo-500/20 mb-2">
-                        <Terminal size={12} /> System Command
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-[0.2em] border border-primary/20 mb-2">
+                        <span className="material-symbols-outlined text-sm">terminal</span>
+                        System Command
                     </div>
-                    <h2 className="text-3xl font-black uppercase tracking-tighter holographic-text">
-                        Initialize <span className="text-white/40 font-light">Hub</span>
+                    <h2 className="text-3xl font-black uppercase tracking-tighter text-white">
+                        Initialize <span className="text-primary">Hub</span>
                     </h2>
                 </div>
 
                 {error && (
-                    <div className="bg-red-500/10 border border-red-500/20 text-red-500 px-5 py-3 rounded-2xl mb-8 text-[11px] font-black uppercase tracking-widest animate-in slide-in-from-top-2">
+                    <div className="bg-rose-500/10 border border-rose-500/20 text-rose-500 px-5 py-3 rounded-2xl mb-8 text-[11px] font-black uppercase tracking-widest animate-in slide-in-from-top-2">
                         {error}
                     </div>
                 )}
 
                 <form onSubmit={handleSubmit} className="space-y-8 relative z-10">
                     <div className="space-y-3">
-                        <label className="block text-[10px] font-black text-white/40 uppercase tracking-[0.2em] ml-1">Room Designation</label>
+                        <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em] ml-1">Room Designation</label>
                         <div className="relative group">
-                            <Hash className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600 group-focus-within:text-emerald-400 transition-colors" size={18} />
+                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-primary transition-colors text-xl">tag</span>
                             <input
                                 type="text"
                                 required
                                 maxLength={30}
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                className="w-full bg-white/[0.02] border border-white/5 rounded-[20px] py-4 pl-12 pr-6 text-sm font-medium text-white placeholder:text-zinc-800 focus:outline-none focus:border-emerald-500/30 focus:bg-white/[0.04] transition-all"
+                                className="w-full bg-background-dark/40 border border-white/10 rounded-2xl py-4 pl-12 pr-6 text-sm font-medium text-white placeholder:text-slate-800 focus:outline-none focus:border-primary/30 transition-all outline-none"
                                 placeholder="E.G. NEURAL_NETWORK"
                             />
                         </div>
                     </div>
 
                     <div className="space-y-4">
-                        <label className="block text-[10px] font-black text-white/40 uppercase tracking-[0.2em] ml-1">Security Protocol</label>
+                        <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-[0.3em] ml-1">Security Protocol</label>
 
                         <div className="grid grid-cols-1 gap-3">
                             <button
                                 type="button"
                                 onClick={() => setIsPrivate(false)}
-                                className={`flex items-start gap-4 p-5 rounded-[24px] border transition-all duration-300 ${!isPrivate ? 'bg-emerald-500/10 border-emerald-500/30 text-white shadow-[0_0_20px_rgba(16,185,129,0.05)]' : 'bg-white/[0.02] border-white/5 text-zinc-500 hover:bg-white/[0.05] hover:text-zinc-300'}`}
+                                className={`flex items-start gap-4 p-5 rounded-[1.5rem] border transition-all duration-300 ${!isPrivate ? 'bg-primary/10 border-primary/30 text-white shadow-[0_0_20px_rgba(19,236,164,0.05)]' : 'bg-white/[0.02] border-white/5 text-slate-500 hover:bg-white/[0.05] hover:text-slate-300'}`}
                             >
-                                <div className={`h-10 w-10 rounded-xl flex items-center justify-center border transition-colors ${!isPrivate ? 'bg-emerald-500/20 border-emerald-500/30 text-emerald-400' : 'bg-white/5 border-white/5 text-zinc-600'}`}>
-                                    <Globe size={20} />
+                                <div className={`h-10 w-10 rounded-xl flex items-center justify-center border transition-colors ${!isPrivate ? 'bg-primary/20 border-primary/30 text-primary' : 'bg-white/5 border-white/5 text-slate-600'}`}>
+                                    <span className="material-symbols-outlined">public</span>
                                 </div>
                                 <div className="text-left py-0.5">
-                                    <div className="text-xs font-black uppercase tracking-widest mb-1">Public Frequency</div>
-                                    <div className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest">Open link for all agents</div>
+                                    <div className="text-xs font-bold uppercase tracking-widest mb-1">Public Frequency</div>
+                                    <div className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Open link for all agents</div>
                                 </div>
                             </button>
 
                             <button
                                 type="button"
                                 onClick={() => setIsPrivate(true)}
-                                className={`flex items-start gap-4 p-5 rounded-[24px] border transition-all duration-300 ${isPrivate ? 'bg-indigo-500/10 border-indigo-500/30 text-white shadow-[0_0_20px_rgba(99,102,241,0.05)]' : 'bg-white/[0.02] border-white/5 text-zinc-500 hover:bg-white/[0.05] hover:text-zinc-300'}`}
+                                className={`flex items-start gap-4 p-5 rounded-[1.5rem] border transition-all duration-300 ${isPrivate ? 'bg-primary/10 border-primary/30 text-white shadow-[0_0_20px_rgba(19,236,164,0.05)]' : 'bg-white/[0.02] border-white/5 text-slate-500 hover:bg-white/[0.05] hover:text-zinc-300'}`}
                             >
-                                <div className={`h-10 w-10 rounded-xl flex items-center justify-center border transition-colors ${isPrivate ? 'bg-indigo-500/20 border-indigo-500/30 text-indigo-400' : 'bg-white/5 border-white/5 text-zinc-600'}`}>
-                                    <Lock size={20} />
+                                <div className={`h-10 w-10 rounded-xl flex items-center justify-center border transition-colors ${isPrivate ? 'bg-primary/20 border-primary/30 text-primary' : 'bg-white/5 border-white/5 text-slate-600'}`}>
+                                    <span className="material-symbols-outlined">encrypted</span>
                                 </div>
                                 <div className="text-left py-0.5">
-                                    <div className="text-xs font-black uppercase tracking-widest mb-1">Encrypted Line</div>
-                                    <div className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest">Invitation only access</div>
+                                    <div className="text-xs font-bold uppercase tracking-widest mb-1">Encrypted Line</div>
+                                    <div className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">Invitation only access</div>
                                 </div>
                             </button>
                         </div>
@@ -137,10 +137,16 @@ export function CreateRoomModal({ isOpen, onClose }: CreateRoomModalProps) {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="premium-button premium-button-primary w-full py-5 text-sm uppercase tracking-[0.3em] shadow-[0_0_30px_rgba(16,185,129,0.15)]"
+                            className="w-full py-5 bg-white text-background-dark font-black rounded-2xl hover:bg-primary transition-all shadow-[0_0_30px_rgba(19,236,164,0.15)] uppercase tracking-[0.2em] text-sm flex items-center justify-center gap-2 group disabled:opacity-50"
                         >
-                            {loading ? <Loader2 size={24} className="animate-spin" /> : <Sparkles size={18} />}
-                            {loading ? 'Processing...' : 'Deploy Hub'}
+                            {loading ? (
+                                <div className="size-5 border-2 border-background-dark border-t-transparent animate-spin rounded-full"></div>
+                            ) : (
+                                <>
+                                    <span className="material-symbols-outlined text-xl group-hover:rotate-12 transition-transform">bolt</span>
+                                    DEPLOY HUB
+                                </>
+                            )}
                         </button>
                     </div>
                 </form>

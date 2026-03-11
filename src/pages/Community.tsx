@@ -3,20 +3,24 @@ import { db, rtdb } from '../lib/firebase';
 import { useAuthStore } from '../store/authStore';
 import { collection, query, getDocs, orderBy, onSnapshot, doc } from 'firebase/firestore';
 import { ref, onValue, set, onDisconnect } from 'firebase/database';
-import { Users, Search, MessageSquarePlus, Hash, ArrowRight, User as UserIcon, Activity, Lock, ShieldAlert } from 'lucide-react';
 import { formatDistanceToNow, format } from 'date-fns';
 import { CreateRoomModal } from '../components/CreateRoomModal';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+
 
 interface UserProfile {
     uid: string;
     nickname: string;
+    profilePicture?: string;
     isOnline?: boolean;
     lastSeen?: Date | null;
 }
 
 export function Community() {
+    const { t } = useTranslation();
     const { user } = useAuthStore();
+
     const navigate = useNavigate();
 
     const [users, setUsers] = useState<UserProfile[]>([]);
@@ -68,7 +72,12 @@ export function Community() {
                 const snap = await getDocs(q);
                 let fetchedUsers: UserProfile[] = [];
                 snap.forEach(doc => {
-                    fetchedUsers.push({ uid: doc.id, nickname: doc.data().nickname });
+                    const data = doc.data();
+                    fetchedUsers.push({
+                        uid: doc.id,
+                        nickname: data.nickname,
+                        profilePicture: data.profilePicture
+                    });
                 });
 
                 // Now attach listeners to RTDB for statuses
@@ -142,184 +151,186 @@ export function Community() {
         u.nickname?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    const filteredRooms = publicRooms.filter(r =>
+        r.name?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
-        <div className="max-w-6xl mx-auto px-6 py-12 space-y-12 animate-in fade-in duration-700">
-            {/* Header Section */}
-            <header className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-8">
-                <div className="flex items-center gap-6">
-                    <div className="h-20 w-20 bg-emerald-500/10 rounded-[24px] flex items-center justify-center text-emerald-400 border border-emerald-500/20 shadow-[0_0_30px_rgba(16,185,129,0.1)]">
-                        <Users size={40} />
+        <main className="flex-1 overflow-y-auto bg-transparent py-10 px-6 lg:px-20 animate-in fade-in duration-700">
+            <div className="max-w-6xl mx-auto">
+                <div className="flex flex-col md:flex-row items-center md:items-end justify-between mb-10 gap-8">
+                    <div className="flex flex-col gap-4 w-full md:w-auto">
+                        <div className="flex items-center gap-4">
+                            <div className="size-10 rounded-2xl bg-gradient-to-br from-emerald-400 to-indigo-600 flex items-center justify-center text-white shadow-xl shadow-emerald-500/20">
+                                <span className="material-symbols-outlined text-2xl">group</span>
+                            </div>
+                            <h2 className="text-3xl md:text-4xl font-light tracking-tight text-white mb-1">
+                                {t('community.title').split(' ')[0]} <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-indigo-400">{t('community.title').split(' ')[1]}</span>
+                            </h2>
+                        </div>
+                        <div className="flex items-center gap-3 bg-white/5 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 w-fit">
+                            <div className="size-2 bg-primary rounded-full animate-pulse shadow-[0_0_10px_rgba(19,236,164,0.5)]"></div>
+                            <span className="text-xs font-bold tracking-widest uppercase text-slate-300">{t('community.activeAgents', { count: onlineCount })}</span>
+                        </div>
+
                     </div>
-                    <div>
-                        <h1 className="text-4xl font-black uppercase tracking-tighter holographic-text">Community <span className="text-white/40 font-light">Hub</span></h1>
-                        <p className="text-sm font-bold text-zinc-500 mt-1 flex items-center gap-2.5 uppercase tracking-widest">
-                            <span className="flex h-2.5 w-2.5 relative">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-                            </span>
-                            {onlineCount} {onlineCount === 1 ? 'Agent' : 'Agents'} Active
-                        </p>
+
+                    <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
+                        <div className="relative w-full sm:w-64 group">
+                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm group-focus-within:text-primary transition-colors">search</span>
+                            <input
+                                type="text"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="w-full bg-white/5 border border-white/10 rounded-full h-10 pl-10 pr-5 rtl:pr-10 rtl:pl-5 text-xs text-slate-200 placeholder:text-slate-600 focus:outline-none input-glow transition-all"
+                                placeholder={t('community.searchPlaceholder')}
+                            />
+
+                        </div>
+
+                        {isLocked ? (
+                            <div className="flex items-center gap-3 px-6 h-10 bg-red-500/20 text-red-500 rounded-full font-bold border border-red-500/30">
+                                <span className="material-symbols-outlined text-lg">shield_alert</span>
+                                <span className="text-xs uppercase tracking-widest">{t('community.meshLocked')}</span>
+                            </div>
+
+                        ) : (
+                            <button
+                                onClick={() => setIsCreateRoomOpen(true)}
+                                className="flex items-center gap-3 px-6 h-10 bg-white text-background-dark rounded-full font-bold hover:bg-primary transition-all group shadow-xl active:scale-95"
+                            >
+                                <span className="material-symbols-outlined text-lg group-hover:rotate-90 transition-transform">add</span>
+                                <span className="text-[10px] font-black uppercase tracking-widest">{t('community.deployRoom')}</span>
+                            </button>
+
+                        )}
                     </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-4 items-center">
-                    <div className="relative w-full sm:w-80 group">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-emerald-400 transition-colors" size={18} />
-                        <input
-                            type="text"
-                            value={searchTerm}
-                            onChange={e => setSearchTerm(e.target.value)}
-                            placeholder="Find explorers..."
-                            className="w-full bg-white/[0.03] border border-white/5 rounded-2xl py-3.5 pl-12 pr-6 text-sm font-medium text-white placeholder:text-zinc-600 focus:outline-none focus:border-emerald-500/30 focus:bg-white/[0.05] transition-all"
-                        />
-                    </div>
-                    {user && (
-                        <button
-                            onClick={() => !isLocked && setIsCreateRoomOpen(true)}
-                            disabled={isLocked}
-                            className={`premium-button ${isLocked ? 'bg-red-500/20 text-red-500 border border-red-500/30' : 'premium-button-primary'} text-[11px] uppercase tracking-[0.2em] w-full sm:w-auto px-8 transition-all duration-500`}
-                        >
-                            {isLocked ? <Lock size={18} /> : <MessageSquarePlus size={18} />}
-                            {isLocked ? 'Mesh Locked' : 'Deploy Room'}
-                        </button>
-                    )}
+                <div className="flex gap-10 border-b border-white/5 mb-10 overflow-x-auto custom-scrollbar">
+                    <button
+                        onClick={() => setActiveTab('users')}
+                        className={`pb-4 text-xs font-bold tracking-[0.2em] uppercase transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === 'users' ? 'border-b-2 border-primary text-white' : 'border-b-2 border-transparent text-slate-500 hover:text-slate-300'}`}
+                    >
+                        <span className="material-symbols-outlined text-lg">explore</span>
+                        {t('community.tabs.explorers')}
+                    </button>
+
+                    <button
+                        onClick={() => setActiveTab('rooms')}
+                        className={`pb-4 text-xs font-bold tracking-[0.2em] uppercase transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === 'rooms' ? 'border-b-2 border-primary text-white' : 'border-b-2 border-transparent text-slate-500 hover:text-slate-300'}`}
+                    >
+                        <span className="material-symbols-outlined text-lg">hub</span>
+                        {t('community.tabs.hubs')}
+                    </button>
+
                 </div>
-            </header>
 
-            {isLocked && (
-                <div className="bg-red-500/10 border border-red-500/20 rounded-2xl p-4 flex items-center gap-4 animate-pulse">
-                    <ShieldAlert className="text-red-500" size={24} />
-                    <div>
-                        <div className="text-xs font-black uppercase tracking-[0.2em] text-red-500">Global Command Lockdown Active</div>
-                        <p className="text-[10px] text-red-400/60 font-medium uppercase tracking-widest mt-0.5">Administrator has restricted new channel deployments across the mesh network.</p>
-                    </div>
-                </div>
-            )}
-
-            {/* Navigation Tabs */}
-            <div className="flex items-center gap-2 p-1.5 bg-white/[0.02] border border-white/[0.05] rounded-2xl w-fit">
-                <button
-                    onClick={() => setActiveTab('users')}
-                    className={`px-8 py-3 text-[11px] font-black uppercase tracking-[0.2em] rounded-xl transition-all ${activeTab === 'users' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/5'}`}
-                >
-                    Explorers
-                </button>
-                <button
-                    onClick={() => setActiveTab('rooms')}
-                    className={`px-8 py-3 text-[11px] font-black uppercase tracking-[0.2em] rounded-xl transition-all ${activeTab === 'rooms' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/5'}`}
-                >
-                    Public Hubs
-                </button>
-            </div>
-
-            {/* Content Display */}
-            <div className="min-h-[400px]">
                 {loading ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {[1, 2, 3, 4, 5, 6].map(i => (
-                            <div key={i} className="h-32 bg-white/5 animate-pulse rounded-[24px] border border-white/5" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                        {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
+                            <div key={i} className="glass rounded-2xl aspect-[4/5] animate-pulse border-white/5"></div>
                         ))}
                     </div>
                 ) : activeTab === 'users' ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                         {filteredUsers.map(u => (
-                            <div key={u.uid} className="glass-panel p-6 rounded-[28px] group hover:bg-white/[0.05] transition-all duration-300 border-white/[0.03]">
-                                <div className="flex items-center gap-5">
-                                    <div className="relative">
-                                        <div className="h-16 w-16 rounded-[20px] bg-gradient-to-br from-indigo-500/20 to-emerald-500/20 border border-white/10 flex items-center justify-center text-xl font-black text-white group-hover:scale-110 transition-transform duration-500 shadow-inner">
-                                            {u.nickname.charAt(0).toUpperCase()}
+                            <div key={u.uid} className="glass glass-card group rounded-2xl p-4 transition-all flex flex-col cursor-pointer border-white/5">
+                                <div className="relative aspect-[4/5] rounded-xl overflow-hidden mb-5">
+                                    {u.profilePicture ? (
+                                        <img className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" src={u.profilePicture} alt={u.nickname} />
+                                    ) : (
+                                        <div className="size-full bg-slate-800 flex items-center justify-center text-slate-500 group-hover:text-primary transition-colors">
+                                            <span className="material-symbols-outlined text-5xl">person</span>
                                         </div>
-                                        {u.isOnline && (
-                                            <div className="absolute -bottom-1 -right-1 h-5 w-5 bg-[#070708] rounded-full flex items-center justify-center">
-                                                <div className="h-3 w-3 bg-emerald-500 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)] animate-pulse" />
-                                            </div>
+                                    )}
+                                    <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
+                                        <div className="flex items-center gap-1.5">
+                                            <div className={`size-1.5 rounded-full ${u.isOnline ? 'bg-primary' : 'bg-slate-500'}`}></div>
+                                            <span className={`text-[9px] font-bold tracking-widest uppercase ${u.isOnline ? 'text-primary' : 'text-slate-300'}`}>
+                                                {u.isOnline ? t('community.userCard.active') : t('community.userCard.offline')}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div className="px-2 pb-2">
+                                    <h3 className="text-lg font-bold mb-1 flex items-center gap-2 rtl:flex-row-reverse">
+                                        {u.nickname}
+                                        {u.uid === user?.uid && (
+                                            <span className="text-[8px] bg-primary/20 text-primary border border-primary/20 px-1.5 py-0.5 rounded uppercase tracking-widest">{t('community.userCard.self')}</span>
                                         )}
-                                    </div>
-                                    <div className="flex-1 min-w-0">
-                                        <div className="flex items-center gap-2 mb-1">
-                                            <h3 className="font-bold text-white truncate max-w-[140px] uppercase tracking-tight">{u.nickname}</h3>
-                                            {u.uid === user?.uid && (
-                                                <span className="text-[9px] bg-emerald-500/20 text-emerald-400 px-2.5 py-1 rounded-lg uppercase tracking-widest font-black border border-emerald-500/20">Self</span>
-                                            )}
-                                        </div>
-                                        <p className="text-[10px] font-bold uppercase tracking-widest flex items-center gap-2">
-                                            {u.isOnline ? (
-                                                <span className="text-emerald-400 flex items-center gap-1.5 italic">
-                                                    <Activity size={12} /> Active Now
-                                                </span>
-                                            ) : (
-                                                <span className="text-zinc-600">
-                                                    {u.lastSeen ? `Seen ${formatDistanceToNow(u.lastSeen, { addSuffix: true })}` : 'Archived'}
-                                                </span>
-                                            )}
-                                        </p>
-                                    </div>
+                                    </h3>
+
+                                    <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">
+                                        {u.isOnline ? t('community.userCard.pulseDetected') : u.lastSeen ? t('community.userCard.seen', { time: formatDistanceToNow(u.lastSeen, { addSuffix: true }) }) : t('community.userCard.archive')}
+                                    </p>
+
                                 </div>
                             </div>
                         ))}
-
                         {filteredUsers.length === 0 && (
-                            <div className="col-span-full py-20 text-center glass-panel rounded-[32px] border-dashed">
-                                <Search className="mx-auto text-zinc-700 mb-4" size={40} />
-                                <p className="text-zinc-500 font-bold uppercase tracking-widest text-xs">No explorers match your frequency</p>
+                            <div className="col-span-full py-20 text-center glass rounded-3xl border-dashed border-white/10">
+                                <span className="material-symbols-outlined text-5xl text-slate-700 mb-4">search_off</span>
+                                <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-xs">{t('community.userCard.noExplorers')}</p>
                             </div>
+
                         )}
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {publicRooms.filter(r => r.name.toLowerCase().includes(searchTerm.toLowerCase())).map(room => (
-                            <div key={room.id} className="glass-panel p-8 rounded-[32px] group hover:bg-white/[0.05] transition-all duration-500 flex flex-col h-full border-white/[0.03] hover:translate-y-[-4px]">
+                        {filteredRooms.map(room => (
+                            <div key={room.id}
+                                onClick={() => navigate(`/room/${room.id}`)}
+                                className="glass glass-card group rounded-[2rem] p-8 transition-all flex flex-col border-white/5 cursor-pointer hover:border-primary/20"
+                            >
                                 <div className="flex items-start justify-between mb-8">
                                     <div className="flex items-center gap-5">
-                                        <div className="h-14 w-14 rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center border border-indigo-500/20 shadow-inner group-hover:scale-110 transition-transform duration-500">
-                                            <Hash size={28} />
+                                        <div className="size-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20 shadow-inner group-hover:scale-110 transition-transform duration-500">
+                                            <span className="material-symbols-outlined text-3xl">hub</span>
                                         </div>
                                         <div>
-                                            <h3 className="font-black text-xl text-white uppercase tracking-tight group-hover:text-emerald-400 transition-colors">{room.name}</h3>
-                                            <div className="flex items-center gap-2 mt-1.5">
-                                                <UserIcon size={12} className="text-zinc-600" />
-                                                <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500">
-                                                    Host: <span className="text-zinc-300">{room.creatorNickname}</span>
+                                            <h3 className="font-bold text-2xl text-white tracking-tight group-hover:text-primary transition-colors">{room.name}</h3>
+                                            <div className="flex items-center gap-2 mt-1.5 rtl:flex-row-reverse">
+                                                <span className="material-symbols-outlined text-slate-500 text-sm">person</span>
+                                                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                                                    {t('community.roomCard.host', { name: room.creatorNickname })}
                                                 </p>
                                             </div>
+
                                         </div>
                                     </div>
-                                    <span className="text-[10px] font-bold text-zinc-700 uppercase tracking-widest bg-white/[0.02] px-3 py-1.5 rounded-lg border border-white/[0.02]">
-                                        {(() => {
-                                            if (!room.createdAt) return 'RT';
-                                            const date = room.createdAt.toDate ? room.createdAt.toDate() : new Date(room.createdAt);
-                                            return format(date, 'MM.dd.yy');
-                                        })()}
-                                    </span>
+                                    <div className="bg-white/5 px-3 py-1.5 rounded-xl border border-white/10">
+                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                            {room.createdAt ? format(room.createdAt.toDate ? room.createdAt.toDate() : new Date(room.createdAt), 'MM.dd.yy') : 'vRT'}
+                                        </span>
+                                    </div>
                                 </div>
-
-                                <div className="mt-auto pt-8 border-t border-white/[0.03] flex items-center justify-between">
-                                    <div className="flex -space-x-3">
-                                        {[1, 2, 3].map(i => (
-                                            <div key={i} className="w-8 h-8 rounded-full border-2 border-[#070708] bg-zinc-800 flex items-center justify-center text-[10px] font-bold text-zinc-400">
-                                                {i}
-                                            </div>
-                                        ))}
-                                        <div className="w-8 h-8 rounded-full border-2 border-[#070708] bg-emerald-500/10 flex items-center justify-center text-[8px] font-black text-emerald-400">
-                                            +12
+                                <div className="mt-auto pt-8 border-t border-white/5 flex items-center justify-between">
+                                    <div className="flex items-center gap-2">
+                                        <div className="flex -space-x-2">
+                                            {[1, 2, 3].map(i => (
+                                                <div key={i} className="size-8 rounded-full border-2 border-background-dark bg-slate-800 flex items-center justify-center text-[8px] font-bold text-slate-400">
+                                                    {i}
+                                                </div>
+                                            ))}
                                         </div>
+                                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('community.roomCard.activeCount', { count: 12 })}</span>
                                     </div>
 
-                                    <button
-                                        onClick={() => navigate(`/room/${room.id}`)}
-                                        className="flex items-center gap-3 text-xs font-black uppercase tracking-[0.2em] text-emerald-400 hover:text-white transition-all group/btn bg-emerald-500/5 px-6 py-3 rounded-xl border border-emerald-500/10 hover:bg-emerald-500 hover:shadow-lg hover:shadow-emerald-500/20"
-                                    >
-                                        Establish Connection <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
-                                    </button>
+                                    <div className="flex items-center gap-2 text-primary group-hover:translate-x-1 transition-transform">
+                                        <span className="text-[11px] font-bold uppercase tracking-widest">Connect Hub</span>
+                                        <span className="material-symbols-outlined text-lg">arrow_forward</span>
+                                    </div>
                                 </div>
                             </div>
                         ))}
-
-                        {publicRooms.length === 0 && (
-                            <div className="col-span-full py-20 text-center glass-panel rounded-[32px] border-dashed">
-                                <Hash className="mx-auto text-zinc-700 mb-4" size={40} />
-                                <p className="text-zinc-500 font-bold uppercase tracking-widest text-xs">Zero frequencies detected</p>
+                        {filteredRooms.length === 0 && (
+                            <div className="col-span-full py-20 text-center glass rounded-3xl border-dashed border-white/10">
+                                <span className="material-symbols-outlined text-5xl text-slate-700 mb-4">analytics</span>
+                                <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-xs">{t('community.roomCard.noHubs')}</p>
                             </div>
+
                         )}
                     </div>
                 )}
@@ -329,6 +340,6 @@ export function Community() {
                 isOpen={isCreateRoomOpen}
                 onClose={() => setIsCreateRoomOpen(false)}
             />
-        </div>
+        </main>
     );
 }

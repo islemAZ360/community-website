@@ -1,144 +1,81 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --primary: 16 185 129;
-  /* Emerald-500 */
-  --primary-glow: 16 185 129 / 0.15;
-  --accent: 99 102 241;
-  /* Indigo-500 */
-  --accent-glow: 99 102 241 / 0.2;
-  --bg-dark: 9 9 11;
-  --card-bg: 18 18 21;
+  --primary: 19 236 164;
+  --bg-dark: 8 14 12;
 }
 
 @layer base {
   body {
-    @apply bg-zinc-950 text-zinc-50 antialiased selection:bg-emerald-500/30 font-sans;
-    font-family: 'Outfit', sans-serif;
-    background-image:
-      radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.05) 0%, transparent 50%),
-      radial-gradient(circle at 100% 100%, rgba(99, 102, 241, 0.05) 0%, transparent 50%);
+    @apply bg-background-dark text-slate-100 antialiased selection:bg-primary/30 font-display;
+    background-image: 
+        radial-gradient(circle at 0% 0%, rgba(19, 236, 164, 0.12) 0%, transparent 35%),
+        radial-gradient(circle at 100% 100%, rgba(19, 236, 164, 0.08) 0%, transparent 35%),
+        radial-gradient(circle at 50% 50%, rgba(19, 236, 164, 0.05) 0%, transparent 50%),
+        #0a0f0d;
     background-attachment: fixed;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    @apply tracking-tight font-bold;
   }
 }
 
 @layer components {
-  .glass-panel {
-    @apply bg-zinc-900/40 border border-white/[0.05] shadow-xl;
-    position: relative;
-    overflow: hidden;
+  .glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
   }
 
-  .glass-panel::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
-    pointer-events: none;
+  .mesh-gradient {
+    background-color: #080e0c;
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(19, 236, 164, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(19, 236, 164, 0.1) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(19, 236, 164, 0.05) 0px, transparent 50%),
+        radial-gradient(at 0% 100%, rgba(19, 236, 164, 0.1) 0px, transparent 50%);
   }
 
-  .premium-button {
-    @apply relative inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold transition-all duration-300 overflow-hidden active:scale-95;
+  .glass-card:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
-  .premium-button-primary {
-    @apply bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 hover:bg-emerald-600 hover:shadow-emerald-500/40;
+  .btn-premium {
+    background: linear-gradient(135deg, #13eca4 0%, #0db981 100%);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-
-  .premium-button-secondary {
-    @apply bg-white/5 text-zinc-300 border border-white/10 hover:bg-white/10 hover:text-white hover:border-white/20;
-  }
-
-  .holographic-text {
-    @apply bg-gradient-to-r from-emerald-400 via-white to-indigo-400 bg-clip-text text-transparent bg-[length:200%_auto] animate-shimmer;
+  
+  .btn-premium:hover {
+    box-shadow: 0 0 25px rgba(19, 236, 164, 0.4);
+    transform: translateY(-1px) scale(1.01);
   }
 }
 
 @layer utilities {
-  .animate-shimmer {
-    animation: shimmer 5s linear infinite;
+  .text-gradient {
+    background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.6) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
-  @keyframes shimmer {
-    to {
-      background-position: 200% center;
-    }
+  .hero-glow {
+    box-shadow: 0 0 80px -20px rgba(19, 236, 164, 0.3);
   }
 
-  .text-glow-emerald {
-    text-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
-  }
-
-  .text-glow-indigo {
-    text-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+  .input-glow:focus {
+    box-shadow: 0 0 20px rgba(19, 236, 164, 0.15);
+    border-color: rgba(19, 236, 164, 0.4);
   }
 
   @keyframes marquee-fast {
-    0% {
-      transform: translateX(0);
-    }
-
-    100% {
-      transform: translateX(-50%);
-    }
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
   }
 
   .animate-marquee-fast {
     animation: marquee-fast 20s linear infinite;
-  }
-
-  /* Epic Hero Overhaul Utilities */
-  .hero-glow {
-    text-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
-  }
-
-  .hero-glow-intense {
-    text-shadow: 0 0 30px rgba(16, 185, 129, 0.5), 0 0 60px rgba(99, 102, 241, 0.2);
-  }
-
-  .bg-grid-moving {
-    background-size: 50px 50px;
-    background-image:
-      linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    animation: moveGrid 20s linear infinite;
-  }
-
-  @keyframes moveGrid {
-    0% {
-      transform: translateY(0);
-    }
-
-    100% {
-      transform: translateY(50px);
-    }
-  }
-
-  /* Removed expensive button-sweep and float animations to maximize performance */
-
-  /* Epic Physics Utilities */
-  .ease-spring {
-    transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
-
-  .ease-spring-heavy {
-    transition-timing-function: cubic-bezier(0.25, 1.5, 0.5, 1);
-  }
-
-  .preserve-3d {
-    transform-style: preserve-3d;
   }
 }

@@ -214,7 +214,7 @@ export function Room() {
     return (
         <div className="max-w-6xl mx-auto h-[calc(100vh-120px)] flex flex-col pt-4 px-6 animate-in fade-in duration-700">
             {/* Room Header */}
-            <header className="glass-panel p-6 rounded-t-[32px] flex items-center justify-between border-b border-white/[0.03] sticky top-0 z-10 shrink-0 shadow-lg">
+            <header className="glass-panel p-4 rounded-t-[2rem] flex items-center justify-between border-b border-white/[0.03] sticky top-0 z-10 shrink-0 shadow-lg">
                 <div className="flex items-center gap-6">
                     <button
                         onClick={() => navigate('/community')}
@@ -223,14 +223,14 @@ export function Room() {
                         <ArrowLeft size={22} />
                     </button>
 
-                    <div className="flex items-center gap-5">
-                        <div className="h-14 w-14 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-400 border border-emerald-500/20 shadow-inner">
-                            <Hash size={28} />
+                    <div className="flex items-center gap-4">
+                        <div className="h-12 w-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-emerald-400 border border-emerald-500/20 shadow-inner">
+                            <Hash size={24} />
                         </div>
                         <div>
-                            <div className="flex items-center gap-3">
-                                <h1 className="font-black text-2xl text-white uppercase tracking-tight holographic-text">{room?.name}</h1>
-                                {room?.isPrivate && <ShieldCheck size={16} className="text-indigo-400/50" />}
+                            <div className="flex items-center gap-2.5">
+                                <h1 className="font-black text-xl text-white uppercase tracking-tight holographic-text">{room?.name}</h1>
+                                {room?.isPrivate && <ShieldCheck size={14} className="text-indigo-400/50" />}
                             </div>
                             <p className="text-[10px] font-black text-zinc-600 uppercase tracking-widest mt-0.5 flex items-center gap-2">
                                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" /> Host: {room?.creatorNickname}
@@ -281,7 +281,7 @@ export function Room() {
             </header>
 
             {/* Chat Area */}
-            <div className="flex-1 glass-panel rounded-none border-x border-y-0 border-white/[0.03] overflow-y-auto p-8 space-y-8 custom-scrollbar bg-black/20">
+            <div className="flex-1 glass-panel rounded-none border-x border-y-0 border-white/[0.03] overflow-y-auto p-6 space-y-6 custom-scrollbar bg-black/20">
                 {messages.length === 0 ? (
                     <div className="h-full flex flex-col items-center justify-center text-zinc-800 space-y-6">
                         <MessageSquare size={64} className="opacity-20 animate-pulse" />
@@ -312,7 +312,7 @@ export function Room() {
                                             </button>
                                         )}
                                         <div
-                                            className={`px-6 py-4 rounded-[24px] text-sm font-medium leading-relaxed ${msg.type === 'admin_announcement' ? 'bg-amber-500/10 text-amber-200 border border-amber-500/20 shadow-[0_0_20px_rgba(245,158,11,0.05)] italic' :
+                                            className={`px-5 py-3 rounded-[20px] text-[13px] font-medium leading-relaxed ${msg.type === 'admin_announcement' ? 'bg-amber-500/10 text-amber-200 border border-amber-500/20 shadow-[0_0_20px_rgba(245,158,11,0.05)] italic' :
                                                 isMe ? 'bg-emerald-500 text-white shadow-[0_10px_30px_rgba(16,185,129,0.1)] rounded-tr-none' :
                                                     'bg-white/[0.03] text-zinc-300 border border-white/[0.03] rounded-tl-none'
                                                 }`}
@@ -345,7 +345,7 @@ export function Room() {
             </div>
 
             {/* Input Area */}
-            <div className="glass-panel p-6 rounded-b-[32px] border-t border-white/[0.03] shrink-0 bg-zinc-950/30 backdrop-blur-2xl">
+            <div className="glass-panel p-5 rounded-b-[2rem] border-t border-white/[0.03] shrink-0 bg-zinc-950/30 backdrop-blur-2xl">
                 <form onSubmit={handleSendMessage} className="flex items-center gap-4">
                     <div className="flex-1 relative group">
                         <input
@@ -353,7 +353,7 @@ export function Room() {
                             value={newMessage}
                             onChange={(e) => setNewMessage(e.target.value)}
                             placeholder={`COMMAND_INPUT_#${room?.name?.toUpperCase()}...`}
-                            className="w-full bg-white/[0.02] border border-white/5 rounded-[22px] py-5 px-8 text-sm font-medium text-white placeholder:text-zinc-800 focus:outline-none focus:border-emerald-500/30 focus:bg-white/[0.04] transition-all"
+                            className="w-full bg-white/[0.02] border border-white/5 rounded-[18px] py-4 px-6 text-xs font-medium text-white placeholder:text-zinc-800 focus:outline-none focus:border-emerald-500/30 focus:bg-white/[0.04] transition-all"
                         />
                         <div className="absolute right-6 top-1/2 -translate-y-1/2 text-[10px] font-black text-zinc-800 pointer-events-none group-focus-within:text-emerald-500/30 transition-colors">
                             RT_V2.0.4
@@ -362,9 +362,9 @@ export function Room() {
                     <button
                         type="submit"
                         disabled={!newMessage.trim()}
-                        className="h-14 w-14 flex items-center justify-center bg-emerald-500 hover:bg-emerald-400 disabled:opacity-20 disabled:hover:bg-emerald-500 text-white rounded-[20px] transition-all shadow-[0_10px_30px_rgba(16,185,129,0.2)] active:scale-95 group"
+                        className="h-12 w-12 flex items-center justify-center bg-emerald-500 hover:bg-emerald-400 disabled:opacity-20 disabled:hover:bg-emerald-500 text-white rounded-[16px] transition-all shadow-[0_10px_30px_rgba(16,185,129,0.2)] active:scale-95 group"
                     >
-                        <Send size={24} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                        <Send size={20} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                     </button>
                 </form>
             </div>

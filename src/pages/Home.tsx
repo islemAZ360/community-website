@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Download, Star, Sparkles, Rocket, ArrowRight, Shield, Zap, Globe, Cpu, Code2, User as UserIcon, Terminal, Monitor, Key, Info, CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { format } from 'date-fns';
+import { useTranslation } from 'react-i18next';
 
 
 interface AppVersion {
@@ -12,24 +12,17 @@ interface AppVersion {
     isLatest: boolean;
 }
 
-interface FeatureDetail {
-    title: string;
-    desc: string;
-    icon: any;
-    gradient: string;
-    longDesc: string[];
-}
-
 export function Home() {
+    const { t, i18n } = useTranslation();
     const [latestVersion, setLatestVersion] = useState<AppVersion | null>(null);
+
     const [olderVersions, setOlderVersions] = useState<AppVersion[]>([]);
     const [loading, setLoading] = useState(true);
-    const [selectedFeature, setSelectedFeature] = useState<number | null>(null);
     const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
 
     const instructionalVideos = [
         { src: "/system_core.mp4", title: "System Capabilities Showcase" },
-        { src: "/system_core1.mp4", title: "How to Use iDIDDY" },
+        { src: "/system_core1.mp4", title: "How to Use OUR-FIX" },
         { src: "/system_core2.mp4", title: "Getting a Free API Key" }
     ];
 
@@ -77,385 +70,279 @@ export function Home() {
         fetchVersions();
     }, []);
 
-    const features: FeatureDetail[] = [
-        {
-            title: "Elite Community",
-            desc: "Join a network of high-performing developers pushing the boundaries of coding efficiency.",
-            icon: Star,
-            gradient: "from-emerald-400 to-emerald-600",
-            longDesc: [
-                "Exclusive access to private development hubs and collaboration rooms.",
-                "Peer-reviewed logic sharing for advanced algorithmic challenges.",
-                "Direct networking with the creator and top-tier power users.",
-                "Community-driven feature requests and beta testing opportunities."
-            ]
-        },
-        {
-            title: "Proprietary Architecture",
-            desc: "Built from the ground up for stability, security, and maximum developer empowerment.",
-            icon: Cpu,
-            gradient: "from-cyan-400 to-cyan-600",
-            longDesc: [
-                "Custom-built IPC (Inter-Process Communication) layer for lightning-fast speeds.",
-                "Secure license management system with encrypted key validation.",
-                "Dynamic PWA support for instant access across multiple devices.",
-                "Modular code structure allowing for rapid feature expansion and iteration."
-            ]
-        },
-        {
-            title: "Global Neural Bridge",
-            desc: "Seamlessly integrate with world-class intelligence providers for real-time problem solving.",
-            icon: Globe,
-            gradient: "from-indigo-400 to-indigo-600",
-            longDesc: [
-                "Multi-provider support including Google, OpenAI, Anthropic, and more.",
-                "Redundant neural node failover for uninterrupted interview support.",
-                "Intelligent context-aware RAG memory for consistent technical answers.",
-                "Encrypted API vault for high-security credential management."
-            ]
-        },
-    ];
-
     return (
-        <div className="max-w-7xl mx-auto px-4 py-8 space-y-16">
-            {/* Compact High-Performance Hero Section */}
-            <section className="relative min-h-[50vh] flex flex-col items-center justify-center text-center py-10 px-4 overflow-hidden -mx-4 rounded-[2rem] border border-white/[0.02] bg-[#050505]">
-
-                {/* Lightweight Static Backgrounds */}
-                <div className="absolute inset-0 bg-grid-moving opacity-10"></div>
-
-                {/* Simplified Lightweight Glows (No Pulse, Lower Blur) */}
-                <div className="absolute top-0 right-1/4 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
-                <div className="relative z-10 w-full max-w-3xl mx-auto space-y-6">
-                    {/* Badge */}
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/5 text-emerald-400 text-[10px] font-bold uppercase tracking-widest shadow-sm">
-                        <Zap size={12} className="text-emerald-500" />
-                        <span>The Ultimate Developer Vanguard</span>
+        <div className="flex-1 flex flex-col">
+            {/* Hero Section */}
+            <section className="relative pt-16 pb-24 px-6 lg:px-20 overflow-hidden">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-6xl h-full pointer-events-none opacity-20">
+                    <div className="absolute inset-0 bg-primary/20 blur-[120px] rounded-full transform -translate-y-1/2"></div>
+                </div>
+                <div className="max-w-7xl mx-auto text-center relative z-10 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass border-primary/20 mb-6 shadow-[0_0_15px_rgba(19,236,164,0.1)]">
+                        <span className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                        </span>
+                        <span className="text-[10px] font-semibold tracking-widest uppercase text-primary">System Update Available</span>
                     </div>
-
-                    {/* Compact Typography */}
-                    <div className="space-y-3">
-                        <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-none uppercase italic text-white drop-shadow-md">
-                            OWN THE <br />
-                            <span className="holographic-text inline-block pb-2">FLOW.</span>
-                        </h1>
-                        <p className="text-sm md:text-base text-zinc-400 max-w-xl mx-auto font-medium uppercase tracking-normal">
-                            Revolutionizing the technical interview landscape. <span className="text-white">Built by developers, for the elite.</span>
-                        </p>
-                    </div>
-
-                    {/* High-Impact CTA */}
-                    <div className="pt-4 flex flex-col items-center gap-6 animate-in fade-in slide-in-from-bottom-16 duration-1000 delay-700 relative z-20">
+                    <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter text-gradient mb-6 leading-[0.9]">
+                        {t('home.hero.title')}
+                    </h1>
+                    <p className="max-w-xl mx-auto text-base md:text-lg text-slate-400 leading-relaxed mb-10">
+                        {i18n.language === 'en' ? (
+                            <>
+                                <span className="text-primary">O</span>ur <span className="text-primary">U</span>nified <span className="text-primary">R</span>esponse: <span className="text-primary">F</span>ast <span className="text-primary">I</span>nterview & <span className="text-primary">X</span>-am assist.
+                            </>
+                        ) : t('home.hero.subtitle')}
+                    </p>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
                         {loading ? (
-                            <div className="h-14 w-64 bg-white/5 rounded-xl animate-pulse border border-white/10" />
+                            <div className="h-16 w-64 bg-white/5 rounded-xl animate-pulse border border-white/10" />
                         ) : latestVersion ? (
-                            <div className="space-y-6 flex flex-col items-center">
-                                {/* Magnetic Glow Button - Resized */}
-                                <div className="relative group">
-                                    <div className="absolute -inset-1 bg-gradient-to-r from-emerald-600 to-emerald-400 rounded-xl opacity-50 group-hover:opacity-100 blur-md group-hover:blur-lg transition-all duration-500"></div>
-                                    <a
-                                        href={latestVersion.downloadUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="relative flex items-center gap-2 bg-zinc-950 border border-emerald-500/50 text-white text-xs font-bold uppercase tracking-[0.2em] px-8 py-3 rounded-xl overflow-hidden button-sweep transform hover:-translate-y-1 hover:scale-105 transition-transform duration-300 shadow-md group-hover:shadow-[0_0_30px_rgba(16,185,129,0.3)]"
-                                    >
-                                        <Download size={16} className="text-emerald-400 group-hover:animate-bounce" />
-                                        <span>GET LATEST <span className="text-emerald-400">V{latestVersion.version}</span></span>
-                                    </a>
-                                </div>
+                            <a
+                                href={latestVersion.downloadUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="hero-glow group relative flex items-center gap-3 px-6 py-3 bg-primary rounded-xl text-background-dark font-bold text-base hover:scale-105 transition-all shadow-xl"
+                            >
+                                <span>{t('home.hero.downloadLatest', { version: latestVersion.version })}</span>
+                                <span className="material-symbols-outlined group-hover:translate-x-0.5 transition-transform text-lg">download</span>
+                            </a>
 
-                                {/* Security Features Footer */}
-                                <div className="glass-panel px-6 py-3 flex flex-wrap items-center justify-center gap-4 md:gap-8 text-[10px] font-bold uppercase tracking-wider text-zinc-400 rounded-full border-white/10">
-                                    <span className="flex items-center gap-2 hover:text-white transition-colors">
-                                        <div className="p-1 rounded-full bg-emerald-500/20"><Shield size={12} className="text-emerald-500" /></div> Encrypted Build
-                                    </span>
-                                    <span className="w-1 h-1 rounded-full bg-white/10" />
-                                    <span className="flex items-center gap-2 hover:text-white transition-colors">
-                                        <div className="p-1 rounded-full bg-indigo-500/20"><Zap size={12} className="text-indigo-400" /></div> Fast Execution
-                                    </span>
-                                    <span className="w-1 h-1 rounded-full bg-white/10" />
-                                    <span className="flex items-center gap-2 hover:text-white transition-colors">
-                                        <div className="p-1 rounded-full bg-cyan-500/20"><Globe size={12} className="text-cyan-400" /></div> Win 10/11 Native
-                                    </span>
-                                </div>
-                            </div>
                         ) : (
-                            <div className="glass-panel p-6 rounded-2xl border-dashed border-zinc-800 flex flex-col items-center">
-                                <Rocket className="text-zinc-600 mb-3 animate-bounce" size={32} />
-                                <p className="text-zinc-500 font-bold uppercase tracking-wider text-xs">Awaiting Build Deployment</p>
+                            <div className="glass p-4 rounded-xl text-slate-400 flex items-center gap-2 border-white/10">
+                                <span className="material-symbols-outlined animate-spin">refresh</span>
+                                <span>{t('home.hero.checkingUpdates')}</span>
                             </div>
                         )}
+
+                        <a href="https://github.com/islemAZ360/DODI-Releases" target="_blank" rel="noopener noreferrer" className="px-6 py-3 glass rounded-xl text-slate-100 font-bold text-base hover:bg-white/10 transition-all border-white/20">
+                            {t('home.hero.viewDocs')}
+                        </a>
+
                     </div>
                 </div>
             </section>
 
-            {/* The iDIDDY Advantage Section */}
-            <section className="glass-panel p-6 md:p-10 rounded-[2rem] relative overflow-hidden border-white/5 bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.05),transparent)]">
-                <div className="grid lg:grid-cols-2 gap-10 items-center">
-                    <div className="space-y-8">
-                        <div className="space-y-4">
-                            <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight leading-none italic">
-                                Why <span className="text-emerald-500">iDIDDY?</span>
-                            </h2>
-                            <p className="text-zinc-400 text-sm md:text-base leading-relaxed font-bold uppercase tracking-normal">
-                                This isn't just another tool. It's a comprehensive ecosystem designed to bridge the gap between human logic and machine-level speed during technical assessments.
-                            </p>
-                        </div>
+            {/* Video Showcase Section */}
+            <section className="px-6 lg:px-20 pb-20">
+                <div className="max-w-5xl mx-auto">
+                    <div className="relative aspect-video rounded-[2rem] glass overflow-hidden hero-glow group border border-primary/20 shadow-2xl">
+                        <video
+                            controls
+                            preload="metadata"
+                            playsInline
+                            className="absolute inset-0 w-full h-full object-cover bg-black"
+                            src={instructionalVideos[currentVideoIndex].src}
+                        />
 
-                        <div className="space-y-8">
-                            {[
-                                { title: "Real-time Transcription", desc: "Our proprietary audio engine captures system sound with 99.9% accuracy.", icon: Terminal },
-                                { title: "Instant Logic Feedback", desc: "Get structural breakdowns of complex coding problems as they are described.", icon: Code2 },
-                                { title: "Stealth Architecture", desc: "Minimal UI footprints ensure focus remains on the code, not the tool.", icon: Monitor }
-                            ].map((adv, i) => (
-                                <div key={i} className="flex gap-6 group">
-                                    <div className="h-12 w-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
-                                        <adv.icon size={24} />
-                                    </div>
-                                    <div>
-                                        <h4 className="text-white font-black uppercase tracking-widest text-sm mb-1">{adv.title}</h4>
-                                        <p className="text-zinc-500 text-xs font-bold leading-relaxed">{adv.desc}</p>
-                                    </div>
-                                </div>
+                        <button
+                            onClick={prevVideo}
+                            className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/50 border border-white/10 text-white flex items-center justify-center hover:bg-primary hover:border-primary hover:text-background-dark backdrop-blur-md transition-all opacity-0 group-hover:opacity-100 z-30 shadow-lg hover:scale-110"
+                        >
+                            <span className="material-symbols-outlined">chevron_left</span>
+                        </button>
+                        <button
+                            onClick={nextVideo}
+                            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/50 border border-white/10 text-white flex items-center justify-center hover:bg-primary hover:border-primary hover:text-background-dark backdrop-blur-md transition-all opacity-0 group-hover:opacity-100 z-30 shadow-lg hover:scale-110"
+                        >
+                            <span className="material-symbols-outlined">chevron_right</span>
+                        </button>
+                    </div>
+                    <div className="mt-8 text-center flex flex-col items-center justify-center gap-4">
+                        <p className="text-xl font-bold tracking-tight text-white uppercase tracking-[0.2em] opacity-80 animate-pulse">
+                            {instructionalVideos[currentVideoIndex].title}
+                        </p>
+                        <div className="flex gap-2">
+                            {instructionalVideos.map((_, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={() => setCurrentVideoIndex(idx)}
+                                    className={`h-1.5 rounded-full transition-all duration-300 ${idx === currentVideoIndex ? 'w-8 bg-primary shadow-[0_0_15px_rgba(19,236,164,0.8)]' : 'w-2 bg-white/10 hover:bg-white/30'}`}
+                                />
                             ))}
                         </div>
                     </div>
-
-                    <div className="relative group perspective-1000 w-full mt-8 lg:mt-0">
-                        {/* Removed blur for performance */}
-                        <div
-                            className="relative rounded-2xl border border-white/10 p-2 shadow-[0_0_40px_rgba(0,0,0,0.5)] bg-[#050505] transform transition-transform duration-300 ease-out w-full overflow-hidden hover:scale-[1.01]"
-                        >
-                            <div className="absolute inset-0 bg-grid-emerald/5 opacity-20"></div>
-
-                            {/* Top Bar / Header */}
-                            <div className="relative z-20 flex items-center justify-between mb-3 px-3 pt-2">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
-                                    <h3
-                                        key={`title-${currentVideoIndex}`}
-                                        className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider"
-                                    >
-                                        {instructionalVideos[currentVideoIndex].title}
-                                    </h3>
-                                </div>
-                                <div className="flex gap-2">
-                                    {instructionalVideos.map((_, idx) => (
-                                        <button
-                                            key={idx}
-                                            onClick={() => setCurrentVideoIndex(idx)}
-                                            className={`h-1.5 rounded-full transition-all duration-500 ease-spring-heavy ${idx === currentVideoIndex ? 'w-8 bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.8)]' : 'w-2 bg-white/10 hover:bg-white/30'}`}
-                                            title={`Go to video ${idx + 1}`}
-                                        />
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Video Screen Container */}
-                            <div className="relative z-10 w-full aspect-[16/9] rounded-xl bg-black border border-white/5 ring-1 ring-emerald-500/20 shadow-[0_0_30px_rgba(16,185,129,0.1)] group/screen overflow-hidden">
-
-                                {/* Single Performant Video Element */}
-                                <video
-                                    controls
-                                    preload="metadata"
-                                    playsInline
-                                    className="absolute inset-0 w-full h-full object-cover bg-black"
-                                    src={instructionalVideos[currentVideoIndex].src}
-                                />
-
-                                {/* Overlay Controls */}
-                                <button
-                                    onClick={prevVideo}
-                                    className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/80 border border-white/10 text-white flex items-center justify-center hover:bg-emerald-500 hover:scale-110 hover:border-emerald-400 transition-all opacity-0 group-hover/screen:opacity-100 z-30 shadow-lg"
-                                >
-                                    <ChevronLeft size={20} />
-                                </button>
-                                <button
-                                    onClick={nextVideo}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-black/80 border border-white/10 text-white flex items-center justify-center hover:bg-emerald-500 hover:scale-110 hover:border-emerald-400 transition-all opacity-0 group-hover/screen:opacity-100 z-30 shadow-lg"
-                                >
-                                    <ChevronRight size={20} />
-                                </button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </section>
 
-            {/* Features Matrix with Read More */}
-            <section className="space-y-20">
-                <div className="text-center space-y-4">
-                    <h2 className="text-4xl font-black uppercase tracking-tighter">System <span className="text-white/40">Capabilities</span></h2>
-                    <p className="text-zinc-500 uppercase tracking-widest text-[11px] font-black">Professional Toolset Breakdown</p>
-                </div>
-                <div className="grid md:grid-cols-3 gap-8">
-                    {features.map((feat, i) => (
-                        <div
-                            key={i}
-                            onClick={() => setSelectedFeature(selectedFeature === i ? null : i)}
-                            className={`glass-panel p-10 rounded-[32px] group transition-all duration-500 border-white/[0.03] cursor-pointer relative overflow-hidden ${selectedFeature === i ? 'bg-white/[0.08] ring-1 ring-emerald-500/40' : 'hover:bg-white/[0.05] hover:translate-y-[-8px]'}`}
-                        >
-                            <div className={`h-16 w-16 rounded-2xl bg-gradient-to-br ${feat.gradient} text-white flex items-center justify-center mb-8 shadow-2xl group-hover:scale-110 transition-transform duration-500`}>
-                                <feat.icon size={32} />
-                            </div>
-                            <h3 className="text-2xl font-black text-white mb-4 uppercase tracking-tight">{feat.title}</h3>
-                            <p className="text-zinc-400 leading-relaxed font-medium mb-6">{feat.desc}</p>
-
-                            <div className={`space-y-4 overflow-hidden transition-all duration-1000 ease-in-out ${selectedFeature === i ? 'max-h-[800px] opacity-100 mb-8 pointer-events-auto' : 'max-h-0 opacity-0 pointer-events-none'}`}>
-                                {feat.longDesc.map((item, idx) => (
-                                    <div key={idx} className="flex items-start gap-4 text-xs text-zinc-400 font-bold uppercase tracking-tight group/item">
-                                        <div className="mt-1 h-3 w-3 flex-shrink-0">
-                                            <CheckCircle2 size={12} className="text-emerald-500 group-hover/item:scale-125 transition-transform" />
-                                        </div>
-                                        <span className="leading-relaxed">{item}</span>
-                                    </div>
-                                ))}
-                            </div>
-
-                            <div className="pt-8 border-t border-white/[0.05]">
-                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-400 flex items-center gap-2">
-                                    {selectedFeature === i ? 'Collapse Details' : 'Read Full Specs'} <ArrowRight size={12} className={selectedFeature === i ? '-rotate-90 transition-transform' : ''} />
-                                </span>
-                            </div>
+            {/* Metrics Grid */}
+            <section className="px-6 lg:px-20 pb-20">
+                <div className="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="glass p-6 rounded-2xl relative overflow-hidden group hover:bg-white/[0.05] transition-colors border-white/10 text-left rtl:text-right">
+                        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <span className="material-symbols-outlined text-5xl text-primary">hub</span>
                         </div>
-                    ))}
+                        <p className="text-slate-400 text-xs font-medium uppercase tracking-widest mb-1">{t('home.metrics.activeNodes')}</p>
+                        <div className="flex items-baseline gap-3">
+                            <h3 className="text-3xl font-black text-white">1.2M+</h3>
+                            <span className="text-primary text-sm font-bold">+12%</span>
+                        </div>
+                        <div className="mt-4 h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                            <div className="h-full bg-primary w-3/4 rounded-full shadow-[0_0_10px_rgba(19,236,164,0.5)]"></div>
+                        </div>
+                    </div>
+                    <div className="glass p-8 rounded-2xl relative overflow-hidden group hover:bg-white/[0.05] transition-colors border-white/10 text-left rtl:text-right">
+                        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <span className="material-symbols-outlined text-6xl text-primary">bolt</span>
+                        </div>
+                        <p className="text-slate-400 text-sm font-medium uppercase tracking-widest mb-1">{t('home.metrics.latency')}</p>
+                        <div className="flex items-baseline gap-3">
+                            <h3 className="text-4xl font-black text-white">&lt; 2ms</h3>
+                            <span className="text-rose-500 text-sm font-bold">-5%</span>
+                        </div>
+                        <div className="mt-4 h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                            <div className="h-full bg-primary w-full rounded-full shadow-[0_0_10px_rgba(19,236,164,0.5)]"></div>
+                        </div>
+                    </div>
+                    <div className="glass p-8 rounded-2xl relative overflow-hidden group hover:bg-white/[0.05] transition-colors border-white/10 text-left rtl:text-right">
+                        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                            <span className="material-symbols-outlined text-6xl text-primary">shield</span>
+                        </div>
+                        <p className="text-slate-400 text-sm font-medium uppercase tracking-widest mb-1">{t('home.metrics.encryption')}</p>
+                        <div className="flex items-baseline gap-3">
+                            <h3 className="text-4xl font-black text-white">{t('home.metrics.military')}</h3>
+                            <span className="text-slate-500 text-sm font-bold">v256-bit</span>
+                        </div>
+                        <div className="mt-4 h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                            <div className="h-full bg-primary w-5/6 rounded-full shadow-[0_0_10px_rgba(19,236,164,0.5)]"></div>
+                        </div>
+                    </div>
+
                 </div>
             </section>
 
-            {/* Expanded Usage Protocol */}
-            <section className="space-y-20">
-                <div className="text-center space-y-4">
-                    <h2 className="text-4xl font-black uppercase tracking-tighter">Usage <span className="text-white/40">Protocol</span></h2>
-                    <p className="text-zinc-500 uppercase tracking-widest text-[11px] font-black">Technical Integration Workflow</p>
-                </div>
-
-                <div className="grid lg:grid-cols-2 gap-8">
-                    {[
-                        {
-                            step: "01",
-                            title: "Account Provisioning",
-                            icon: UserIcon,
-                            details: [
-                                "Create a Hub Profile via the 'Sign In' portal to access the elite developer ecosystem.",
-                                "Navigate to your Personal Profile and trigger the 'Request Access Key' protocol.",
-                                "Authorized keys are typically provisioned within 24 hours after manual vetting.",
-                                "Once approved, your unique encrypted hardware key will manifest in your dashboard."
-                            ]
-                        },
-                        {
-                            step: "02",
-                            title: "Infrastructure Setup",
-                            icon: Download,
-                            details: [
-                                "Download the latest native iDIDDY production build from the Release Archive.",
-                                "Execute the installer to deploy the core engine and frontend assets locally.",
-                                "Launch the application and authenticate using your Hub credentials to prime the system.",
-                                "The engine will verify your hardware fingerprint against our secure blockchain-linked registry."
-                            ]
-                        },
-                        {
-                            step: "03",
-                            title: "Neural Engine Calibration",
-                            icon: Key,
-                            details: [
-                                "Configure your primary intelligence node in settings (Google Gemini or OpenAI recommended).",
-                                "Insert your LLM API key into the local encrypted vault; credentials never leave your machine.",
-                                "Run the 'Neural Bridge Diagnostic' to confirm connectivity and response latency.",
-                                "Calibrate audio sensitivity thresholds for optimal system-level transcription accuracy."
-                            ]
-                        },
-                        {
-                            step: "04",
-                            title: "Operational Mastery",
-                            icon: Sparkles,
-                            details: [
-                                "Initiate your capture session; iDIDDY will autohijack system audio streams for processing.",
-                                "Deploy the sidecar transcription window to monitor real-time node outputs silently.",
-                                "Activate 'Stealth Mode' to minimize visual footprints while maintaining full cognitive support.",
-                                "Use global shortcuts (Ctrl+H, Alt+S) to command the AI without breaking your coding flow."
-                            ]
-                        }
-                    ].map((item, i) => (
-                        <div key={i} className="glass-panel p-10 rounded-[40px] border-white/5 hover:bg-white/[0.02] transition-colors">
-                            <div className="flex items-start gap-8">
-                                <div className="h-20 w-20 flex-shrink-0 rounded-3xl bg-zinc-900 border border-white/10 flex items-center justify-center text-white font-black text-3xl shadow-2xl">
-                                    {item.step}
-                                </div>
-                                <div className="space-y-6">
-                                    <div className="flex items-center gap-4">
-                                        <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-400">
-                                            <item.icon size={18} />
-                                        </div>
-                                        <h4 className="text-xl font-black text-white uppercase tracking-tighter italic">{item.title}</h4>
-                                    </div>
-                                    <div className="space-y-3">
-                                        {item.details.map((point, pidx) => (
-                                            <div key={pidx} className="flex gap-3 items-start group">
-                                                <div className="h-1.5 w-1.5 rounded-full bg-white/20 mt-1.5 group-hover:bg-emerald-500 transition-colors"></div>
-                                                <p className="text-[12px] text-zinc-500 font-bold leading-relaxed">{point}</p>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
+            {/* Features Matrix */}
+            <section className="px-6 lg:px-20 pb-24">
+                <div className="max-w-7xl mx-auto">
+                    <div className="flex items-end justify-between mb-10">
+                        <div className="text-left rtl:text-right">
+                            <h2 className="text-3xl font-black text-white tracking-tight mb-2">{t('home.features.title')}</h2>
+                            <p className="text-slate-400">{t('home.features.subtitle')}</p>
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div className="relative aspect-[4/5] rounded-3xl overflow-hidden group cursor-default">
+                            <div className="absolute inset-0 bg-background-dark/80 group-hover:bg-background-dark/60 transition-colors duration-500"></div>
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(19,236,164,0.2),transparent)]"></div>
+                            <div className="absolute inset-0 border border-white/10 rounded-3xl group-hover:border-primary/30 transition-colors"></div>
+                            <div className="absolute bottom-0 left-0 rtl:left-auto rtl:right-0 p-8 transform group-hover:-translate-y-2 transition-transform duration-500 text-left rtl:text-right">
+                                <span className="material-symbols-outlined text-primary text-4xl mb-6 shadow-sm">psychology</span>
+                                <h3 className="text-xl font-bold text-white mb-2">{t('home.features.neural.title')}</h3>
+                                <p className="text-slate-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">{t('home.features.neural.description')}</p>
                             </div>
                         </div>
-                    ))}
-                </div>
-
-                <div className="glass-panel p-12 rounded-[40px] bg-emerald-500/5 border-emerald-500/10 border-dashed text-center">
-                    <div className="inline-flex items-center gap-2 mb-6 text-[10px] font-black uppercase tracking-widest text-emerald-400">
-                        <Info size={14} /> Developer Tip
+                        <div className="relative aspect-[4/5] rounded-3xl overflow-hidden group cursor-default">
+                            <div className="absolute inset-0 bg-background-dark/80 group-hover:bg-background-dark/60 transition-colors duration-500"></div>
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(19,236,164,0.2),transparent)]"></div>
+                            <div className="absolute inset-0 border border-white/10 rounded-3xl group-hover:border-primary/30 transition-colors"></div>
+                            <div className="absolute bottom-0 left-0 rtl:left-auto rtl:right-0 p-8 transform group-hover:-translate-y-2 transition-transform duration-500 text-left rtl:text-right">
+                                <span className="material-symbols-outlined text-primary text-4xl mb-6 shadow-sm">enhanced_encryption</span>
+                                <h3 className="text-xl font-bold text-white mb-2">{t('home.features.quantum.title')}</h3>
+                                <p className="text-slate-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">{t('home.features.quantum.description')}</p>
+                            </div>
+                        </div>
+                        <div className="relative aspect-[4/5] rounded-3xl overflow-hidden group cursor-default">
+                            <div className="absolute inset-0 bg-background-dark/80 group-hover:bg-background-dark/60 transition-colors duration-500"></div>
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.2),transparent)]"></div>
+                            <div className="absolute inset-0 border border-white/10 rounded-3xl group-hover:border-sky-400/30 transition-colors"></div>
+                            <div className="absolute bottom-0 left-0 rtl:left-auto rtl:right-0 p-8 transform group-hover:-translate-y-2 transition-transform duration-500 text-left rtl:text-right">
+                                <span className="material-symbols-outlined text-sky-400 text-4xl mb-6 shadow-sm">all_out</span>
+                                <h3 className="text-xl font-bold text-white mb-2">{t('home.features.scalability.title')}</h3>
+                                <p className="text-slate-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">{t('home.features.scalability.description')}</p>
+                            </div>
+                        </div>
+                        <div className="relative aspect-[4/5] rounded-3xl overflow-hidden group cursor-default">
+                            <div className="absolute inset-0 bg-background-dark/80 group-hover:bg-background-dark/60 transition-colors duration-500"></div>
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_right,rgba(167,139,250,0.2),transparent)]"></div>
+                            <div className="absolute inset-0 border border-white/10 rounded-3xl group-hover:border-purple-400/30 transition-colors"></div>
+                            <div className="absolute bottom-0 left-0 rtl:left-auto rtl:right-0 p-8 transform group-hover:-translate-y-2 transition-transform duration-500 text-left rtl:text-right">
+                                <span className="material-symbols-outlined text-purple-400 text-4xl mb-6 shadow-sm">stream</span>
+                                <h3 className="text-xl font-bold text-white mb-2">{t('home.features.ui.title')}</h3>
+                                <p className="text-slate-300 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300">{t('home.features.ui.description')}</p>
+                            </div>
+                        </div>
                     </div>
-                    <p className="text-zinc-400 text-lg font-bold uppercase tracking-tight max-w-3xl mx-auto mb-8">
-                        For the best results, ensure your system audio is set to "Stereo Mix" or use a virtual audio cable to pipe high-quality stream data into iDIDDY.
-                    </p>
+
                 </div>
             </section>
 
-            {/* Repository Timeline */}
-            {olderVersions.length > 0 && (
-                <section className="space-y-10">
-                    <div className="flex items-center justify-between">
-                        <h2 className="text-3xl font-black uppercase tracking-tighter flex items-center gap-4">
-                            Release Archive
-                            <span className="px-3 py-1 rounded-lg bg-white/5 text-[10px] font-black tracking-widest text-white/40 border border-white/5">
-                                {olderVersions.length} Builds
-                            </span>
-                        </h2>
+            {/* Usage Protocol & Archive */}
+            <section className="px-6 lg:px-20 pb-32">
+                <div className="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    <div className="glass rounded-3xl p-10 border-white/10 text-left rtl:text-right">
+                        <div className="flex items-center gap-4 mb-8">
+                            <div className="size-12 rounded-xl bg-primary/20 flex items-center justify-center">
+                                <span className="material-symbols-outlined text-primary">gavel</span>
+                            </div>
+                            <h2 className="text-2xl font-bold text-white">{t('home.protocol.title')}</h2>
+                        </div>
+                        <ul className="space-y-6">
+                            <li className="flex gap-4">
+                                <span className="text-primary font-mono pt-1 text-lg">01</span>
+                                <div>
+                                    <h4 className="text-slate-100 font-bold mb-1">{t('home.protocol.p1.title')}</h4>
+                                    <p className="text-slate-400 text-sm leading-relaxed">{t('home.protocol.p1.description')}</p>
+                                </div>
+                            </li>
+                            <li className="flex gap-4">
+                                <span className="text-primary font-mono pt-1 text-lg">02</span>
+                                <div>
+                                    <h4 className="text-slate-100 font-bold mb-1">{t('home.protocol.p2.title')}</h4>
+                                    <p className="text-slate-400 text-sm leading-relaxed">{t('home.protocol.p2.description')}</p>
+                                </div>
+                            </li>
+                            <li className="flex gap-4">
+                                <span className="text-primary font-mono pt-1 text-lg">03</span>
+                                <div>
+                                    <h4 className="text-slate-100 font-bold mb-1">{t('home.protocol.p3.title')}</h4>
+                                    <p className="text-slate-400 text-sm leading-relaxed">{t('home.protocol.p3.description')}</p>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
 
-                    <div className="grid gap-4">
-                        {olderVersions.map(v => (
-                            <div key={v.id} className="glass-panel p-6 rounded-2xl flex items-center justify-between group hover:bg-white/[0.03] transition-all border-white/[0.02]">
-                                <div className="flex items-center gap-8">
-                                    <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-zinc-500 group-hover:text-emerald-400 transition-colors">
-                                        <div className="text-xs font-black">V{v.version.split('.').pop()}</div>
-                                    </div>
-                                    <div>
-                                        <div className="flex items-center gap-4 mb-1">
-                                            <h4 className="text-lg font-bold text-white">Version {v.version}</h4>
-                                            <span className="text-[10px] font-black text-zinc-600 tracking-widest uppercase">
-                                                {v.releaseDate ? format(new Date(v.releaseDate), 'MMMM dd, yyyy') : ''}
-                                            </span>
-                                        </div>
-                                        <p className="text-sm text-zinc-500 font-medium line-clamp-1 max-w-xl italic">"{v.releaseNotes}"</p>
-                                    </div>
+                    <div className="glass rounded-3xl p-10 border-white/10 flex flex-col text-left rtl:text-right">
+                        <div className="flex items-center justify-between mb-8">
+                            <div className="flex items-center gap-4">
+                                <div className="size-12 rounded-xl bg-primary/20 flex items-center justify-center">
+                                    <span className="material-symbols-outlined text-primary">history</span>
                                 </div>
+                                <h2 className="text-2xl font-bold text-white">{t('home.archive.title')}</h2>
+                            </div>
+                            <span className="text-sm font-bold text-slate-500">{t('home.archive.buildsAvailable', { count: olderVersions.length })}</span>
+                        </div>
+
+                        <div className="space-y-4 flex-1 overflow-y-auto pr-2 custom-scrollbar" style={{ maxHeight: '300px' }}>
+                            {olderVersions.map((v) => (
                                 <a
+                                    key={v.id}
                                     href={v.downloadUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="p-4 text-zinc-600 hover:text-white hover:bg-white/5 rounded-2xl transition-all active:scale-90"
-                                    title="Download Setup"
+                                    className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5 hover:border-primary/30 hover:bg-white/10 transition-all cursor-pointer group"
                                 >
-                                    <Download size={22} />
+                                    <div className="text-left rtl:text-right">
+                                        <p className="text-white font-bold group-hover:text-primary transition-colors">v{v.version}</p>
+                                        <p className="text-slate-500 text-xs mt-1">
+                                            {t('home.archive.released', { date: v.releaseDate ? format(new Date(v.releaseDate), 'MMM dd, yyyy') : 'Unknown' })}
+                                        </p>
+                                    </div>
+
+                                    <span className="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">download</span>
                                 </a>
-                            </div>
-                        ))}
+                            ))}
+                            {olderVersions.length === 0 && (
+                                <div className="text-slate-500 text-sm flex items-center gap-2 pt-4">
+                                    <span className="material-symbols-outlined">info</span>
+                                    {t('home.archive.noArchive')}
+                                </div>
+                            )}
+
+                        </div>
                     </div>
-                </section>
-            )}
+                </div>
+            </section>
         </div>
     );
 }

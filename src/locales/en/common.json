@@ -1,0 +1,204 @@
+{
+    "nav": {
+        "home": "Home",
+        "community": "Community",
+        "news": "News",
+        "support": "Support",
+        "inbox": "Inbox",
+        "search": "Search system docs...",
+        "dashboard": "Dashboard",
+        "nodes": "Nodes",
+        "assets": "Assets"
+    },
+    "auth": {
+        "signIn": "Sign In",
+        "logout": "Logout"
+    },
+    "common": {
+        "loading": "Syncing Intelligence Feed...",
+        "search": "Search parameters...",
+        "EN": "English",
+        "AR": "Arabic",
+        "RU": "Russian",
+        "error": "Error",
+        "success": "Success"
+    },
+    "home": {
+        "hero": {
+            "updateAvailable": "System Update Available",
+            "title": "OUR-FIX SOLUTION",
+            "subtitle": "Our Unified Response: Fast Interview & X-am assist.",
+            "downloadLatest": "Download Latest v{{version}}",
+            "viewDocs": "View Documentation",
+            "checkingUpdates": "Checking for updates..."
+        },
+        "metrics": {
+            "activeNodes": "Active Nodes",
+            "latency": "Response Latency",
+            "encryption": "Encryption Level",
+            "military": "Military"
+        },
+        "features": {
+            "title": "Features Matrix",
+            "subtitle": "The core architectural pillars of the ProOS ecosystem.",
+            "neural": {
+                "title": "Neural Engine",
+                "description": "Self-optimizing AI cores for predictive workload management."
+            },
+            "quantum": {
+                "title": "Quantum Security",
+                "description": "End-to-end post-quantum cryptographic tunneling protocols."
+            },
+            "scalability": {
+                "title": "Infinite Scalability",
+                "description": "Horizontal shard distribution across global edge nodes."
+            },
+            "ui": {
+                "title": "Ultra UI Engine",
+                "description": "Fluid 120Hz interface rendering with cinematic depth."
+            }
+        },
+        "protocol": {
+            "title": "Usage Protocol",
+            "p1": {
+                "title": "Decentralized Execution",
+                "description": "All computational tasks must be signed by valid node credentials before broadcast."
+            },
+            "p2": {
+                "title": "Data Sovereignty",
+                "description": "User data remains encrypted at rest with keys held exclusively by the device owner."
+            },
+            "p3": {
+                "title": "Zero-Trust Network",
+                "description": "Always verify API connections using the Neural Engine Dashboard securely."
+            }
+        },
+        "archive": {
+            "title": "Release Archive",
+            "buildsAvailable": "{{count}} Builds Available",
+            "released": "Released {{date}}",
+            "noArchive": "No archive currently available."
+        }
+    },
+    "community": {
+        "title": "Community Hub",
+        "activeAgents": "{{count}} Agents Active",
+        "searchPlaceholder": "Search agents...",
+        "meshLocked": "Mesh Locked",
+        "deployRoom": "Deploy Room",
+        "tabs": {
+            "explorers": "Explorers",
+            "hubs": "Public Hubs"
+        },
+        "userCard": {
+            "active": "Active",
+            "offline": "Offline",
+            "self": "Self",
+            "pulseDetected": "Network Pulse Detected",
+            "seen": "Seen {{time}}",
+            "archive": "Archive Presence",
+            "noExplorers": "No explorers found on this frequency"
+        },
+        "roomCard": {
+            "host": "Host: {{name}}",
+            "activeCount": "+{{count}} active",
+            "connect": "Connect Hub",
+            "noHubs": "No active public hubs detected"
+        }
+    },
+    "news": {
+        "loading": "Syncing Intelligence Feed...",
+        "featured": {
+            "tag": "Featured Story",
+            "priority": "Priority Intel",
+            "readStory": "Read Story",
+            "readTime": "{{time}} READ",
+            "systemCore": "SYSTEM CORE"
+        },
+        "latest": {
+            "title": "Latest Stories",
+            "liveFeed": "Live Feed Active",
+            "noStories": "Awaiting further tactical transmissions..."
+        },
+        "sidebar": {
+            "poll": {
+                "title": "Hub Insights Poll",
+                "noIdentity": "Please establish identity to participate.",
+                "transmissions": "{{count}} Transmissions Logged",
+                "consensus": "Live Consensus"
+            },
+            "magazine": {
+                "title": "OUR-FIX Quarterly",
+                "edition": "THE QUANTUM \nEDITION",
+                "artIntel": "Art & Intelligence",
+                "fieldReports": "{{count}} Exclusive Field Reports"
+            }
+        },
+        "modal": {
+            "category": "Strategic Intel",
+            "return": "Return to feed",
+            "published": "Published",
+            "readTime": "Read Time",
+            "verification": "Verification",
+            "secured": "OUR-FIX SECURED"
+        }
+    },
+    "support": {
+        "success": {
+            "title": "Transmission Secured",
+            "description": "Your support signal has been injected into the core mainframe. \nOur response team will establish contact via your secure frequency shortly.",
+            "newSignal": "NEW SIGNAL"
+        },
+        "header": {
+            "title": "Support Node",
+            "encrypted": "Encrypted Line",
+            "protocol": "Protocol: STRATEGIC-ALPHA",
+            "hardened": "End-to-End Hardened"
+        },
+        "form": {
+            "title": "Initialize Signal",
+            "identityRequired": "Identity verification required.",
+            "parametersRequired": "All signal parameters must be defined.",
+            "collision": "Transmission collision. Please re-initiate stream.",
+            "subject": "Subject Frequency",
+            "subjectPlaceholder": "Brief identifier of the technical anomaly...",
+            "payload": "Data Payload",
+            "payloadPlaceholder": "Provide comprehensive diagnostics and logs for the core team to analyze...",
+            "encryption": "Encryption: Quantum Resistant AES-256",
+            "submit": "ESTABLISH SIGNAL"
+        },
+        "history": {
+            "title": "Signal Manifest",
+            "logged": "{{count}} Signals Logged",
+            "uuid": "UUID: {{id}}",
+            "initiated": "Initiated: {{time}}",
+            "resolved": "Decrypted & Resolved",
+            "transit": "In_Transit",
+            "mainframeResponse": "Core Mainframe Response",
+            "signedBy": "Signed by: CENTRAL_AUTH_NODE",
+            "noHistory": "No signal history recorded on this identity",
+            "syncing": "Syncing..."
+        },
+        "protocols": {
+            "title": "Technical Protocol",
+            "lock": {
+                "title": "Identity Lock",
+                "description": "Signals must be broadcasted from a verified hardware node for priority processing."
+            },
+            "sla": {
+                "title": "Latency SLA",
+                "description": "Expected initial analysis within {{time}} for strategic-tier nodes."
+            },
+            "availability": {
+                "title": "Availability",
+                "description": "Global support mesh is active 24/7/365. Protocol: 13ECA4-GLOW."
+            }
+        },
+        "diagnostics": {
+            "title": "Mainframe Scanner",
+            "description": "Every signal payload undergoes automated structural integrity scans by the OUR-FIX AI before human decryption.",
+            "engine": "Scanning Engine",
+            "status": "Optimal"
+        }
+    }
+}
