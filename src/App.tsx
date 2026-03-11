@@ -4,8 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { useAuthStore } from './store/authStore';
 import { auth, db } from './lib/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-// Image path for PWA/Static resolution
-const communityLogo = "/our-fix.png";
+import communityLogo from './public/community.png';
 import { AuthModal } from './components/AuthModal';
 import { Home } from './pages/Home';
 import { Community } from './pages/Community';
@@ -117,7 +116,7 @@ function App() {
                             <div className="flex items-center gap-8">
                                 <Link to="/" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
                                     <div className="size-12 flex items-center justify-center">
-                                        <img src={communityLogo} alt="our-Fix" className="size-full object-contain" />
+                                        <img src={communityLogo} alt="OUR-FIX" className="size-full object-contain" />
                                     </div>
                                     <h2 className="text-lg font-bold tracking-tight text-slate-100">our-Fix</h2>
                                 </Link>
