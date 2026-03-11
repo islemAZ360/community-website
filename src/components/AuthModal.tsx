@@ -88,8 +88,8 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                 </button>
 
                 <div className="flex flex-col items-center mb-10 mt-4">
-                    <div className="size-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 border border-primary/20 shadow-[0_0_40px_rgba(19,236,164,0.1)]">
-                        <span className="material-symbols-outlined text-primary text-3xl">pentagon</span>
+                    <div className="size-20 flex items-center justify-center mb-6">
+                        <img src="/our-fix.png" alt="OUR-FIX" className="w-full h-full object-contain" />
                     </div>
                     <h1 className="text-3xl font-bold tracking-tight text-white mb-2">OUR-FIX HUB</h1>
                     <p className="text-slate-400 text-sm font-medium tracking-wide">
