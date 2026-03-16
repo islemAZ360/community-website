@@ -4,7 +4,7 @@ import { collection, query, orderBy, onSnapshot, doc, updateDoc, arrayUnion } fr
 import { useAuthStore } from '../store/authStore';
 import { format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
-
+import { Reveal } from '../components/Reveal';
 
 interface NewsItem {
     id: string;
@@ -26,7 +26,6 @@ interface NewsItem {
 export function News() {
     const { t, i18n } = useTranslation();
     const { user } = useAuthStore();
-
 
     const [news, setNews] = useState<NewsItem[]>([]);
     const [loading, setLoading] = useState(true);
@@ -67,129 +66,130 @@ export function News() {
                     <div className="size-12 rounded-xl bg-primary/20 flex items-center justify-center text-primary animate-pulse">
                         <span className="material-symbols-outlined text-4xl">auto_awesome</span>
                     </div>
-                    <span className="text-[10px] uppercase font-bold tracking-[0.3em] text-slate-500">Syncing Intelligence Feed...</span>
+                    <span className="text-[10px] uppercase font-black tracking-[0.3em] text-white/40 italic">Syncing Intelligence Feed...</span>
                 </div>
             </div>
         );
     }
 
     return (
-        <main className="flex-1 w-full max-w-[1440px] mx-auto px-6 lg:px-20 py-10 animate-in fade-in duration-1000">
+        <main className="flex-1 w-full max-w-7xl mx-auto px-6 lg:px-20 py-24 aurora-bg animate-in fade-in duration-1000">
             {/* Immersive Hero Section */}
-            {featuredArticle && (
-                <section className="relative group mb-20 cursor-pointer" onClick={() => setSelectedArticle(featuredArticle)}>
-                    <div className="relative aspect-[21/9] w-full overflow-hidden rounded-xl shadow-2xl shadow-black/20 border border-white/5">
-                        <div className="absolute inset-0 bg-gradient-to-t from-background-dark via-background-dark/20 to-transparent z-10"></div>
-                        {featuredArticle.imageUrl ? (
-                            <img
-                                src={featuredArticle.imageUrl}
-                                alt={featuredArticle.title}
-                                className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-1000 filter brightness-75 group-hover:brightness-90"
-                            />
-                        ) : (
-                            <div className="absolute inset-0 bg-slate-900 flex items-center justify-center text-slate-700">
-                                <span className="material-symbols-outlined text-9xl">newspaper</span>
-                            </div>
-                        )}
-                        <div className="absolute bottom-0 left-0 rtl:left-auto rtl:right-0 p-8 lg:p-12 z-20 max-w-3xl text-left rtl:text-right">
-                            <div className="flex items-center gap-3 mb-4">
-                                <span className="inline-block text-primary text-[10px] font-bold uppercase tracking-[0.2em] bg-primary/10 px-2.5 py-1 rounded-full border border-primary/20">{t('news.featured.tag')}</span>
-                                <span className="text-white/40 text-[9px] font-bold uppercase tracking-[0.2em]">{t('news.featured.priority')}</span>
-                            </div>
-
-                            <h1 className="text-3xl lg:text-5xl font-serif italic text-white leading-[1.1] mb-5 group-hover:text-primary transition-colors">
-                                {featuredArticle.title}
-                            </h1>
-                            <p className="text-slate-300 text-base lg:text-lg max-w-xl mb-6 leading-relaxed line-clamp-2 font-medium opacity-80">
-                                {featuredArticle.content}
-                            </p>
-                            <div className="flex items-center gap-5">
-                                <button className="px-8 py-3 bg-white text-background-dark font-bold rounded-full hover:bg-primary transition-all duration-300 shadow-xl active:scale-95 text-sm">
-                                    {t('news.featured.readStory')}
-                                </button>
-
-                                <div className="flex items-center gap-2">
-                                    <span className="text-slate-400 text-xs font-bold uppercase tracking-widest">
-                                        {t('news.featured.readTime', { time: featuredArticle.readTime || '8 MIN' })} • {featuredArticle.author || t('news.featured.systemCore')}
-                                    </span>
+            <Reveal amount={0.25}>
+                {featuredArticle && (
+                    <section className="relative group mb-32 cursor-pointer" onClick={() => setSelectedArticle(featuredArticle)}>
+                        <div className="relative aspect-[21/9] w-full overflow-hidden rounded-3xl shadow-2xl border border-white/5">
+                            <div className="absolute inset-0 bg-gradient-to-t from-background-dark via-background-dark/40 to-transparent z-10"></div>
+                            {featuredArticle.imageUrl ? (
+                                <img
+                                    src={featuredArticle.imageUrl}
+                                    alt={featuredArticle.title}
+                                    className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[2000ms] filter brightness-50 group-hover:brightness-75"
+                                />
+                            ) : (
+                                <div className="absolute inset-0 bg-white/5 flex items-center justify-center text-white/10">
+                                    <span className="material-symbols-outlined text-9xl">newspaper</span>
+                                </div>
+                            )}
+                            <div className="absolute bottom-0 left-0 rtl:left-auto rtl:right-0 p-12 lg:p-16 z-20 max-w-4xl text-left rtl:text-right">
+                                <div className="flex items-center gap-4 mb-6">
+                                    <span className="inline-block text-primary text-[10px] font-black uppercase tracking-[0.4em] glass border-white/5 px-3 py-1.5 rounded-lg shadow-2xl">{t('news.featured.tag')}</span>
+                                    <span className="text-white/20 text-[9px] font-black uppercase tracking-[0.3em]">{t('news.featured.priority')}</span>
                                 </div>
 
+                                <h1 className="text-5xl lg:text-7xl font-black text-premium mb-8 leading-[0.9] uppercase italic tracking-tighter group-hover:tracking-tight transition-all duration-700">
+                                    {featuredArticle.title}
+                                </h1>
+                                <p className="text-white/40 text-lg lg:text-xl max-w-2xl mb-10 leading-relaxed line-clamp-2 font-medium italic opacity-80 group-hover:opacity-100 group-hover:text-white/60 transition-all">
+                                    {featuredArticle.content}
+                                </p>
+                                <div className="flex items-center gap-8">
+                                    <button className="btn-premium px-10 py-4 flex items-center gap-3">
+                                        <span>{t('news.featured.readStory')}</span>
+                                        <span className="material-symbols-outlined text-xl group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                                    </button>
+
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-white/20 text-[10px] font-black uppercase tracking-widest italic">
+                                            {t('news.featured.readTime', { time: featuredArticle.readTime || '8 MIN' })} • {featuredArticle.author || t('news.featured.systemCore')}
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </section>
-            )}
+                    </section>
+                )}
+            </Reveal>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-20">
                 {/* Latest Updates Grid */}
                 <div className="lg:col-span-8">
-                    <div className="flex items-center justify-between mb-12 border-b border-white/10 pb-4">
-                        <h3 className="font-serif text-3xl italic text-white">{t('news.latest.title')}</h3>
-                        <div className="flex items-center gap-2 text-primary">
-                            <span className="text-xs font-bold uppercase tracking-widest animate-pulse">{t('news.latest.liveFeed')}</span>
-                            <div className="size-1.5 bg-primary rounded-full"></div>
+                    <div className="flex items-center justify-between mb-16 border-b border-white/5 pb-8">
+                        <h3 className="text-4xl font-black text-white italic uppercase tracking-tighter">{t('news.latest.title')}</h3>
+                        <div className="flex items-center gap-3 px-4 py-2 glass border-white/5 rounded-2xl">
+                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary animate-pulse">{t('news.latest.liveFeed')}</span>
+                            <div className="size-1.5 bg-primary rounded-full shadow-[0_0_8px_rgba(19,236,164,0.8)]"></div>
                         </div>
                     </div>
 
-
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                        {otherArticles.map(item => (
-                            <div key={item.id} className="flex flex-col group cursor-pointer text-left rtl:text-right" onClick={() => setSelectedArticle(item)}>
-
-                                <div className="relative aspect-[4/3] rounded-xl overflow-hidden mb-6 shadow-2xl shadow-black/20 border border-white/5">
-                                    {item.imageUrl ? (
-                                        <img
-                                            src={item.imageUrl}
-                                            alt={item.title}
-                                            className="size-full object-cover group-hover:scale-110 transition-transform duration-700 brightness-90 group-hover:brightness-100"
-                                        />
-                                    ) : (
-                                        <div className="size-full bg-slate-900 flex items-center justify-center text-slate-700">
-                                            <span className="material-symbols-outlined text-4xl">feed</span>
-                                        </div>
-                                    )}
+                        {otherArticles.map((item, idx) => (
+                            <Reveal key={item.id} delay={idx * 0.15} variant="fadeUp" amount={0.1}>
+                                <div className="flex flex-col group cursor-pointer text-left rtl:text-right" onClick={() => setSelectedArticle(item)}>
+                                    <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-8 shadow-2xl border border-white/5">
+                                        {item.imageUrl ? (
+                                            <img
+                                                src={item.imageUrl}
+                                                alt={item.title}
+                                                className="size-full object-cover group-hover:scale-110 transition-transform duration-[1500ms] brightness-50 group-hover:brightness-90"
+                                            />
+                                        ) : (
+                                            <div className="size-full bg-white/5 flex items-center justify-center text-white/10">
+                                                <span className="material-symbols-outlined text-4xl">feed</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <span className="text-primary text-[10px] font-black uppercase tracking-[0.4em] mb-4 italic opacity-60">{item.category || 'Architecture'}</span>
+                                    <h4 className="text-2xl font-black text-white italic leading-none mb-4 group-hover:text-primary transition-colors uppercase tracking-tighter">
+                                        {item.title}
+                                    </h4>
+                                    <p className="text-white/40 text-sm line-clamp-3 leading-relaxed font-medium italic opacity-80 group-hover:text-white/60 transition-all">
+                                        {item.content}
+                                    </p>
+                                    <div className="mt-8 flex items-center gap-4 pt-8 border-t border-white/5">
+                                        <span className="text-[9px] font-black text-white/20 uppercase tracking-[0.2em] italic">
+                                            {item.createdAt ? format(item.createdAt.toDate ? item.createdAt.toDate() : new Date(item.createdAt), 'MMM dd, yyyy') : 'Recent'}
+                                        </span>
+                                        <div className="size-1 bg-white/10 rounded-full"></div>
+                                        <span className="text-[9px] font-black text-white/10 uppercase tracking-[0.2em]">Signal #{item.id.substring(0, 6).toUpperCase()}</span>
+                                    </div>
                                 </div>
-                                <span className="text-primary text-[10px] font-bold uppercase tracking-[0.2em] mb-3">{item.category || 'Technology'}</span>
-                                <h4 className="text-2xl font-serif italic leading-tight mb-4 group-hover:text-primary transition-colors text-slate-100">
-                                    {item.title}
-                                </h4>
-                                <p className="text-slate-400 text-sm line-clamp-3 leading-relaxed font-medium">
-                                    {item.content}
-                                </p>
-                                <div className="mt-6 flex items-center gap-3 pt-6 border-t border-white/5 opacity-50">
-                                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-                                        {item.createdAt ? format(item.createdAt.toDate ? item.createdAt.toDate() : new Date(item.createdAt), 'MMM dd, yyyy') : 'Recent'}
-                                    </span>
-                                    <div className="size-1 bg-slate-800 rounded-full"></div>
-                                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Trace #{item.id.substring(0, 6).toUpperCase()}</span>
-                                </div>
-                            </div>
+                            </Reveal>
                         ))}
-                        {otherArticles.length === 0 && (
-                            <div className="col-span-full py-20 text-center glass rounded-3xl border-dashed border-white/10">
-                                <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-xs italic">{t('news.latest.noStories')}</p>
-                            </div>
-
-                        )}
                     </div>
+
+                    {otherArticles.length === 0 && (
+                        <div className="col-span-full py-20 text-center glass rounded-3xl border-dashed border-white/10">
+                            <p className="text-white/20 font-black uppercase tracking-[0.2em] text-[10px] italic">{t('news.latest.noStories')}</p>
+                        </div>
+                    )}
                 </div>
 
                 {/* Sidebar Content */}
                 <aside className="lg:col-span-4 space-y-16">
                     {/* Hub Insights Poll */}
                     {featuredArticle?.poll && (
-                        <div className="p-6 rounded-3xl bg-white/[0.02] border border-white/5 relative overflow-hidden group">
-                            <div className="absolute top-0 right-0 p-6 opacity-5 group-hover:opacity-10 transition-opacity">
-                                <span className="material-symbols-outlined text-[8rem] text-primary">poll</span>
+                        <div className="premium-card p-8 group">
+                            <div className="flex items-center gap-3 mb-10">
+                                <div className="size-8 rounded-lg bg-primary/10 flex items-center justify-center border border-primary/20">
+                                    <span className="material-symbols-outlined text-primary text-lg">insights</span>
+                                </div>
+                                <h3 className="text-[10px] font-black text-primary uppercase tracking-[0.4em] italic">Hub Insights Poll</h3>
                             </div>
-                            <div className="relative z-10 flex items-center gap-2 mb-8">
-                                <span className="material-symbols-outlined text-primary text-xl">insights</span>
-                                <h3 className="font-bold uppercase tracking-[0.25rem] text-[10px] text-slate-400">Hub Insights Poll</h3>
-                            </div>
-                            <p className="text-2xl font-serif italic mb-8 text-white leading-snug">
+                            <p className="text-xl font-black text-white uppercase italic tracking-tighter mb-10 leading-none">
                                 {featuredArticle.poll.question}
                             </p>
-                            <div className="space-y-4 relative z-10">
+                            <div className="space-y-4">
                                 {(() => {
                                     const hasVoted = user && featuredArticle.poll!.voters.includes(user.uid);
                                     const totalVotes = featuredArticle.poll!.options.reduce((acc, opt) => acc + opt.votes, 0);
@@ -222,7 +222,7 @@ export function News() {
                                             <button
                                                 key={option.id}
                                                 onClick={(e) => { e.stopPropagation(); handleVote(); }}
-                                                className={`w-full relative h-12 rounded-2xl overflow-hidden border transition-all duration-500 flex items-center px-5 ${hasVoted ? 'cursor-default border-white/5' : 'hover:border-primary/40 border-white/10 hover:bg-white/5 active:scale-[0.98]'} ${i18n.dir() === 'rtl' ? 'flex-row-reverse' : ''}`}
+                                                className={`w-full relative h-14 rounded-xl overflow-hidden glass border transition-all duration-500 flex items-center px-6 ${hasVoted ? 'cursor-default border-white/5' : 'hover:border-purple-500/30 border-white/5 hover:bg-white/5 active:scale-[0.98]'} ${i18n.dir() === 'rtl' ? 'flex-row-reverse' : ''}`}
                                             >
                                                 {hasVoted && (
                                                     <div
@@ -232,7 +232,7 @@ export function News() {
                                                 )}
 
                                                 <div className="relative z-20 flex justify-between w-full items-center">
-                                                    <span className={`text-sm font-bold tracking-tight uppercase transition-colors ${hasVoted ? 'text-white' : 'text-slate-400 group-hover:text-white'}`}>
+                                                    <span className={`text-[11px] font-black uppercase tracking-tight transition-colors ${hasVoted ? 'text-white' : 'text-white/40 group-hover:text-white'}`}>
                                                         {option.text}
                                                     </span>
                                                     {hasVoted && <span className="text-[10px] font-black text-primary">{percentage}%</span>}
@@ -242,41 +242,39 @@ export function News() {
                                     });
                                 })()}
                             </div>
-                            <p className="text-[8px] text-slate-500 mt-6 text-center uppercase tracking-[0.3em] font-black">
+                            <p className="text-[9px] text-white/20 mt-8 text-center uppercase tracking-[0.3em] font-black italic">
                                 {t('news.sidebar.poll.transmissions', { count: featuredArticle.poll.voters.length })} • {t('news.sidebar.poll.consensus')}
                             </p>
-
                         </div>
                     )}
 
                     {/* Magazine Issue Section */}
-                    <div className="space-y-8">
-                        <div className="flex items-center justify-between">
-                            <h3 className="font-bold uppercase tracking-[0.15em] text-[10px] text-slate-500">{t('news.sidebar.magazine.title')}</h3>
-                            <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">{format(new Date(), 'MMMM yyyy')}</span>
+                    <div className="space-y-10">
+                        <div className="flex items-center justify-between border-b border-white/5 pb-4">
+                            <h3 className="text-[10px] font-black text-white/40 uppercase tracking-[0.4em] italic">{t('news.sidebar.magazine.title')}</h3>
+                            <span className="text-[10px] font-black text-primary uppercase tracking-widest">{format(new Date(), 'MMMM yyyy')}</span>
                         </div>
 
                         <div className="relative group cursor-pointer">
-                            <div className="absolute -inset-4 bg-primary/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                            <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-slate-900 shadow-2xl border border-white/5">
+                            <div className="absolute -inset-4 bg-primary/10 rounded-[2.5rem] blur-3xl opacity-0 group-hover:opacity-100 transition-all duration-1000"></div>
+                            <div className="relative aspect-[3/4] rounded-3xl overflow-hidden bg-white/5 shadow-2xl border border-white/5">
                                 <img
-                                    className="size-full object-cover group-hover:scale-105 transition-transform duration-700 brightness-75"
+                                    className="size-full object-cover group-hover:scale-110 transition-transform duration-[2000ms] brightness-50 group-hover:brightness-75"
                                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuAO5h-C2KBXLfLen4RugZa7_HzkLhDOY9odWjgRYXrPRiOjDTARMzrQIdfhQM7Ctm-3PC8_KOPiLzX-jQMWkYGxRzyujXvz6k7sO5RpTeO5xugXGI9eZucdjEhHqIuSudcSKnUGQ41i0320CYqHHSigQiruHhfCo7ugzTKkq-DSSx0HYDfpMUXpyWTp5MnGQFhPBsv76BDZpXumpB-ImCbrpQ3a_CEe6DpWOpzqL3iYsdx2RbsL-_IAkDLJkthFlZSsZsSPB29yUJI"
                                     alt="Magazine Cover"
                                 />
-                                <div className="absolute inset-x-0 top-0 p-8 bg-gradient-to-b from-black/80 to-transparent text-left rtl:text-right">
-                                    <h4 className="text-3xl font-serif italic text-white leading-tight whitespace-pre-line">{t('news.sidebar.magazine.edition')}</h4>
+                                <div className="absolute inset-x-0 bottom-0 p-8 bg-gradient-to-t from-black/80 to-transparent text-left rtl:text-right">
+                                    <h4 className="text-3xl font-black text-white leading-none uppercase italic tracking-tighter">{t('news.sidebar.magazine.edition')}</h4>
                                 </div>
-
                             </div>
-                            <div className="mt-6 flex justify-between items-end">
+                            <div className="mt-8 flex justify-between items-center px-2">
                                 <div className="text-left rtl:text-right">
-                                    <p className="font-serif italic text-xl text-white">{t('news.sidebar.magazine.artIntel')}</p>
-                                    <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">{t('news.sidebar.magazine.fieldReports', { count: 12 })}</p>
+                                    <p className="text-lg font-black text-white uppercase italic tracking-tighter leading-none">{t('news.sidebar.magazine.artIntel')}</p>
+                                    <p className="text-[9px] font-black text-white/20 uppercase tracking-widest mt-2">{t('news.sidebar.magazine.fieldReports', { count: 12 })}</p>
                                 </div>
 
-                                <button className="size-10 rounded-full bg-primary flex items-center justify-center text-background-dark shadow-xl hover:scale-110 transition-all active:scale-95">
-                                    <span className="material-symbols-outlined text-xl font-bold">download</span>
+                                <button className="size-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-primary hover:border-primary/40 transition-all hover:scale-110 active:scale-95 shadow-2xl">
+                                    <span className="material-symbols-outlined text-2xl">download</span>
                                 </button>
                             </div>
                         </div>
@@ -284,29 +282,21 @@ export function News() {
                 </aside>
             </div>
 
-            {/* Immersive Article Modal */}
+            {/* Article Detail Modal */}
             {selectedArticle && (
-                <div
-                    className="fixed inset-0 z-[100] flex items-center justify-center p-6 lg:p-12 animate-in fade-in duration-500"
-                    onClick={() => setSelectedArticle(null)}
-                >
-                    <div className="absolute inset-0 bg-background-dark/95 backdrop-blur-3xl"></div>
-                    <div
-                        className="bg-background-dark w-full max-w-5xl max-h-full rounded-[2rem] overflow-hidden border border-white/10 shadow-[0_0_100px_rgba(19,236,164,0.15)] relative flex flex-col animate-in slide-in-from-bottom-12 duration-700"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        {/* Close Action */}
-                        <div className="absolute top-8 right-8 z-[110]">
-                            <button
-                                onClick={() => setSelectedArticle(null)}
-                                className="size-14 bg-white/5 hover:bg-red-500/20 rounded-2xl text-white/50 hover:text-red-500 transition-all backdrop-blur-md border border-white/5 flex items-center justify-center group"
-                            >
-                                <span className="material-symbols-outlined text-2xl group-hover:rotate-90 transition-transform">close</span>
-                            </button>
-                        </div>
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 lg:p-12 animate-in fade-in duration-500">
+                    <div className="absolute inset-0 bg-background-dark/95 backdrop-blur-xl" onClick={() => setSelectedArticle(null)}></div>
+
+                    <div className="relative w-full max-w-7xl max-h-full glass rounded-[3rem] border border-white/10 overflow-hidden flex flex-col shadow-[0_0_100px_rgba(168,85,247,0.15)] animate-in zoom-in-95 slide-in-from-bottom-10 duration-700">
+                        <button
+                            onClick={() => setSelectedArticle(null)}
+                            className="absolute top-8 right-8 z-50 size-12 rounded-2xl bg-black/50 border border-white/10 flex items-center justify-center text-white hover:bg-primary hover:border-primary transition-all hover:scale-110 active:scale-90"
+                        >
+                            <span className="material-symbols-outlined">close</span>
+                        </button>
 
                         <div className="overflow-y-auto flex-1 custom-scrollbar">
-                            <div className="relative aspect-[21/9] lg:aspect-[21/7]">
+                            <div className="relative aspect-video lg:aspect-[21/9]">
                                 {selectedArticle.imageUrl ? (
                                     <img
                                         src={selectedArticle.imageUrl}
@@ -314,65 +304,70 @@ export function News() {
                                         alt={selectedArticle.title}
                                     />
                                 ) : (
-                                    <div className="size-full bg-slate-900 border-b border-white/10"></div>
+                                    <div className="size-full bg-white/5"></div>
                                 )}
-                                <div className="absolute inset-x-0 bottom-0 p-10 lg:p-16 bg-gradient-to-t from-background-dark to-transparent text-left rtl:text-right">
+                                <div className="absolute inset-0 bg-gradient-to-t from-background-dark via-background-dark/60 to-transparent z-10"></div>
+                                <div className="absolute inset-x-0 bottom-0 p-12 lg:p-20 z-20 text-left rtl:text-right">
                                     <div className="max-w-4xl">
-                                        <span className="text-primary text-[10px] font-bold uppercase tracking-[0.3em] mb-3 inline-block">{selectedArticle.category || t('news.modal.category')}</span>
-                                        <h2 className="text-3xl lg:text-5xl font-serif italic text-white leading-[1.1]">
-                                            {selectedArticle.title}
-                                        </h2>
+                                        <Reveal amount={0.1}>
+                                            <span className="text-primary text-[10px] font-black uppercase tracking-[0.4em] mb-6 inline-block glass border-white/5 px-4 py-2 rounded-xl italic">{selectedArticle.category || t('news.modal.category')}</span>
+                                            <h2 className="text-4xl lg:text-7xl font-black text-premium leading-[0.9] uppercase italic tracking-tighter">
+                                                {selectedArticle.title}
+                                            </h2>
+                                        </Reveal>
                                     </div>
                                 </div>
-
                             </div>
 
-                            <div className="px-10 lg:px-16 pb-16 pt-8">
-                                <div className="flex flex-col lg:flex-row gap-16">
+                            <div className="px-12 lg:px-20 pb-24 pt-16">
+                                <div className="flex flex-col lg:flex-row gap-20">
                                     <div className="flex-1">
-                                        <div className="prose prose-invert prose-lg max-w-none text-left rtl:text-right">
-                                            <p className="text-2xl lg:text-3xl text-slate-300 font-serif italic leading-relaxed border-l-4 rtl:border-l-0 rtl:border-r-4 border-primary/20 pl-10 rtl:pl-0 rtl:pr-10 py-4 mb-12">
-                                                {selectedArticle.content}
-                                            </p>
+                                        <Reveal delay={0.2} amount={0.1}>
+                                            <div className="prose prose-invert prose-lg max-w-none text-left rtl:text-right">
+                                                <p className="text-2xl lg:text-3xl text-white font-black italic uppercase tracking-tighter leading-none border-l-8 rtl:border-l-0 rtl:border-r-8 border-primary/30 pl-12 rtl:pl-0 rtl:pr-12 py-6 mb-16 shadow-2xl">
+                                                    {selectedArticle.content}
+                                                </p>
 
-                                            <div className="text-slate-400 font-medium leading-[1.8] text-lg space-y-6">
-                                                {/* In a real app, content would be split or have more body. 
-                                                   Using the content twice for visual density as in design. */}
-                                                <p>{selectedArticle.content}</p>
-                                                <p>Operational data retrieved from the Neural Engine indicates this development will significantly stabilize the node mesh across the secondary sector. The architecture proposed represents a paradigm shift in how we envision decentralized intelligence.</p>
+                                                <div className="text-white/40 font-medium leading-relaxed text-lg space-y-10 italic">
+                                                    <p>{selectedArticle.content}</p>
+                                                    <p>Operational data retrieved from the Neural Engine indicates this development will significantly stabilize the node mesh across the secondary sector. The architecture proposed represents a paradigm shift in how we envision decentralized intelligence.</p>
+                                                    <p>Strategic deployment of these protocols ensures maximum stealth and efficiency in technical assessments. Our proprietary algorithms continue to evolve, providing unparalleled depth to candidate evaluation metrics.</p>
+                                                </div>
                                             </div>
-                                        </div>
+                                        </Reveal>
                                     </div>
-                                    <aside className="w-full lg:w-80 shrink-0 space-y-12">
-                                        <div className="glass p-8 rounded-3xl border-white/5 space-y-6 text-left rtl:text-right">
-                                            <div className="space-y-1">
-                                                <dt className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('news.modal.published')}</dt>
-                                                <dd className="text-sm font-bold text-slate-100 italic font-serif">
-                                                    {selectedArticle.createdAt ? format(selectedArticle.createdAt.toDate ? selectedArticle.createdAt.toDate() : new Date(selectedArticle.createdAt), 'MMMM dd, yyyy') : t('news.latest.recent')}
-                                                </dd>
+                                    <aside className="w-full lg:w-96 shrink-0">
+                                        <Reveal delay={0.4} variant="fadeUp" amount={0.1}>
+                                            <div className="premium-card p-10 space-y-10 text-left rtl:text-right mb-10">
+                                                <div className="space-y-2">
+                                                    <dt className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] italic">{t('news.modal.published')}</dt>
+                                                    <dd className="text-base font-black text-white italic uppercase tracking-tight">
+                                                        {selectedArticle.createdAt ? format(selectedArticle.createdAt.toDate ? selectedArticle.createdAt.toDate() : new Date(selectedArticle.createdAt), 'MMMM dd, yyyy') : t('news.latest.recent')}
+                                                    </dd>
+                                                </div>
+
+                                                <div className="space-y-2">
+                                                    <dt className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] italic">{t('news.modal.readTime')}</dt>
+                                                    <dd className="text-base font-black text-white italic uppercase tracking-tight">{selectedArticle.readTime || t('news.featured.readTime', { time: '12 Minutes' })}</dd>
+                                                </div>
+
+                                                <div className="space-y-2 pt-8 border-t border-white/5">
+                                                    <dt className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] italic">{t('news.modal.verification')}</dt>
+                                                    <dd className="text-base font-black text-primary flex items-center gap-3 italic uppercase tracking-tight">
+                                                        <span className="material-symbols-outlined text-xl">verified</span>
+                                                        {t('news.modal.secured')}
+                                                    </dd>
+                                                </div>
                                             </div>
 
-                                            <div className="space-y-1">
-                                                <dt className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('news.modal.readTime')}</dt>
-                                                <dd className="text-sm font-bold text-slate-100 italic font-serif">{selectedArticle.readTime || t('news.featured.readTime', { time: '12 Minutes' })}</dd>
-                                            </div>
-
-                                            <div className="space-y-1">
-                                                <dt className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('news.modal.verification')}</dt>
-                                                <dd className="text-sm font-bold text-primary flex items-center gap-2">
-                                                    <span className="material-symbols-outlined text-lg">verified</span>
-                                                    {t('news.modal.secured')}
-                                                </dd>
-                                            </div>
-
-                                        </div>
-                                        <button
-                                            onClick={() => setSelectedArticle(null)}
-                                            className="w-full py-5 bg-white text-background-dark font-bold rounded-2xl hover:bg-primary transition-all shadow-xl shadow-black/40 uppercase tracking-widest text-sm"
-                                        >
-                                            {t('news.modal.return')}
-                                        </button>
-
+                                            <button
+                                                onClick={() => setSelectedArticle(null)}
+                                                className="btn-premium w-full py-6 text-sm flex items-center justify-center gap-4"
+                                            >
+                                                <span className="material-symbols-outlined">first_page</span>
+                                                <span>{t('news.modal.return')}</span>
+                                            </button>
+                                        </Reveal>
                                     </aside>
                                 </div>
                             </div>

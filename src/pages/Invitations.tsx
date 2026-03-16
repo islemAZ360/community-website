@@ -5,6 +5,7 @@ import { useAuthStore } from '../store/authStore';
 import { Mail, Check, X, Loader2, UserPlus, Hash, Sparkles } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
+import { Reveal } from '../components/Reveal';
 
 export function Invitations() {
     const { user } = useAuthStore();
@@ -79,6 +80,7 @@ export function Invitations() {
 
     return (
         <div className="max-w-5xl mx-auto px-6 py-12 space-y-16 animate-in fade-in duration-700">
+            <Reveal amount={0.25}>
             <header className="flex flex-col md:flex-row items-center justify-between gap-8">
                 <div className="flex items-center gap-5">
                     <div className="h-14 w-14 bg-indigo-500/10 rounded-2xl flex items-center justify-center text-indigo-400 border border-indigo-500/20 shadow-[0_0_30px_rgba(99,102,241,0.1)]">
@@ -142,6 +144,7 @@ export function Invitations() {
                     ))}
                 </div>
             )}
+            </Reveal>
         </div>
     );
 }

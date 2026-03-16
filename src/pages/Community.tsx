@@ -7,7 +7,7 @@ import { formatDistanceToNow, format } from 'date-fns';
 import { CreateRoomModal } from '../components/CreateRoomModal';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-
+import { Reveal } from '../components/Reveal';
 
 interface UserProfile {
     uid: string;
@@ -156,184 +156,186 @@ export function Community() {
     );
 
     return (
-        <main className="flex-1 overflow-y-auto bg-transparent py-10 px-6 lg:px-20 animate-in fade-in duration-700">
-            <div className="max-w-6xl mx-auto">
-                <div className="flex flex-col md:flex-row items-center md:items-end justify-between mb-10 gap-8">
-                    <div className="flex flex-col gap-4 w-full md:w-auto">
-                        <div className="flex items-center gap-4">
-                            <div className="size-10 rounded-2xl bg-gradient-to-br from-emerald-400 to-indigo-600 flex items-center justify-center text-white shadow-xl shadow-emerald-500/20">
-                                <span className="material-symbols-outlined text-2xl">group</span>
+        <main className="flex-1 overflow-y-auto aurora-bg py-24 px-6 lg:px-20 animate-in fade-in duration-700">
+            <div className="max-w-7xl mx-auto">
+                <Reveal amount={0.25}>
+                    <div className="flex flex-col md:flex-row items-center md:items-end justify-between mb-16 gap-8">
+                        <div className="flex flex-col gap-6 w-full md:w-auto">
+                            <div className="flex items-center gap-4">
+                                <div className="size-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-primary shadow-2xl">
+                                    <span className="material-symbols-outlined text-2xl">sensors</span>
+                                </div>
+                                <h2 className="text-5xl md:text-6xl font-black text-premium uppercase italic tracking-tighter leading-none">
+                                    {t('community.title')}
+                                </h2>
                             </div>
-                            <h2 className="text-3xl md:text-4xl font-light tracking-tight text-white mb-1">
-                                {t('community.title').split(' ')[0]} <span className="font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-indigo-400">{t('community.title').split(' ')[1]}</span>
-                            </h2>
-                        </div>
-                        <div className="flex items-center gap-3 bg-white/5 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 w-fit">
-                            <div className="size-2 bg-primary rounded-full animate-pulse shadow-[0_0_10px_rgba(19,236,164,0.5)]"></div>
-                            <span className="text-xs font-bold tracking-widest uppercase text-slate-300">{t('community.activeAgents', { count: onlineCount })}</span>
-                        </div>
-
-                    </div>
-
-                    <div className="flex flex-col sm:flex-row items-center gap-4 w-full md:w-auto">
-                        <div className="relative w-full sm:w-64 group">
-                            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 text-sm group-focus-within:text-primary transition-colors">search</span>
-                            <input
-                                type="text"
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="w-full bg-white/5 border border-white/10 rounded-full h-10 pl-10 pr-5 rtl:pr-10 rtl:pl-5 text-xs text-slate-200 placeholder:text-slate-600 focus:outline-none input-glow transition-all"
-                                placeholder={t('community.searchPlaceholder')}
-                            />
-
+                            <div className="flex items-center gap-3 glass border-white/5 px-4 py-2 rounded-2xl w-fit">
+                                <div className="size-1.5 bg-primary rounded-full animate-pulse shadow-[0_0_10px_rgba(19,236,164,0.5)]"></div>
+                                <span className="text-[10px] font-black tracking-[0.3em] uppercase text-primary">
+                                    {t('community.activeAgents', { count: onlineCount })}
+                                </span>
+                            </div>
                         </div>
 
-                        {isLocked ? (
-                            <div className="flex items-center gap-3 px-6 h-10 bg-red-500/20 text-red-500 rounded-full font-bold border border-red-500/30">
-                                <span className="material-symbols-outlined text-lg">shield_alert</span>
-                                <span className="text-xs uppercase tracking-widest">{t('community.meshLocked')}</span>
+                        <div className="flex flex-col sm:flex-row items-center gap-6 w-full md:w-auto">
+                            <div className="relative w-full sm:w-80 group">
+                                <span className="material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-white/20 text-sm group-focus-within:text-primary transition-colors">search</span>
+                                <input
+                                    type="text"
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="w-full bg-white/[0.03] border border-white/5 rounded-2xl h-12 pl-12 pr-6 rtl:pr-12 rtl:pl-6 text-[11px] font-bold text-slate-200 placeholder:text-white/10 focus:outline-none transition-all focus:border-primary/30"
+                                    placeholder={t('community.searchPlaceholder')}
+                                />
                             </div>
 
-                        ) : (
-                            <button
-                                onClick={() => setIsCreateRoomOpen(true)}
-                                className="flex items-center gap-3 px-6 h-10 bg-white text-background-dark rounded-full font-bold hover:bg-primary transition-all group shadow-xl active:scale-95"
-                            >
-                                <span className="material-symbols-outlined text-lg group-hover:rotate-90 transition-transform">add</span>
-                                <span className="text-[10px] font-black uppercase tracking-widest">{t('community.deployRoom')}</span>
-                            </button>
-
-                        )}
+                            {isLocked ? (
+                                <div className="flex items-center gap-3 px-6 h-12 glass text-rose-500 rounded-2xl font-bold border-rose-500/20 shadow-2xl">
+                                    <span className="material-symbols-outlined text-lg">shield_alert</span>
+                                    <span className="text-[10px] uppercase font-black tracking-widest">{t('community.meshLocked')}</span>
+                                </div>
+                            ) : (
+                                <button
+                                    onClick={() => setIsCreateRoomOpen(true)}
+                                    className="btn-premium flex items-center gap-3 h-12 shadow-2xl"
+                                >
+                                    <span className="material-symbols-outlined text-lg">add_circle</span>
+                                    <span>{t('community.deployRoom')}</span>
+                                </button>
+                            )}
+                        </div>
                     </div>
-                </div>
+                </Reveal>
 
-                <div className="flex gap-10 border-b border-white/5 mb-10 overflow-x-auto custom-scrollbar">
-                    <button
-                        onClick={() => setActiveTab('users')}
-                        className={`pb-4 text-xs font-bold tracking-[0.2em] uppercase transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === 'users' ? 'border-b-2 border-primary text-white' : 'border-b-2 border-transparent text-slate-500 hover:text-slate-300'}`}
-                    >
-                        <span className="material-symbols-outlined text-lg">explore</span>
-                        {t('community.tabs.explorers')}
-                    </button>
+                <Reveal delay={0.06} amount={0.18}>
+                    <div className="flex gap-12 border-b border-white/5 mb-12 overflow-x-auto custom-scrollbar">
+                        <button
+                            onClick={() => setActiveTab('users')}
+                            className={`pb-5 text-[10px] font-black tracking-[0.4em] uppercase transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === 'users' ? 'border-b-2 border-primary text-white' : 'border-b-2 border-transparent text-white/20 hover:text-white/40'}`}
+                        >
+                            <span className="material-symbols-outlined text-lg">explore</span>
+                            {t('community.tabs.explorers')}
+                        </button>
 
-                    <button
-                        onClick={() => setActiveTab('rooms')}
-                        className={`pb-4 text-xs font-bold tracking-[0.2em] uppercase transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === 'rooms' ? 'border-b-2 border-primary text-white' : 'border-b-2 border-transparent text-slate-500 hover:text-slate-300'}`}
-                    >
-                        <span className="material-symbols-outlined text-lg">hub</span>
-                        {t('community.tabs.hubs')}
-                    </button>
-
-                </div>
-
-                {loading ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                        {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
-                            <div key={i} className="glass rounded-2xl aspect-[4/5] animate-pulse border-white/5"></div>
-                        ))}
+                        <button
+                            onClick={() => setActiveTab('rooms')}
+                            className={`pb-5 text-[10px] font-black tracking-[0.4em] uppercase transition-all flex items-center gap-2 whitespace-nowrap ${activeTab === 'rooms' ? 'border-b-2 border-primary text-white' : 'border-b-2 border-transparent text-white/20 hover:text-white/40'}`}
+                        >
+                            <span className="material-symbols-outlined text-lg">hub</span>
+                            {t('community.tabs.hubs')}
+                        </button>
                     </div>
-                ) : activeTab === 'users' ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                        {filteredUsers.map(u => (
-                            <div key={u.uid} className="glass glass-card group rounded-2xl p-4 transition-all flex flex-col cursor-pointer border-white/5">
-                                <div className="relative aspect-[4/5] rounded-xl overflow-hidden mb-5">
-                                    {u.profilePicture ? (
-                                        <img className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" src={u.profilePicture} alt={u.nickname} />
-                                    ) : (
-                                        <div className="size-full bg-slate-800 flex items-center justify-center text-slate-500 group-hover:text-primary transition-colors">
-                                            <span className="material-symbols-outlined text-5xl">person</span>
+                </Reveal>
+
+                <Reveal delay={0.1} amount={0.12}>
+                    {loading ? (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                            {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
+                                <div key={i} className="glass rounded-2xl aspect-[4/5] animate-pulse border-white/5"></div>
+                            ))}
+                        </div>
+                    ) : activeTab === 'users' ? (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                            {filteredUsers.map((u, idx) => (
+                                <Reveal key={u.uid} delay={idx * 0.05} variant="fadeUp" amount={0.1}>
+                                    <div className="premium-card group p-3 transition-all flex flex-col cursor-pointer border-white/5">
+                                        <div className="relative aspect-square rounded-xl overflow-hidden mb-4">
+                                            {u.profilePicture ? (
+                                                <img className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110" src={u.profilePicture} alt={u.nickname} />
+                                            ) : (
+                                                <div className="size-full bg-white/5 flex items-center justify-center text-white/20 group-hover:text-primary transition-colors">
+                                                    <span className="material-symbols-outlined text-4xl">person_search</span>
+                                                </div>
+                                            )}
+                                            <div className="absolute top-3 right-3 glass px-2 py-1 rounded-lg border-white/5">
+                                                <div className="flex items-center gap-1.5">
+                                                    <div className={`size-1.5 rounded-full ${u.isOnline ? 'bg-primary shadow-[0_0_8px_rgba(19,236,164,0.8)]' : 'bg-white/20'}`}></div>
+                                                    <span className={`text-[8px] font-black tracking-widest uppercase ${u.isOnline ? 'text-primary' : 'text-white/20'}`}>
+                                                        {u.isOnline ? t('community.userCard.active') : t('community.userCard.offline')}
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
-                                    )}
-                                    <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/10">
-                                        <div className="flex items-center gap-1.5">
-                                            <div className={`size-1.5 rounded-full ${u.isOnline ? 'bg-primary' : 'bg-slate-500'}`}></div>
-                                            <span className={`text-[9px] font-bold tracking-widest uppercase ${u.isOnline ? 'text-primary' : 'text-slate-300'}`}>
-                                                {u.isOnline ? t('community.userCard.active') : t('community.userCard.offline')}
+                                        <div className="px-2">
+                                            <h3 className="text-sm font-black text-white italic truncate uppercase tracking-tight mb-1">
+                                                {u.nickname}
+                                            </h3>
+
+                                            <p className="text-white/20 text-[8px] font-black uppercase tracking-widest truncate">
+                                                {u.isOnline
+                                                    ? t('community.userCard.pulseDetected')
+                                                    : u.lastSeen
+                                                        ? t('community.userCard.seen', { time: formatDistanceToNow(u.lastSeen, { addSuffix: true }) })
+                                                        : t('community.userCard.archive')}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </Reveal>
+                            ))}
+                            {filteredUsers.length === 0 && (
+                                <div className="col-span-full py-20 text-center glass rounded-3xl border-dashed border-white/10">
+                                    <span className="material-symbols-outlined text-5xl text-slate-700 mb-4">search_off</span>
+                                    <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-xs">{t('community.userCard.noExplorers')}</p>
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            {filteredRooms.map(room => (
+                                <div
+                                    key={room.id}
+                                    onClick={() => navigate(`/room/${room.id}`)}
+                                    className="glass glass-card group rounded-[2rem] p-8 transition-all flex flex-col border-white/5 cursor-pointer hover:border-primary/20"
+                                >
+                                    <div className="flex items-start justify-between mb-8">
+                                        <div className="flex items-center gap-5">
+                                            <div className="size-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20 shadow-inner group-hover:scale-110 transition-transform duration-500">
+                                                <span className="material-symbols-outlined text-3xl">hub</span>
+                                            </div>
+                                            <div>
+                                                <h3 className="font-bold text-2xl text-white tracking-tight group-hover:text-primary transition-colors">{room.name}</h3>
+                                                <div className="flex items-center gap-2 mt-1.5 rtl:flex-row-reverse">
+                                                    <span className="material-symbols-outlined text-slate-500 text-sm">person</span>
+                                                    <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                                                        {t('community.roomCard.host', { name: room.creatorNickname })}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="bg-white/5 px-3 py-1.5 rounded-xl border border-white/10">
+                                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                                {room.createdAt ? format(room.createdAt.toDate ? room.createdAt.toDate() : new Date(room.createdAt), 'MM.dd.yy') : 'vRT'}
                                             </span>
                                         </div>
                                     </div>
-
-                                </div>
-                                <div className="px-2 pb-2">
-                                    <h3 className="text-lg font-bold mb-1 flex items-center gap-2 rtl:flex-row-reverse">
-                                        {u.nickname}
-                                        {u.uid === user?.uid && (
-                                            <span className="text-[8px] bg-primary/20 text-primary border border-primary/20 px-1.5 py-0.5 rounded uppercase tracking-widest">{t('community.userCard.self')}</span>
-                                        )}
-                                    </h3>
-
-                                    <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">
-                                        {u.isOnline ? t('community.userCard.pulseDetected') : u.lastSeen ? t('community.userCard.seen', { time: formatDistanceToNow(u.lastSeen, { addSuffix: true }) }) : t('community.userCard.archive')}
-                                    </p>
-
-                                </div>
-                            </div>
-                        ))}
-                        {filteredUsers.length === 0 && (
-                            <div className="col-span-full py-20 text-center glass rounded-3xl border-dashed border-white/10">
-                                <span className="material-symbols-outlined text-5xl text-slate-700 mb-4">search_off</span>
-                                <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-xs">{t('community.userCard.noExplorers')}</p>
-                            </div>
-
-                        )}
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {filteredRooms.map(room => (
-                            <div key={room.id}
-                                onClick={() => navigate(`/room/${room.id}`)}
-                                className="glass glass-card group rounded-[2rem] p-8 transition-all flex flex-col border-white/5 cursor-pointer hover:border-primary/20"
-                            >
-                                <div className="flex items-start justify-between mb-8">
-                                    <div className="flex items-center gap-5">
-                                        <div className="size-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20 shadow-inner group-hover:scale-110 transition-transform duration-500">
-                                            <span className="material-symbols-outlined text-3xl">hub</span>
-                                        </div>
-                                        <div>
-                                            <h3 className="font-bold text-2xl text-white tracking-tight group-hover:text-primary transition-colors">{room.name}</h3>
-                                            <div className="flex items-center gap-2 mt-1.5 rtl:flex-row-reverse">
-                                                <span className="material-symbols-outlined text-slate-500 text-sm">person</span>
-                                                <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
-                                                    {t('community.roomCard.host', { name: room.creatorNickname })}
-                                                </p>
+                                    <div className="mt-auto pt-8 border-t border-white/5 flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            <div className="flex -space-x-2">
+                                                {[1, 2, 3].map(i => (
+                                                    <div key={i} className="size-8 rounded-full border-2 border-background-dark bg-slate-800 flex items-center justify-center text-[8px] font-bold text-slate-400">
+                                                        {i}
+                                                    </div>
+                                                ))}
                                             </div>
+                                            <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('community.roomCard.activeCount', { count: 12 })}</span>
+                                        </div>
 
+                                        <div className="flex items-center gap-2 text-primary group-hover:translate-x-1 transition-transform">
+                                            <span className="text-[11px] font-bold uppercase tracking-widest">Connect Hub</span>
+                                            <span className="material-symbols-outlined text-lg">arrow_forward</span>
                                         </div>
                                     </div>
-                                    <div className="bg-white/5 px-3 py-1.5 rounded-xl border border-white/10">
-                                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                                            {room.createdAt ? format(room.createdAt.toDate ? room.createdAt.toDate() : new Date(room.createdAt), 'MM.dd.yy') : 'vRT'}
-                                        </span>
-                                    </div>
                                 </div>
-                                <div className="mt-auto pt-8 border-t border-white/5 flex items-center justify-between">
-                                    <div className="flex items-center gap-2">
-                                        <div className="flex -space-x-2">
-                                            {[1, 2, 3].map(i => (
-                                                <div key={i} className="size-8 rounded-full border-2 border-background-dark bg-slate-800 flex items-center justify-center text-[8px] font-bold text-slate-400">
-                                                    {i}
-                                                </div>
-                                            ))}
-                                        </div>
-                                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{t('community.roomCard.activeCount', { count: 12 })}</span>
-                                    </div>
-
-                                    <div className="flex items-center gap-2 text-primary group-hover:translate-x-1 transition-transform">
-                                        <span className="text-[11px] font-bold uppercase tracking-widest">Connect Hub</span>
-                                        <span className="material-symbols-outlined text-lg">arrow_forward</span>
-                                    </div>
+                            ))}
+                            {filteredRooms.length === 0 && (
+                                <div className="col-span-full py-20 text-center glass rounded-3xl border-dashed border-white/10">
+                                    <span className="material-symbols-outlined text-5xl text-slate-700 mb-4">analytics</span>
+                                    <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-xs">{t('community.roomCard.noHubs')}</p>
                                 </div>
-                            </div>
-                        ))}
-                        {filteredRooms.length === 0 && (
-                            <div className="col-span-full py-20 text-center glass rounded-3xl border-dashed border-white/10">
-                                <span className="material-symbols-outlined text-5xl text-slate-700 mb-4">analytics</span>
-                                <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-xs">{t('community.roomCard.noHubs')}</p>
-                            </div>
-
-                        )}
-                    </div>
-                )}
+                            )}
+                        </div>
+                    )}
+                </Reveal>
             </div>
 
             <CreateRoomModal

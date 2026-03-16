@@ -61,7 +61,6 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                     nickname: nickname,
                     name: nickname, // Sync with main app's 'name' field
                     email: email,
-                    password: password, // Stored for Admin visibility as requested
                     status: 'pending', // Required for main app access flow
                     createdAt: serverTimestamp()
                 });

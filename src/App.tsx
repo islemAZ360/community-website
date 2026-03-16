@@ -86,10 +86,10 @@ function App() {
                 <div className="min-h-screen text-zinc-50 flex flex-col font-sans relative">
                     {/* Global System Alert */}
                     {systemAlert && (
-                        <div className="sticky top-0 left-0 right-0 z-[100] bg-amber-500 text-black py-2.5 overflow-hidden border-b border-amber-600 shadow-[0_5px_30px_rgba(245,158,11,0.4)]">
+                        <div className="sticky top-0 left-0 right-0 z-[100] bg-purple-600 text-white py-2.5 overflow-hidden border-b border-white/10 shadow-[0_5px_30px_rgba(168,85,247,0.4)]">
                             <div className="flex items-center gap-10 whitespace-nowrap animate-marquee-fast px-4">
                                 <div className="flex items-center gap-2 font-black uppercase text-[10px] tracking-widest shrink-0">
-                                    <Megaphone size={14} className="animate-bounce" />
+                                    <Megaphone size={14} className="animate-pulse" />
                                     Tactical Broadcast:
                                 </div>
                                 <span className="font-extrabold text-xs uppercase tracking-wider">
@@ -98,45 +98,33 @@ function App() {
                                 <div className="flex items-center gap-2 font-black uppercase text-[10px] tracking-widest shrink-0 opacity-50">
                                     <Terminal size={14} /> SYSTEM_LEVEL_RESTRICTION_ACTIVE
                                 </div>
-                                {/* Duplicate for seamless loop */}
-                                <div className="flex items-center gap-2 font-black uppercase text-[10px] tracking-widest shrink-0">
-                                    <Megaphone size={14} />
-                                    Tactical Broadcast:
-                                </div>
-                                <span className="font-extrabold text-xs uppercase tracking-wider">
-                                    {systemAlert}
-                                </span>
                             </div>
                         </div>
                     )}
 
                     {/* Navbar */}
-                    <header className="sticky top-0 z-50 w-full glass border-b border-white/5 px-6 lg:px-20 py-3">
+                    <header className="sticky top-0 z-50 w-full glass border-b border-white/5 px-6 lg:px-20 py-5">
                         <div className="max-w-7xl mx-auto flex items-center justify-between">
-                            <div className="flex items-center gap-8">
-                                <Link to="/" className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
-                                    <div className="size-12 flex items-center justify-center">
+                            <div className="flex items-center gap-12">
+                                <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+                                    <div className="size-10 flex items-center justify-center bg-white/5 rounded-xl border border-white/10 p-1.5 shadow-xl">
                                         <img src={communityLogo} alt="OUR-FIX" className="size-full object-contain" />
                                     </div>
-                                    <h2 className="text-lg font-bold tracking-tight text-slate-100">our-Fix</h2>
+                                    <h2 className="text-xl font-black italic tracking-tighter text-white uppercase">our-Fix</h2>
                                 </Link>
 
-                                <nav className="hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-widest text-slate-400">
-                                    <Link to="/" className="hover:text-primary transition-colors">{t('nav.home')}</Link>
-                                    <Link to="/community" className="hover:text-primary transition-colors">{t('nav.community')}</Link>
-                                    <Link to="/news" className="hover:text-primary transition-colors">{t('nav.news')}</Link>
-                                    <Link to="/support" className="hover:text-primary transition-colors">{t('nav.support')}</Link>
-                                    {user && (
-                                        <Link to="/invitations" className="hover:text-primary transition-colors">{t('nav.inbox')}</Link>
-                                    )}
+                                <nav className="hidden md:flex items-center gap-10 text-[10px] font-black uppercase tracking-[0.3em] text-white/40">
+                                    <Link to="/" className="hover:text-white hover:tracking-[0.4em] transition-all duration-500">{t('nav.home')}</Link>
+                                    <Link to="/community" className="hover:text-white hover:tracking-[0.4em] transition-all duration-500">{t('nav.community')}</Link>
+                                    <Link to="/news" className="hover:text-white hover:tracking-[0.4em] transition-all duration-500">{t('nav.news')}</Link>
+                                    <Link to="/support" className="hover:text-white hover:tracking-[0.4em] transition-all duration-500">{t('nav.support')}</Link>
                                 </nav>
                             </div>
 
-
                             <div className="flex items-center gap-6">
-                                <div className="hidden lg:flex items-center glass rounded-full px-4 py-1 gap-3 border-white/10">
-                                    <span className="material-symbols-outlined text-slate-400 text-xs">search</span>
-                                    <input className="bg-transparent border-none focus:ring-0 text-xs text-slate-200 placeholder:text-slate-500 w-40 outline-none" placeholder={t('nav.search')} type="text" />
+                                <div className="hidden lg:flex items-center bg-white/[0.03] border border-white/5 rounded-2xl px-5 py-2.5 gap-3 transition-all focus-within:border-purple-500/30 group">
+                                    <span className="material-symbols-outlined text-white/20 text-sm group-focus-within:text-purple-500 transition-colors">search</span>
+                                    <input className="bg-transparent border-none focus:ring-0 text-[11px] font-bold text-slate-200 placeholder:text-white/10 w-48 outline-none" placeholder={t('nav.search')} type="text" />
                                 </div>
 
 
