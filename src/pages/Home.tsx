@@ -35,7 +35,40 @@ export function Home() {
 
     useEffect(() => {
         const fetchVersions = async () => {
-            // ... (keep existing fetch logic)
+            try {
+                const response = await fetch('https://api.github.com/repos/islemAZ360/DODI-Releases/releases');
+                if (!response.ok) throw new Error('Failed to fetch releases');
+                const data = await response.json();
+
+                const versions: AppVersion[] = data.map((release: any) => {
+                    const rawVersion = release.tag_name || release.name;
+                    const cleanVersion = rawVersion.startsWith('v') ? rawVersion.slice(1) : rawVersion;
+
+                    const exeAsset = release.assets?.find((a: any) =>
+                        a.name.toLowerCase().endsWith('.exe') ||
+                        a.name.toLowerCase().includes('setup')
+                    );
+
+                    return {
+                        id: release.id.toString(),
+                        version: cleanVersion,
+                        releaseNotes: release.body || 'No release notes provided.',
+                        downloadUrl: exeAsset ? exeAsset.browser_download_url : release.html_url,
+                        releaseDate: new Date(release.published_at),
+                        isLatest: false
+                    };
+                });
+
+                if (versions.length > 0) {
+                    versions[0].isLatest = true;
+                    setLatestVersion(versions[0]);
+                    setOlderVersions(versions.slice(1));
+                }
+            } catch (error) {
+                console.error("Error fetching versions from GitHub:", error);
+            } finally {
+                setLoading(false);
+            }
         };
         fetchVersions();
 
