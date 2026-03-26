@@ -4,6 +4,7 @@
         "community": "Community",
         "news": "News",
         "support": "Support",
+        "profile": "My Account",
         "inbox": "Inbox",
         "search": "Search system docs...",
         "dashboard": "Dashboard",
@@ -104,6 +105,14 @@
             "activeCount": "+{{count}} active",
             "connect": "Connect Hub",
             "noHubs": "No active public hubs detected"
+        },
+        "room": {
+            "title": "Secure Hub",
+            "members": "Manifest",
+            "noMessages": "No previous transmissions found on this frequency.",
+            "chatPlaceholder": "Broadcast signal to node...",
+            "accessDenied": "Access Denied: Node Restricted",
+            "identityRequired": "Protocol Failure: Identity Required"
         }
     },
     "news": {
@@ -144,6 +153,12 @@
         }
     },
     "support": {
+        "title": "Support Node",
+        "responseStatus": "Protocol: STRATEGIC-ALPHA",
+        "description": "Establish a secure connection with our tactical response team. All transmissions are end-to-end hardened and monitored by the Neural Engine.",
+        "newTicket": {
+            "title": "Initialize Signal"
+        },
         "success": {
             "title": "Transmission Secured",
             "description": "Your support signal has been injected into the core mainframe. \nOur response team will establish contact via your secure frequency shortly.",

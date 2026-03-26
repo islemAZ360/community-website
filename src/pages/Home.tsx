@@ -3,7 +3,6 @@ import { format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { Reveal } from '../components/Reveal';
 
-
 interface AppVersion {
     id: string;
     version: string;
@@ -22,9 +21,8 @@ export function Home() {
     const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
 
     const instructionalVideos = [
-        { src: "/system_core.mp4", title: "System Capabilities Showcase" },
-        { src: "/system_core1.mp4", title: "How to Use OUR-FIX" },
-        { src: "/system_core2.mp4", title: "Getting a Free API Key" }
+        { src: "/how to use.mp4", title: "How to use Our-Fix" },
+        { src: "/how to get free api.mp4", title: "How to get free API" }
     ];
 
     const nextVideo = () => {
@@ -45,10 +43,10 @@ export function Home() {
                 const versions: AppVersion[] = data.map((release: any) => {
                     const rawVersion = release.tag_name || release.name;
                     const cleanVersion = rawVersion.startsWith('v') ? rawVersion.slice(1) : rawVersion;
-                    
+
                     // Direct link to the .exe asset if it exists
-                    const exeAsset = release.assets?.find((a: any) => 
-                        a.name.toLowerCase().endsWith('.exe') || 
+                    const exeAsset = release.assets?.find((a: any) =>
+                        a.name.toLowerCase().endsWith('.exe') ||
                         a.name.toLowerCase().includes('setup')
                     );
 
@@ -78,33 +76,34 @@ export function Home() {
     }, []);
 
     return (
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col w-full overflow-x-hidden">
             {/* Hero Section */}
-            <section className="relative pt-64 pb-96 px-6 lg:px-20 overflow-hidden">
+            <section className="relative pt-40 pb-24 lg:pt-56 lg:pb-32 px-6 lg:px-20 overflow-hidden flex flex-col items-center justify-center min-h-[85vh]">
                 {/* Dynamic Brand Glows */}
-                <div className="glow-circle w-[600px] h-[600px] -top-[300px] -left-[100px] opacity-20 animate-pulse"></div>
-                <div className="glow-circle w-[800px] h-[800px] -bottom-[400px] -right-[200px] opacity-10"></div>
-                <div className="glow-circle w-[400px] h-[400px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-5"></div>
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-primary/20 blur-[120px] rounded-full opacity-40 pointer-events-none mix-blend-screen"></div>
+                <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-sky-500/10 blur-[150px] rounded-full opacity-30 pointer-events-none"></div>
 
-                <div className="max-w-7xl mx-auto text-center relative z-10">
+                <div className="max-w-5xl mx-auto text-center relative z-10 w-full flex flex-col items-center">
                     <Reveal amount={0.05}>
-                        <div className="inline-flex items-center gap-3 px-4 py-2 rounded-2xl glass border-white/5 mb-8 shadow-2xl">
-                            <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#13eca4] opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#13eca4]"></span>
+                        <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full glass border border-white/10 mb-10 shadow-[0_0_30px_rgba(19,236,164,0.15)] backdrop-blur-md">
+                            <span className="relative flex h-2.5 w-2.5">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary shadow-[0_0_10px_rgba(19,236,164,1)]"></span>
                             </span>
-                            <span className="text-[10px] font-black tracking-[0.3em] uppercase text-[#13eca4]">Tactical Mesh: v5.2.0 • Online</span>
+                            <span className="text-[11px] font-black tracking-[0.3em] uppercase text-primary/90">
+                                Tactical Mesh: v5.2.0 • Online
+                            </span>
                         </div>
                     </Reveal>
 
                     <Reveal delay={0.1} amount={0.05}>
-                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-premium mb-6 leading-[0.85] uppercase">
+                        <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-white/90 to-white/40 mb-8 leading-[1.1] uppercase tracking-tighter drop-shadow-2xl">
                             {t('home.hero.title')}
                         </h1>
                     </Reveal>
 
                     <Reveal delay={0.2} amount={0.05}>
-                        <p className="max-w-2xl mx-auto text-base md:text-lg text-white/40 leading-relaxed mb-10 font-medium italic">
+                        <p className="max-w-2xl mx-auto text-base md:text-xl text-white/50 leading-relaxed mb-12 font-medium italic">
                             {i18n.language === 'en' ? (
                                 <>
                                     The undetectable tactical companion for <span className="text-white">high-stakes technical interviews</span>. Real-time intelligence at your fingertips.
@@ -114,100 +113,118 @@ export function Home() {
                     </Reveal>
 
                     <Reveal delay={0.3} amount={0.05}>
-                        <div className="flex flex-col sm:flex-row items-center justify-center gap-8">
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-6 w-full sm:w-auto">
                             {loading ? (
-                                <div className="h-16 w-64 bg-white/5 rounded-2xl animate-pulse border border-white/10" />
+                                <div className="h-14 w-full sm:w-72 bg-white/5 rounded-2xl animate-pulse border border-white/10" />
                             ) : latestVersion ? (
                                 <a
                                     href={latestVersion.downloadUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="btn-premium group flex items-center gap-4"
+                                    className="btn-premium group flex items-center justify-center gap-4 h-14 px-8 w-full sm:w-auto shadow-[0_0_40px_rgba(19,236,164,0.2)] hover:shadow-[0_0_60px_rgba(19,236,164,0.4)] transition-all duration-500"
                                 >
-                                    <span>{t('home.hero.downloadLatest', { version: latestVersion.version })}</span>
-                                    <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform text-xl">arrow_forward</span>
+                                    <span className="text-sm tracking-wider font-bold">{t('home.hero.downloadLatest', { version: latestVersion.version })}</span>
+                                    <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform text-xl">download</span>
                                 </a>
 
                             ) : (
-                                <div className="glass p-4 rounded-xl text-slate-400 flex items-center gap-2 border-white/10">
-                                    <span className="material-symbols-outlined animate-spin">refresh</span>
-                                    <span>{t('home.hero.checkingUpdates')}</span>
+                                <div className="glass px-8 h-14 rounded-2xl text-slate-400 flex items-center justify-center gap-3 border-white/10 w-full sm:w-auto">
+                                    <span className="material-symbols-outlined animate-spin text-primary">refresh</span>
+                                    <span className="text-sm font-bold uppercase tracking-widest">{t('home.hero.checkingUpdates')}</span>
                                 </div>
                             )}
 
-                            <a href="https://github.com/islemAZ360/DODI-Releases" target="_blank" rel="noopener noreferrer" className="px-8 py-4 glass rounded-2xl text-white font-black text-sm uppercase tracking-[0.2em] hover:bg-white/10 transition-all border-white/10">
+                            <a href="https://github.com/islemAZ360/DODI-Releases" target="_blank" rel="noopener noreferrer" className="h-14 px-8 glass flex items-center justify-center rounded-2xl text-white/70 font-black text-sm uppercase tracking-[0.2em] hover:bg-white/10 hover:text-white transition-all border border-white/10 w-full sm:w-auto">
                                 {t('home.hero.viewDocs')}
                             </a>
                         </div>
                     </Reveal>
                 </div>
             </section>
- 
-            {/* Video Showcase Section */}
-            <Reveal delay={0.05} amount={0.05}>
-                <section className="px-6 lg:px-20 pb-96">
-                <div className="max-w-5xl mx-auto">
-                    <div className="relative aspect-video rounded-[2rem] glass overflow-hidden hero-glow group border border-primary/20 shadow-2xl">
-                        <video
-                            controls
-                            preload="metadata"
-                            playsInline
-                            className="absolute inset-0 w-full h-full object-cover bg-black"
-                            src={instructionalVideos[currentVideoIndex].src}
-                        />
 
-                        <button
-                            onClick={prevVideo}
-                            className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/50 border border-white/10 text-white flex items-center justify-center hover:bg-primary hover:border-primary hover:text-background-dark backdrop-blur-md transition-all opacity-0 group-hover:opacity-100 z-30 shadow-lg hover:scale-110"
-                        >
-                            <span className="material-symbols-outlined">chevron_left</span>
-                        </button>
-                        <button
-                            onClick={nextVideo}
-                            className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/50 border border-white/10 text-white flex items-center justify-center hover:bg-primary hover:border-primary hover:text-background-dark backdrop-blur-md transition-all opacity-0 group-hover:opacity-100 z-30 shadow-lg hover:scale-110"
-                        >
-                            <span className="material-symbols-outlined">chevron_right</span>
-                        </button>
-                    </div>
-                    <div className="mt-8 text-center flex flex-col items-center justify-center gap-4">
-                        <p className="text-xl font-bold tracking-tight text-white uppercase tracking-[0.2em] opacity-80 animate-pulse">
-                            {instructionalVideos[currentVideoIndex].title}
-                        </p>
-                        <div className="flex gap-2">
-                            {instructionalVideos.map((_, idx) => (
-                                <button
-                                    key={idx}
-                                    onClick={() => setCurrentVideoIndex(idx)}
-                                    className={`h-1.5 rounded-full transition-all duration-300 ${idx === currentVideoIndex ? 'w-8 bg-primary shadow-[0_0_15px_rgba(19,236,164,0.8)]' : 'w-2 bg-white/10 hover:bg-white/30'}`}
+            {/* Video Showcase Section */}
+            <section className="px-6 lg:px-20 py-24 relative z-20">
+                <Reveal delay={0.05} amount={0.05}>
+                    <div className="max-w-5xl mx-auto flex flex-col items-center">
+                        <div className="relative w-full aspect-video rounded-[2rem] glass p-2 sm:p-3 overflow-hidden border border-white/10 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] group bg-white/[0.02]">
+                            {/* Decorative Corner Accents */}
+                            <div className="absolute top-0 left-0 w-16 h-16 border-t-2 border-l-2 border-primary/50 rounded-tl-[2rem] z-20 pointer-events-none opacity-50"></div>
+                            <div className="absolute bottom-0 right-0 w-16 h-16 border-b-2 border-r-2 border-primary/50 rounded-br-[2rem] z-20 pointer-events-none opacity-50"></div>
+
+                            <div className="relative w-full h-full rounded-[1.5rem] overflow-hidden bg-black/80">
+                                <video
+                                    controls
+                                    preload="metadata"
+                                    playsInline
+                                    className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
+                                    src={instructionalVideos[currentVideoIndex].src}
                                 />
-                            ))}
+
+                                {/* Gradient Overlay for controls */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+
+                                <button
+                                    onClick={prevVideo}
+                                    className="absolute left-4 top-1/2 -translate-y-1/2 size-12 rounded-full bg-black/40 border border-white/10 text-white flex items-center justify-center hover:bg-primary/20 hover:border-primary hover:text-primary backdrop-blur-md transition-all duration-300 opacity-0 group-hover:opacity-100 z-30 hover:scale-110"
+                                >
+                                    <span className="material-symbols-outlined text-2xl">chevron_left</span>
+                                </button>
+                                <button
+                                    onClick={nextVideo}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 size-12 rounded-full bg-black/40 border border-white/10 text-white flex items-center justify-center hover:bg-primary/20 hover:border-primary hover:text-primary backdrop-blur-md transition-all duration-300 opacity-0 group-hover:opacity-100 z-30 hover:scale-110"
+                                >
+                                    <span className="material-symbols-outlined text-2xl">chevron_right</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div className="mt-8 text-center flex flex-col items-center justify-center gap-5">
+                            <p className="text-lg font-black tracking-[0.2em] text-white uppercase opacity-90 drop-shadow-lg">
+                                {instructionalVideos[currentVideoIndex].title}
+                            </p>
+                            <div className="flex gap-3">
+                                {instructionalVideos.map((_, idx) => (
+                                    <button
+                                        key={idx}
+                                        onClick={() => setCurrentVideoIndex(idx)}
+                                        className={`h-1.5 rounded-full transition-all duration-500 ${idx === currentVideoIndex ? 'w-10 bg-primary shadow-[0_0_15px_rgba(19,236,164,0.8)]' : 'w-3 bg-white/20 hover:bg-white/40'}`}
+                                        aria-label={`Go to video ${idx + 1}`}
+                                    />
+                                ))}
+                            </div>
                         </div>
                     </div>
-                </div>
+                </Reveal>
             </section>
-            </Reveal>
 
             {/* Metrics Grid */}
-            <section className="px-6 lg:px-20 pb-96">
+            <section className="px-6 lg:px-20 py-24 border-y border-white/5 bg-gradient-to-b from-white/[0.01] to-transparent">
                 <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
                     {[
-                        { icon: 'hub', label: t('home.metrics.activeNodes'), value: '1.2M+', growth: '+12%', progress: '75%' },
-                        { icon: 'bolt', label: t('home.metrics.latency'), value: '< 2ms', growth: '-5%', progress: '100%', accent: 'text-rose-500' },
-                        { icon: 'shield', label: t('home.metrics.encryption'), value: t('home.metrics.military'), growth: 'v256-bit', progress: '85%' }
+                        { icon: 'hub', label: t('home.metrics.activeNodes'), value: '1.2M+', growth: '+12%', progress: '75%', color: 'text-primary', bg: 'bg-primary' },
+                        { icon: 'bolt', label: t('home.metrics.latency'), value: '< 2ms', growth: '-5%', progress: '100%', color: 'text-sky-400', bg: 'bg-sky-400' },
+                        { icon: 'shield', label: t('home.metrics.encryption'), value: t('home.metrics.military'), growth: 'v256-bit', progress: '85%', color: 'text-purple-400', bg: 'bg-purple-400' }
                     ].map((metric, idx) => (
                         <Reveal key={idx} delay={idx * 0.1} variant="fadeUp" amount={0.05}>
-                            <div className="premium-card p-10 group relative overflow-hidden">
-                                <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-20 transition-all duration-700 group-hover:scale-110">
-                                    <span className="material-symbols-outlined text-7xl text-primary">{metric.icon}</span>
+                            <div className="glass p-10 rounded-[2rem] group relative overflow-hidden border border-white/5 hover:border-white/10 transition-all duration-500 hover:-translate-y-1 hover:shadow-2xl">
+                                {/* Large background Icon */}
+                                <div className="absolute -top-6 -right-6 p-8 opacity-[0.03] group-hover:opacity-10 transition-all duration-700 group-hover:scale-125 group-hover:rotate-12 pointer-events-none">
+                                    <span className={`material-symbols-outlined text-[120px] ${metric.color}`}>{metric.icon}</span>
                                 </div>
-                                <p className="text-white/30 text-[10px] font-black uppercase tracking-[0.3em] mb-2">{metric.label}</p>
-                                <div className="flex items-baseline gap-4 mb-6">
-                                    <h3 className="text-4xl font-black text-white italic">{metric.value}</h3>
-                                    <span className={`${metric.accent || 'text-primary'} text-xs font-bold`}>{metric.growth}</span>
+
+                                <div className={`size-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 border border-white/10 shadow-inner group-hover:scale-110 transition-transform duration-500`}>
+                                    <span className={`material-symbols-outlined text-2xl ${metric.color}`}>{metric.icon}</span>
                                 </div>
-                                <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                                    <div 
-                                        className="h-full bg-primary rounded-full shadow-[0_0_20px_rgba(19,236,164,0.8)] transition-all duration-1000 delay-500"
+
+                                <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.3em] mb-2">{metric.label}</p>
+                                <div className="flex items-baseline gap-4 mb-8">
+                                    <h3 className="text-4xl md:text-5xl font-black text-white italic tracking-tighter">{metric.value}</h3>
+                                    <span className={`${metric.color} text-xs font-bold px-2 py-1 rounded-md bg-white/5`}>{metric.growth}</span>
+                                </div>
+
+                                <div className="h-1.5 w-full bg-black/40 rounded-full overflow-hidden border border-white/5">
+                                    <div
+                                        className={`h-full ${metric.bg} rounded-full shadow-[0_0_15px_currentColor] transition-all duration-1000 ease-out`}
                                         style={{ width: metric.progress }}
                                     ></div>
                                 </div>
@@ -218,16 +235,19 @@ export function Home() {
             </section>
 
             {/* Features Matrix */}
-            <section className="px-6 lg:px-20 pb-96">
+            <section className="px-6 lg:px-20 py-24">
                 <div className="max-w-7xl mx-auto">
                     <Reveal amount={0.05}>
-                        <div className="flex flex-col mb-12">
-                            <h2 className="text-[10px] font-black text-primary uppercase tracking-[0.4em] mb-4 italic">Core Architecture</h2>
-                            <h3 className="text-3xl md:text-5xl font-black text-white uppercase tracking-tighter leading-none italic">{t('home.features.title')}</h3>
+                        <div className="flex flex-col mb-16 text-center md:text-left rtl:md:text-right">
+                            <div className="inline-flex items-center justify-center md:justify-start gap-2 mb-4">
+                                <span className="material-symbols-outlined text-primary text-sm">memory</span>
+                                <h2 className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Core Architecture</h2>
+                            </div>
+                            <h3 className="text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-tighter leading-none">{t('home.features.title')}</h3>
                         </div>
                     </Reveal>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {[
                             { icon: 'psychology', title: t('home.features.neural.title'), description: t('home.features.neural.description') },
                             { icon: 'enhanced_encryption', title: t('home.features.quantum.title'), description: t('home.features.quantum.description') },
@@ -235,45 +255,52 @@ export function Home() {
                             { icon: 'stream', title: t('home.features.ui.title'), description: t('home.features.ui.description'), accent: 'text-primary' }
                         ].map((feature, idx) => (
                             <Reveal key={idx} delay={idx * 0.15} variant="scale" amount={0.05}>
-                                <div className="premium-card aspect-[4/5] p-10 flex flex-col justify-end group cursor-default relative overflow-hidden">
-                                    <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-20 transition-all duration-700 group-hover:scale-110">
+                                <div className="glass aspect-[4/5] p-8 md:p-10 rounded-[2rem] flex flex-col justify-end group border border-white/5 hover:border-white/20 transition-all duration-500 hover:-translate-y-2 relative overflow-hidden bg-gradient-to-t from-white/[0.05] to-transparent">
+                                    <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-20 transition-all duration-700 group-hover:scale-125 pointer-events-none">
                                         <span className={`material-symbols-outlined text-8xl ${feature.accent || 'text-primary'}`}>{feature.icon}</span>
                                     </div>
-                                    <span className={`material-symbols-outlined ${feature.accent || 'text-primary'} text-5xl mb-8 group-hover:scale-110 transition-transform duration-500`}>
-                                        {feature.icon}
-                                    </span>
-                                    <h4 className="text-2xl font-black text-white mb-4 uppercase italic tracking-tighter">{feature.title}</h4>
-                                    <p className="text-white/40 text-sm font-medium leading-relaxed opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
-                                        {feature.description}
-                                    </p>
+
+                                    <div className="mt-auto relative z-10">
+                                        <span className={`material-symbols-outlined ${feature.accent || 'text-primary'} text-5xl mb-6 group-hover:scale-110 transition-transform duration-500 drop-shadow-lg`}>
+                                            {feature.icon}
+                                        </span>
+                                        <h4 className="text-2xl font-black text-white mb-3 uppercase tracking-tighter">{feature.title}</h4>
+                                        <p className="text-white/40 text-sm font-medium leading-relaxed group-hover:text-white/70 transition-colors duration-300">
+                                            {feature.description}
+                                        </p>
+                                    </div>
                                 </div>
                             </Reveal>
                         ))}
                     </div>
                 </div>
             </section>
-             {/* Usage Protocol & Archive */}
-            <section className="px-6 lg:px-20 pb-96">
-                <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+
+            {/* Usage Protocol & Archive */}
+            <section className="px-6 lg:px-20 py-24 bg-black/20">
+                <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
                     <Reveal delay={0.1} variant="fadeUp" amount={0.05}>
-                        <div className="premium-card p-10 text-left rtl:text-right">
-                            <div className="flex items-center gap-6 mb-10">
-                                <div className="size-14 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20 shadow-2xl">
+                        <div className="glass p-8 md:p-12 rounded-[2rem] border border-white/5 h-full text-left rtl:text-right hover:border-primary/20 transition-colors duration-500">
+                            <div className="flex items-center gap-5 mb-12">
+                                <div className="size-14 rounded-2xl bg-gradient-to-br from-primary/20 to-transparent flex items-center justify-center border border-primary/20 shadow-lg">
                                     <span className="material-symbols-outlined text-primary text-2xl">gavel</span>
                                 </div>
-                                <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter">{t('home.protocol.title')}</h2>
+                                <h2 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter">{t('home.protocol.title')}</h2>
                             </div>
-                            <ul className="space-y-10">
+                            <ul className="space-y-8">
                                 {[
                                     { step: '01', title: t('home.protocol.p1.title'), desc: t('home.protocol.p1.description') },
                                     { step: '02', title: t('home.protocol.p2.title'), desc: t('home.protocol.p2.description') },
                                     { step: '03', title: t('home.protocol.p3.title'), desc: t('home.protocol.p3.description') }
                                 ].map((step, idx) => (
-                                    <li key={idx} className="flex gap-8 group">
-                                        <span className="text-primary font-black italic text-2xl opacity-40 group-hover:opacity-100 transition-opacity">{step.step}</span>
-                                        <div>
-                                            <h4 className="text-white font-bold text-lg mb-2 uppercase tracking-tight">{step.title}</h4>
-                                            <p className="text-white/40 text-sm leading-relaxed italic">{step.desc}</p>
+                                    <li key={idx} className="flex gap-6 group">
+                                        <div className="flex flex-col items-center">
+                                            <span className="text-primary font-black text-xl opacity-50 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300 bg-primary/10 size-12 rounded-full flex items-center justify-center border border-primary/20">{step.step}</span>
+                                            {idx !== 2 && <div className="w-px h-full bg-white/10 mt-4 group-hover:bg-primary/30 transition-colors"></div>}
+                                        </div>
+                                        <div className="pb-8">
+                                            <h4 className="text-white font-bold text-lg mb-2 uppercase tracking-tight group-hover:text-primary transition-colors">{step.title}</h4>
+                                            <p className="text-white/40 text-sm leading-relaxed">{step.desc}</p>
                                         </div>
                                     </li>
                                 ))}
@@ -282,41 +309,54 @@ export function Home() {
                     </Reveal>
 
                     <Reveal delay={0.2} variant="fadeUp" amount={0.05}>
-                        <div className="premium-card p-12 flex flex-col text-left rtl:text-right h-full">
-                            <div className="flex items-center justify-between mb-12">
-                                <div className="flex items-center gap-6">
-                                    <div className="size-16 rounded-2xl bg-primary/10 flex items-center justify-center border border-primary/20 shadow-2xl">
-                                        <span className="material-symbols-outlined text-primary text-3xl">history</span>
+                        <div className="glass p-8 md:p-12 rounded-[2rem] border border-white/5 flex flex-col text-left rtl:text-right h-full hover:border-white/10 transition-colors duration-500">
+                            <div className="flex items-center justify-between mb-10">
+                                <div className="flex items-center gap-5">
+                                    <div className="size-14 rounded-2xl bg-gradient-to-br from-white/10 to-transparent flex items-center justify-center border border-white/10 shadow-lg">
+                                        <span className="material-symbols-outlined text-white text-2xl">history</span>
                                     </div>
-                                    <h2 className="text-3xl font-black text-white uppercase italic tracking-tighter">{t('home.archive.title')}</h2>
+                                    <h2 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter">{t('home.archive.title')}</h2>
                                 </div>
-                                <span className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em]">{t('home.archive.buildsAvailable', { count: olderVersions.length })}</span>
+                                <div className="bg-white/5 px-3 py-1.5 rounded-lg border border-white/10 hidden sm:block">
+                                    <span className="text-[10px] font-black text-white/50 uppercase tracking-[0.2em]">{t('home.archive.buildsAvailable', { count: olderVersions.length })}</span>
+                                </div>
                             </div>
 
-                            <div className="space-y-4 flex-1 overflow-y-auto pr-4 custom-scrollbar" style={{ maxHeight: '400px' }}>
-                                {olderVersions.map((v) => (
+                            <div className="space-y-3 flex-1 overflow-y-auto pr-2 custom-scrollbar" style={{ maxHeight: '420px' }}>
+                                {olderVersions.length > 0 ? olderVersions.map((v) => (
                                     <a
                                         key={v.id}
                                         href={v.downloadUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="flex items-center justify-between p-6 rounded-2xl bg-white/[0.02] border border-white/[0.05] hover:border-primary/30 hover:bg-white/[0.05] transition-all cursor-pointer group"
+                                        className="flex items-center justify-between p-5 rounded-[1.25rem] bg-black/20 border border-white/5 hover:border-primary/30 hover:bg-white/[0.04] hover:shadow-[0_5px_20px_rgba(19,236,164,0.1)] transition-all duration-300 cursor-pointer group"
                                     >
-                                        <div>
-                                            <p className="text-white font-black text-lg group-hover:text-primary transition-colors uppercase italic tracking-tighter">v{v.version}</p>
-                                            <p className="text-white/20 text-[10px] font-black uppercase tracking-[0.2em] mt-1">
-                                                {t('home.archive.released', { date: v.releaseDate ? format(new Date(v.releaseDate), 'MMM dd, yyyy') : 'Unknown' })}
-                                            </p>
+                                        <div className="flex items-center gap-4">
+                                            <div className="size-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+                                                <span className="material-symbols-outlined text-white/40 group-hover:text-primary text-lg transition-colors">terminal</span>
+                                            </div>
+                                            <div>
+                                                <p className="text-white font-black text-lg group-hover:text-primary transition-colors uppercase tracking-tighter">v{v.version}</p>
+                                                <p className="text-white/30 text-[10px] font-bold uppercase tracking-[0.2em] mt-0.5">
+                                                    {t('home.archive.released', { date: v.releaseDate ? format(new Date(v.releaseDate), 'MMM dd, yyyy') : 'Unknown' })}
+                                                </p>
+                                            </div>
                                         </div>
-                                        <span className="material-symbols-outlined text-white/10 group-hover:text-primary transition-all group-hover:translate-y-1">download</span>
+                                        <div className="size-10 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-primary group-hover:text-background-dark transition-all duration-300 group-hover:-translate-y-1">
+                                            <span className="material-symbols-outlined text-white/40 group-hover:text-background-dark transition-colors">download</span>
+                                        </div>
                                     </a>
-                                ))}
+                                )) : (
+                                    <div className="flex flex-col items-center justify-center h-full opacity-50">
+                                        <span className="material-symbols-outlined text-4xl mb-4 text-white/20">cloud_off</span>
+                                        <p className="text-sm font-bold uppercase tracking-widest text-white/40">No Older Builds Found</p>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </Reveal>
                 </div>
             </section>
-
         </div>
     );
 }
