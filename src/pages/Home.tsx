@@ -21,8 +21,8 @@ export function Home() {
     const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
 
     const instructionalVideos = [
-        { src: "/how-to-use.mp4", title: "How to use Our-Fix" },
-        { src: "/how-to-get-free-api.mp4", title: "How to get free API" }
+        { src: "https://media.githubusercontent.com/media/islemAZ360/community-website/main/public/how-to-use.mp4", title: "How to use Our-Fix" },
+        { src: "https://media.githubusercontent.com/media/islemAZ360/community-website/main/public/how-to-get-free-api.mp4", title: "How to get free API" }
     ];
 
     const nextVideo = () => {
