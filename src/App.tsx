@@ -13,7 +13,7 @@ import { Invitations } from './pages/Invitations';
 import { News } from './pages/News';
 import { Support } from './pages/Support';
 import { ProfileModal } from './components/ProfileModal';
-import { Megaphone, Terminal, Menu, X, Globe, ShieldAlert, LogOut, Search, Bell } from 'lucide-react';
+import { Megaphone, Terminal, Menu, X, Globe, ShieldAlert, LogOut, Search } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { StarfieldBackground } from './components/StarfieldBackground';
 

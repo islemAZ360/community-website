@@ -200,7 +200,7 @@ export function Room() {
                             </p>
                         </div>
                     ) : (
-                        messages.map((msg, idx) => {
+                        messages.map((msg) => {
                             const isMe = msg.senderId === user?.uid;
                             return (
                                 <Reveal key={msg.id} delay={0} variant="fadeUp" amount={0}>

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { db } from '../lib/firebase';
 import { collection, query, where, onSnapshot, doc, updateDoc, arrayUnion, deleteDoc } from 'firebase/firestore';
 import { useAuthStore } from '../store/authStore';
-import { Mail, Check, X, Loader2, UserPlus, Hash, Sparkles, Radio } from 'lucide-react';
+import { Mail, Check, X, Loader2, Hash, Sparkles, Radio } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { Reveal } from '../components/Reveal';
