@@ -103,7 +103,26 @@
                 "period": "Lifetime",
                 "save": "Best Investment",
                 "desc": "Unlimited access to all future neural updates with one click."
-            }
+            },
+            "paymentNote": "Note: The website currently only supports payments via Rubles. Additional payment methods (including Crypto and Global Cards) will be available in the coming days."
+        },
+        "faq": {
+            "title": "Frequently Asked Questions",
+            "subtitle": "Everything you need to know about the OUR-FIX technical intelligence system.",
+            "questions": [
+                {
+                    "q": "How does OUR-FIX help in technical interviews?",
+                    "a": "Our neural engine provides real-time coding solutions and precise explanations for complex problems, putting you at the top of the candidate list."
+                },
+                {
+                    "q": "Is the software completely safe and undetectable?",
+                    "a": "Yes, our stealth protocol programmatically renames the process in Task Manager and encrypts transmissions to ensure your full privacy."
+                },
+                {
+                    "q": "What programming languages does the system support?",
+                    "a": "The system supports all modern programming languages including Python, Java, JavaScript, C++, C#, Go, and many more."
+                }
+            ]
         },
         "activation": {
             "title": "Activation & Operational Guide",

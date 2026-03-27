@@ -346,6 +346,45 @@ export function Home() {
                             </Reveal>
                         ))}
                     </div>
+
+                    <Reveal delay={0.5} amount={0.05}>
+                        <p className="mt-12 text-center text-white/30 text-xs font-medium max-w-2xl mx-auto leading-relaxed">
+                            <span className="material-symbols-outlined text-[10px] align-middle mr-1 text-primary">info</span>
+                            {t('home.pricing.paymentNote')}
+                        </p>
+                    </Reveal>
+                </div>
+            </section>
+
+            {/* FAQ Section */}
+            <section className="px-6 lg:px-20 py-24 bg-black/40 relative overflow-hidden">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-[600px] bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
+                
+                <div className="max-w-4xl mx-auto relative z-10">
+                    <Reveal amount={0.05}>
+                        <div className="text-center mb-16">
+                            <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">{t('home.faq.title')}</h2>
+                            <p className="text-white/40 text-lg font-medium">{t('home.faq.subtitle')}</p>
+                        </div>
+                    </Reveal>
+
+                    <div className="space-y-4">
+                        {[0, 1, 2].map((i) => (
+                            <Reveal key={i} delay={i * 0.1} variant="fadeUp" amount={0.05}>
+                                <details className="group glass rounded-3xl border border-white/5 overflow-hidden transition-all duration-500 hover:border-primary/20">
+                                    <summary className="flex items-center justify-between p-8 cursor-pointer list-none">
+                                        <h4 className="text-white font-bold text-lg pr-8">{t(`home.faq.questions.${i}.q`)}</h4>
+                                        <div className="size-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center transition-all group-open:rotate-180 group-open:bg-primary/20 group-open:border-primary/30">
+                                            <span className="material-symbols-outlined text-primary text-xl">expand_more</span>
+                                        </div>
+                                    </summary>
+                                    <div className="px-8 pb-8 text-white/50 leading-relaxed border-t border-white/5 pt-6 animate-in slide-in-from-top-2 duration-500">
+                                        {t(`home.faq.questions.${i}.a`)}
+                                    </div>
+                                </details>
+                            </Reveal>
+                        ))}
+                    </div>
                 </div>
             </section>
 
