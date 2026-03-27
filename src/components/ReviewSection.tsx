@@ -23,7 +23,7 @@ export const ReviewSection: React.FC = () => {
     const [newRating, setNewRating] = useState(5);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const isAuthorized = !!userData?.licenseKey;
+    const isAuthorized = userData?.status === 'approved' && !!userData?.licenseKey;
 
     useEffect(() => {
         const q = query(

@@ -8,6 +8,7 @@ interface UserData {
     email: string;
     profilePicture?: string;
     licenseKey?: string;
+    status?: 'pending' | 'approved' | 'rejected';
     isBanned?: boolean;
     createdAt: any;
 }
