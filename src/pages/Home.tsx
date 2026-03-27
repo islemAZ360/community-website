@@ -349,6 +349,72 @@ export function Home() {
                 </div>
             </section>
 
+            {/* Activation & Usage Guide */}
+            <section className="px-6 lg:px-20 py-24 bg-white/[0.02] border-y border-white/5 relative overflow-hidden">
+                <div className="absolute -bottom-24 -left-24 size-96 bg-primary/10 blur-[100px] rounded-full pointer-events-none"></div>
+                
+                <div className="max-w-7xl mx-auto relative z-10">
+                    <Reveal amount={0.05}>
+                        <div className="flex flex-col mb-16 text-center md:text-left rtl:md:text-right">
+                            <div className="inline-flex items-center justify-center md:justify-start gap-2 mb-4">
+                                <span className="material-symbols-outlined text-primary text-sm">terminal</span>
+                                <h2 className="text-[10px] font-black text-primary uppercase tracking-[0.4em]">Operational Protocol</h2>
+                            </div>
+                            <h3 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter leading-none mb-6">{t('home.activation.title')}</h3>
+                            <p className="max-w-xl text-white/40 text-lg font-medium">{t('home.activation.subtitle')}</p>
+                        </div>
+                    </Reveal>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {[0, 1, 2, 3, 4, 5].map((i) => (
+                            <Reveal key={i} delay={i * 0.1} variant="fadeUp" amount={0.05}>
+                                <div className="glass p-8 rounded-[2rem] border border-white/5 hover:border-primary/20 transition-all duration-500 group h-full flex flex-col">
+                                    <div className="flex items-start justify-between mb-6">
+                                        <div className="size-12 rounded-xl bg-white/5 flex items-center justify-center border border-white/10 text-primary font-black text-xl group-hover:bg-primary/10 transition-colors">
+                                            {i + 1}
+                                        </div>
+                                        {i === 2 && (
+                                            <div className="px-3 py-1 rounded-md bg-amber-500/10 border border-amber-500/20 text-amber-500 text-[10px] font-black uppercase tracking-widest animate-pulse">
+                                                Important Note
+                                            </div>
+                                        )}
+                                    </div>
+                                    <h4 className="text-white font-bold text-lg mb-3 uppercase tracking-tight group-hover:text-primary transition-colors">
+                                        {t(`home.activation.steps.${i}.title`)}
+                                    </h4>
+                                    <p className="text-white/40 text-sm leading-relaxed group-hover:text-white/70 transition-colors">
+                                        {t(`home.activation.steps.${i}.desc`)}
+                                    </p>
+                                </div>
+                            </Reveal>
+                        ))}
+                    </div>
+
+                    <Reveal delay={0.6} amount={0.05}>
+                        <div className="mt-16 p-8 rounded-[2rem] bg-gradient-to-r from-primary/10 to-transparent border border-primary/20 flex flex-col md:flex-row items-center justify-between gap-8">
+                            <div className="flex items-center gap-6">
+                                <div className="size-16 rounded-2xl bg-primary/20 flex items-center justify-center border border-primary/30 shadow-lg">
+                                    <span className="material-symbols-outlined text-primary text-3xl">verified_user</span>
+                                </div>
+                                <div>
+                                    <h5 className="text-white font-black text-xl uppercase tracking-tighter">Ready to Deploy?</h5>
+                                    <p className="text-white/50 text-sm">Start your professional journey with the most advanced AI assistant.</p>
+                                </div>
+                            </div>
+                            <a 
+                                href="https://t.me/islamazaizia" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="btn-premium px-10 h-14 flex items-center justify-center gap-3 shadow-[0_0_30px_rgba(19,236,164,0.3)] hover:shadow-[0_0_50px_rgba(19,236,164,0.5)]"
+                            >
+                                <span className="font-black text-xs uppercase tracking-widest">Connect with Admin</span>
+                                <span className="material-symbols-outlined text-lg">send</span>
+                            </a>
+                        </div>
+                    </Reveal>
+                </div>
+            </section>
+
             {/* Usage Protocol & Archive */}
             <section className="px-6 lg:px-20 py-24 bg-black/20">
                 <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">

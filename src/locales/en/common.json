@@ -104,6 +104,36 @@
                 "save": "Best Investment",
                 "desc": "Unlimited access to all future neural updates with one click."
             }
+        },
+        "activation": {
+            "title": "Activation & Usage Guide",
+            "subtitle": "Follow these tactical steps to unlock your full potential and bypass system restrictions.",
+            "steps": [
+                {
+                    "title": "Digital Registration",
+                    "desc": "Create your account on this website first to register your identity in the database."
+                },
+                {
+                    "title": "Application Sync",
+                    "desc": "Use the same email and password to log into the OUR-FIX software."
+                },
+                {
+                    "title": "Bypassing Defenses",
+                    "desc": "If Windows Defender warnings appear, do not worry. The software programmatically changes its name in Task Manager to remain stealthy."
+                },
+                {
+                    "title": "Sending Coordinates",
+                    "desc": "Send your registered email to the owner via Telegram to verify your identity."
+                },
+                {
+                    "title": "Transfer Protocol",
+                    "desc": "Upon verification, you will receive payment details to complete your investment."
+                },
+                {
+                    "title": "Key Injection",
+                    "desc": "You will receive a unique Activation Key that unlocks all software capabilities instantly."
+                }
+            ]
         }
     },
     "community": {
