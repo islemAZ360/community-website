@@ -67,7 +67,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pla
                         { text: '❌ Reject', callback_data: `reject_${docRef.id}` }
                     ],
                     [
-                        { text: '🌐 Open Admin Dashboard', url: 'https://cod-admin.vercel.app/' }
+                        { text: '🌐 Open Admin Dashboard', url: 'https://cod-admin-eta.vercel.app/' }
                     ]
                 ]
             };
