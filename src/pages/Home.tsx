@@ -107,8 +107,8 @@ export function Home() {
                     </Reveal>
 
                     <Reveal delay={0.1} amount={0.05}>
-                        <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] font-black text-transparent bg-clip-text bg-gradient-to-b from-white via-white/90 to-white/40 mb-8 leading-[1.1] uppercase tracking-tighter drop-shadow-2xl">
-                            {t('home.hero.title')}
+                        <h1 className="text-6xl md:text-8xl lg:text-[8rem] font-black text-white mb-8 leading-[0.85] uppercase tracking-tighter drop-shadow-[0_0_40px_rgba(19,236,164,0.3)]">
+                            Tactical<br />Mesh
                         </h1>
                     </Reveal>
 
