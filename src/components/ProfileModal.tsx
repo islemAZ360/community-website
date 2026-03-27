@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { X, Mail, Camera, Save, CheckCircle2, ShieldCheck, Copy, Check, Activity, Globe, Zap, Cpu } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { db, storage } from '../lib/firebase';
-import { doc, updateDoc, collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
+import { doc, updateDoc, collection, query, where, onSnapshot } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 interface ProfileModalProps {
