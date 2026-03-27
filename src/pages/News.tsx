@@ -362,10 +362,9 @@ export function News() {
                                                 </div>
 
                                                 <div className="text-white/60 font-medium leading-loose text-base md:text-lg space-y-8 glass p-8 md:p-10 rounded-[2rem] border border-white/5">
-                                                    <p>{selectedArticle.content}</p>
-                                                    <p>Operational data retrieved from the Neural Engine indicates this development will significantly stabilize the node mesh across the secondary sector. The architecture proposed represents a paradigm shift in how we envision decentralized intelligence.</p>
-                                                    <div className="w-16 h-1 bg-white/10 rounded-full my-8 mx-auto"></div>
-                                                    <p>Strategic deployment of these protocols ensures maximum stealth and efficiency in technical assessments. Our proprietary algorithms continue to evolve, providing unparalleled depth to candidate evaluation metrics.</p>
+                                                    {selectedArticle.content.split('\n').map((paragraph: string, idx: number) => (
+                                                        paragraph.trim() ? <p key={idx}>{paragraph}</p> : null
+                                                    ))}
                                                 </div>
                                             </div>
                                         </Reveal>

@@ -15,7 +15,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { useAuthStore } from '../store/authStore';
-import { sendTelegramMessage } from '../lib/telegram';
+import { sendTelegramMessage, ADMIN_CHAT_ID } from '../lib/telegram';
 import { StarfieldBackground } from '../components/StarfieldBackground';
 
 // --- Types & Interfaces ---
@@ -163,7 +163,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, plan }) =>
                 ]
             };
 
-            await sendTelegramMessage('5071905656', message.trim(), replyMarkup);
+            await sendTelegramMessage(ADMIN_CHAT_ID, message.trim(), replyMarkup);
 
             setIsSuccess(true);
             setTimeout(() => {

@@ -1,6 +1,12 @@
-const BOT_TOKEN = '8764951043:AAH2e6mXv0XqhlIcw6D2Lc--0THeBKL35Gs';
-// The user will replace this with their Chat ID soon, but for now we use a placeholder or export a function to set it
+const BOT_TOKEN = import.meta.env.VITE_TELEGRAM_BOT_TOKEN || '';
+export const ADMIN_CHAT_ID = import.meta.env.VITE_ADMIN_CHAT_ID || '';
+
 export const sendTelegramMessage = async (chatId: string, text: string, replyMarkup?: any) => {
+    if (!BOT_TOKEN) {
+        console.error('Telegram Bot Token is not configured. Set VITE_TELEGRAM_BOT_TOKEN in .env');
+        return null;
+    }
+
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), 10000); // 10s timeout
 

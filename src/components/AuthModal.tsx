@@ -3,7 +3,8 @@ import { auth, db } from '../lib/firebase';
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
-    updateProfile
+    updateProfile,
+    sendPasswordResetEmail
 } from 'firebase/auth';
 import { doc, getDoc, setDoc, serverTimestamp } from 'firebase/firestore';
 import communityLogo from '../public/community.png';
@@ -20,6 +21,7 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [resetSent, setResetSent] = useState(false);
 
     if (!isOpen) return null;
 
@@ -227,10 +229,29 @@ export function AuthModal({ isOpen, onClose }: AuthModalProps) {
                     </div>
 
                     <div className="mt-8 pt-6 border-t border-white/5 flex items-center justify-center gap-6">
-                        <a href="#" className="text-[9px] text-white/30 hover:text-primary font-black uppercase tracking-[0.2em] transition-colors">
-                            Forgot Protocol?
-                        </a>
-                        <span className="size-1 rounded-full bg-white/10"></span>
+                        {isLogin && (
+                            <button
+                                type="button"
+                                onClick={async () => {
+                                    if (!email) {
+                                        setError('Enter your email first, then click Forgot Protocol.');
+                                        return;
+                                    }
+                                    try {
+                                        await sendPasswordResetEmail(auth, email);
+                                        setResetSent(true);
+                                        setError('');
+                                        setTimeout(() => setResetSent(false), 5000);
+                                    } catch (err: any) {
+                                        setError(err.message || 'Failed to send reset email.');
+                                    }
+                                }}
+                                className={`text-[9px] font-black uppercase tracking-[0.2em] transition-colors ${resetSent ? 'text-primary' : 'text-white/30 hover:text-primary'}`}
+                            >
+                                {resetSent ? '✓ Reset Link Sent!' : 'Forgot Protocol?'}
+                            </button>
+                        )}
+                        {isLogin && <span className="size-1 rounded-full bg-white/10"></span>}
                         <a href="#" className="text-[9px] text-white/30 hover:text-primary font-black uppercase tracking-[0.2em] transition-colors">
                             Security Policy
                         </a>

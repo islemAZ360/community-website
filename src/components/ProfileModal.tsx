@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { X, Mail, Camera, Save, CheckCircle2, ShieldCheck, Copy, Check, Activity, Globe, Zap, Cpu } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
-import { db } from '../lib/firebase';
+import { db, storage } from '../lib/firebase';
 import { doc, updateDoc, collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 interface ProfileModalProps {
     isOpen: boolean;
@@ -13,6 +14,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
     const { user, userData, fetchUserData } = useAuthStore();
     const [isSaving, setIsSaving] = useState(false);
     const [previewImage, setPreviewImage] = useState<string | null>(null);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
     const [paymentRequests, setPaymentRequests] = useState<any[]>([]);
@@ -29,11 +31,10 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
             setError(null);
             setSuccess(false);
 
-            // Fetch payment history
+            // Fetch payment history (Removed orderBy to avoid missing index errors)
             const q = query(
                 collection(db, 'payment_requests'),
-                where('userId', '==', user.uid),
-                orderBy('createdAt', 'desc')
+                where('userId', '==', user.uid)
             );
 
             const unsubscribePayments = onSnapshot(q, (snapshot) => {
@@ -41,6 +42,12 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
                     id: doc.id,
                     ...doc.data()
                 }));
+                // Sort locally instead of relying on Firestore index
+                requests.sort((a: any, b: any) => {
+                    const dateA = a.createdAt?.seconds ? a.createdAt.seconds * 1000 : 0;
+                    const dateB = b.createdAt?.seconds ? b.createdAt.seconds * 1000 : 0;
+                    return dateB - dateA;
+                });
                 setPaymentRequests(requests);
             });
 
@@ -65,11 +72,12 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
         setError(null);
         const file = e.target.files?.[0];
         if (file) {
-            if (file.size > 500 * 1024) {
-                setError("Payload too large. Max allowed size is 500KB.");
+            if (file.size > 2 * 1024 * 1024) {
+                setError("Payload too large. Max allowed size is 2MB.");
                 return;
             }
 
+            setSelectedFile(file);
             const reader = new FileReader();
             reader.onloadend = () => {
                 setPreviewImage(reader.result as string);
@@ -83,10 +91,20 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
         setError(null);
         try {
             const userRef = doc(db, 'users', user.uid);
+            let imageUrl = previewImage;
+
+            // Upload to Firebase Storage if a new file was selected
+            if (selectedFile) {
+                const storageRef = ref(storage, `profile_pictures/${user.uid}`);
+                await uploadBytes(storageRef, selectedFile);
+                imageUrl = await getDownloadURL(storageRef);
+            }
+
             await updateDoc(userRef, {
-                profilePicture: previewImage
+                profilePicture: imageUrl
             });
             await fetchUserData(user.uid);
+            setSelectedFile(null);
             setSuccess(true);
             setTimeout(() => {
                 setSuccess(false);
@@ -204,9 +222,9 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
                                 <div className="grid grid-cols-2 gap-3 mt-6">
                                     <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-2xl flex flex-col items-start gap-1 group/stat hover:border-[#13eca4]/20 transition-colors">
                                         <span className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em]">Status</span>
-                                        <span className="text-[10px] font-bold text-[#13eca4] uppercase tracking-widest flex items-center gap-1.5">
-                                            <span className="size-1.5 bg-[#13eca4] rounded-full animate-pulse" />
-                                            Active Link
+                                        <span className={`text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 ${userData?.status === 'approved' ? 'text-[#13eca4]' : 'text-amber-500'}`}>
+                                            <span className={`size-1.5 rounded-full animate-pulse ${userData?.status === 'approved' ? 'bg-[#13eca4]' : 'bg-amber-500'}`} />
+                                            {userData?.status === 'approved' ? 'Active Link' : 'Pending'}
                                         </span>
                                     </div>
                                     <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-2xl flex flex-col items-start gap-1 hover:border-white/10 transition-colors">
@@ -215,11 +233,15 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
                                     </div>
                                     <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-2xl flex flex-col items-start gap-1 hover:border-white/10 transition-colors">
                                         <span className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em]">Security</span>
-                                        <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">Enhanced</span>
+                                        <span className={`text-[10px] font-bold uppercase tracking-widest ${userData?.licenseKey ? 'text-indigo-400' : 'text-white/50'}`}>
+                                            {userData?.licenseKey ? 'Enhanced' : 'Standard'}
+                                        </span>
                                     </div>
                                     <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-2xl flex flex-col items-start gap-1 hover:border-white/10 transition-colors">
                                         <span className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em]">Authority</span>
-                                        <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">L3 Clear</span>
+                                        <span className={`text-[10px] font-bold uppercase tracking-widest ${userData?.role === 'admin' ? 'text-rose-400' : (userData?.licenseKey ? 'text-emerald-400' : 'text-white/50')}`}>
+                                            {userData?.role === 'admin' ? 'L5 Command' : (userData?.licenseKey ? 'L3 Clear' : 'L1 Guest')}
+                                        </span>
                                     </div>
                                 </div>
                             </div>

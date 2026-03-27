@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, QrCode, CreditCard, Send, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
-import { sendTelegramMessage } from '../lib/telegram';
+import { sendTelegramMessage, ADMIN_CHAT_ID } from '../lib/telegram';
 import { db } from '../lib/firebase';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useAuthStore } from '../store/authStore';
@@ -72,7 +72,6 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pla
                 ]
             };
 
-            const ADMIN_CHAT_ID = '5071905656';
             await sendTelegramMessage(ADMIN_CHAT_ID, message.trim(), replyMarkup);
 
             setIsSuccess(true);

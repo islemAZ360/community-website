@@ -10,6 +10,7 @@ interface UserData {
     licenseKey?: string;
     status?: 'pending' | 'approved' | 'rejected';
     isBanned?: boolean;
+    role?: string;
     createdAt: any;
 }
 

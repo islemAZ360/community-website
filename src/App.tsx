@@ -13,7 +13,7 @@ import { Invitations } from './pages/Invitations';
 import { News } from './pages/News';
 import { Support } from './pages/Support';
 import { ProfileModal } from './components/ProfileModal';
-import { Megaphone, Terminal, Menu, X, Globe, ShieldAlert, LogOut, Search } from 'lucide-react';
+import { Megaphone, Terminal, Menu, X, Globe, ShieldAlert, LogOut } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { StarfieldBackground } from './components/StarfieldBackground';
 
@@ -152,15 +152,6 @@ function App() {
                             {/* Actions Right Side */}
                             <div className="flex items-center gap-4 lg:gap-6">
 
-                                {/* Desktop Search */}
-                                <div className="hidden md:flex items-center bg-black/40 border border-white/10 rounded-2xl px-4 py-2 gap-3 transition-all focus-within:border-primary/50 focus-within:bg-primary/5 group">
-                                    <Search size={14} className="text-white/30 group-focus-within:text-primary transition-colors" />
-                                    <input
-                                        className="bg-transparent border-none focus:ring-0 text-[11px] font-bold text-slate-200 placeholder:text-white/20 w-32 lg:w-48 outline-none font-mono"
-                                        placeholder={t('nav.search', 'SEARCH NET...')}
-                                        type="text"
-                                    />
-                                </div>
 
                                 {/* Desktop License HUD */}
                                 {user && licenseInfo && (
@@ -256,15 +247,6 @@ function App() {
                     {isMobileMenuOpen && (
                         <div className="fixed inset-0 top-[73px] z-40 bg-black/95 backdrop-blur-2xl lg:hidden animate-in fade-in slide-in-from-top-4 duration-300">
                             <div className="p-6 flex flex-col gap-6 h-full overflow-y-auto">
-
-                                <div className="flex items-center bg-white/5 border border-white/10 rounded-2xl px-4 py-3 gap-3">
-                                    <Search size={16} className="text-white/40" />
-                                    <input
-                                        className="bg-transparent border-none focus:ring-0 text-xs font-bold text-white placeholder:text-white/30 w-full outline-none font-mono"
-                                        placeholder={t('nav.search', 'Search network...')}
-                                        type="text"
-                                    />
-                                </div>
 
                                 <nav className="flex flex-col gap-2">
                                     <Link onClick={() => setIsMobileMenuOpen(false)} to="/" className="p-4 rounded-2xl bg-white/5 text-xs font-black uppercase tracking-[0.2em] text-white/70 hover:text-primary hover:bg-white/10 transition-colors">{t('nav.home')}</Link>
