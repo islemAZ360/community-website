@@ -159,7 +159,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, plan }) =>
                         { text: '✅ Approve', callback_data: `approve_${docRef.id}` },
                         { text: '❌ Reject', callback_data: `reject_${docRef.id}` }
                     ],
-                    [{ text: '🌐 Open Admin Dashboard', url: 'https://cod-admin.vercel.app/' }]
+                    [{ text: '🌐 Open Admin Dashboard', url: 'https://cod-admin-eta.vercel.app/' }]
                 ]
             };
 
