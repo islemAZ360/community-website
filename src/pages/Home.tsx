@@ -510,9 +510,9 @@ export function Home() {
                             </div>
                         </Reveal>
 
-                        <Reveal delay={0.1} amount={0.05}>
-                            <h1 className="text-5xl md:text-8xl lg:text-[9rem] font-black text-white mb-6 tracking-tighter leading-[0.9] drop-shadow-[0_0_50px_rgba(19,236,164,0.3)]">
-                                <span className="bg-clip-text text-transparent bg-gradient-to-br from-white via-[#13eca4] to-[#0a5c44]">
+                        <Reveal delay={0.1} amount={0}>
+                            <h1 className="text-7xl md:text-9xl lg:text-[11rem] font-black mb-10 tracking-tighter leading-none select-none drop-shadow-[0_20px_50px_rgba(19,236,164,0.2)]">
+                                <span className="bg-clip-text text-transparent bg-gradient-to-b from-white via-[#13eca4] to-[#042f2e] inline-block">
                                     OUR-FIX
                                 </span>
                             </h1>

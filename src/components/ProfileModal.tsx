@@ -36,7 +36,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
                 orderBy('createdAt', 'desc')
             );
 
-            const unsubscribe = onSnapshot(q, (snapshot) => {
+            const unsubscribePayments = onSnapshot(q, (snapshot) => {
                 const requests = snapshot.docs.map(doc => ({
                     id: doc.id,
                     ...doc.data()
@@ -44,9 +44,20 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
                 setPaymentRequests(requests);
             });
 
-            return () => unsubscribe();
+            // Real-time user data sync (for license key approval)
+            const userRef = doc(db, 'users', user.uid);
+            const unsubscribeUser = onSnapshot(userRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    useAuthStore.setState({ userData: snapshot.data() as any });
+                }
+            });
+
+            return () => {
+                unsubscribePayments();
+                unsubscribeUser();
+            };
         }
-    }, [isOpen, user, userData, fetchUserData]);
+    }, [isOpen, user]);
 
     if (!isOpen || !user) return null;
 

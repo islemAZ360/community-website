@@ -36,7 +36,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pla
 
         try {
             // 1. Save to Firestore
-            await addDoc(collection(db, 'payment_requests'), {
+            const docRef = await addDoc(collection(db, 'payment_requests'), {
                 userId: user.uid,
                 userEmail: user.email,
                 userName: userData?.nickname || 'Anonymous',
@@ -57,11 +57,15 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pla
 📦 <b>Plan:</b> ${plan.name} (${plan.price} RUB)
 🆔 <b>Transaction:</b> <code>${transactionId}</code>
 ━━━━━━━━━━━━━━━━━━
-<i>Verify the payment in your bank app and approve via the Admin Dashboard.</i>
+<i>Verify the payment in your bank app and decide:</i>
             `;
             
             const replyMarkup = {
                 inline_keyboard: [
+                    [
+                        { text: '✅ Approve', callback_data: `approve_${docRef.id}` },
+                        { text: '❌ Reject', callback_data: `reject_${docRef.id}` }
+                    ],
                     [
                         { text: '🌐 Open Admin Dashboard', url: 'https://cod-admin.vercel.app/' }
                     ]
@@ -77,9 +81,13 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pla
                 setIsSuccess(false);
                 setTransactionId('');
             }, 5000);
-        } catch (err) {
+        } catch (err: any) {
             console.error('Payment submission error:', err);
-            setError('Failed to submit. Please contact admin directly.');
+            if (err.message === 'TIMEOUT' || err.name === 'AbortError' || (err.message && err.message.toLowerCase().includes('network'))) {
+                setError('Network Protocol Failure. If you are in a restricted region (e.g. Russia), please activate a VPN and try again.');
+            } else {
+                setError('Failed to transmit mission data. Please contact Command directly.');
+            }
         } finally {
             setIsSubmitting(false);
         }
