@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { Reveal } from '../components/Reveal';
+import { PaymentModal } from '../components/PaymentModal';
+import { ReviewSection } from '../components/ReviewSection';
 
 interface AppVersion {
     id: string;
@@ -19,6 +21,8 @@ export function Home() {
     const [olderVersions, setOlderVersions] = useState<AppVersion[]>([]);
     const [loading, setLoading] = useState(true);
     const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+    const [selectedPlan, setSelectedPlan] = useState<{ name: string, price: string, key: string } | null>(null);
+    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
     const instructionalVideos = [
         { src: "https://media.githubusercontent.com/media/islemAZ360/community-website/main/public/how-to-use.mp4", title: "How to use Our-Fix" },
@@ -332,15 +336,20 @@ export function Home() {
                                             <span className="text-white/20 text-sm ml-2 font-medium">/ {t(`home.pricing.${plan.key}.period`)}</span>
                                         </div>
 
-                                        <a
-                                            href="https://t.me/islamazaizia"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
+                                        <button
+                                            onClick={() => {
+                                                setSelectedPlan({
+                                                    name: t(`home.pricing.${plan.key}.name`),
+                                                    price: t(`home.pricing.${plan.key}.price`),
+                                                    key: plan.key
+                                                });
+                                                setIsPaymentModalOpen(true);
+                                            }}
                                             className={`flex items-center justify-center gap-3 w-full h-14 rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all duration-500 ${plan.highlight ? 'bg-primary text-background-dark hover:shadow-[0_0_30px_rgba(19,236,164,0.5)] hover:scale-[1.02]' : 'bg-white/5 text-white border border-white/10 hover:bg-white/10'}`}
                                         >
                                             {t('home.pricing.cta')}
                                             <span className="material-symbols-outlined text-lg">arrow_forward</span>
-                                        </a>
+                                        </button>
                                     </div>
                                 </div>
                             </Reveal>
@@ -355,6 +364,9 @@ export function Home() {
                     </Reveal>
                 </div>
             </section>
+
+            {/* Reviews Section */}
+            <ReviewSection />
 
             {/* FAQ Section */}
             <section className="px-6 lg:px-20 py-24 bg-black/40 relative overflow-hidden">
@@ -535,6 +547,12 @@ export function Home() {
                     </Reveal>
                 </div>
             </section>
+            {/* Payment Modal */}
+            <PaymentModal
+                isOpen={isPaymentModalOpen}
+                onClose={() => setIsPaymentModalOpen(false)}
+                plan={selectedPlan}
+            />
         </div>
     );
-}
+}
