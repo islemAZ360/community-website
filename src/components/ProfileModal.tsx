@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { X, User, Mail, Camera, Save, CheckCircle2, AlertCircle, ShieldCheck } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { db } from '../lib/firebase';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
 
 interface ProfileModalProps {
     isOpen: boolean;
@@ -15,17 +15,35 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
     const [previewImage, setPreviewImage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
+    const [paymentRequests, setPaymentRequests] = useState<any[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    // Sync initial state when modal opens
+    // Sync initial state and fetch payments when modal opens
     useEffect(() => {
-        if (isOpen) {
-            if (user && !userData) {
+        if (isOpen && user) {
+            if (!userData) {
                 fetchUserData(user.uid);
             }
             setPreviewImage(userData?.profilePicture || null);
             setError(null);
             setSuccess(false);
+
+            // Fetch payment history
+            const q = query(
+                collection(db, 'payment_requests'),
+                where('userId', '==', user.uid),
+                orderBy('createdAt', 'desc')
+            );
+
+            const unsubscribe = onSnapshot(q, (snapshot) => {
+                const requests = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                setPaymentRequests(requests);
+            });
+
+            return () => unsubscribe();
         }
     }, [isOpen, user, userData, fetchUserData]);
 
@@ -180,6 +198,48 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
                                 <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.15em] block mb-1">Network Status</span>
                                 <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400">Connection Stable</span>
                             </div>
+                        </div>
+                    </div>
+
+                    {/* Mission History (Payment Requests) */}
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-between px-2">
+                            <h4 className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em]">Mission History</h4>
+                            <span className="text-[8px] font-mono text-white/20 uppercase">{paymentRequests.length} LOGS</span>
+                        </div>
+                        
+                        <div className="space-y-3 max-h-[200px] overflow-y-auto pr-2 custom-scrollbar">
+                            {paymentRequests.length === 0 ? (
+                                <div className="text-center py-8 border border-dashed border-white/5 rounded-2xl">
+                                    <p className="text-[10px] font-black text-white/10 uppercase tracking-widest italic">No missions deployed yet</p>
+                                </div>
+                            ) : (
+                                paymentRequests.map((req) => (
+                                    <div key={req.id} className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 flex flex-col gap-3">
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <p className="text-[10px] font-black text-white uppercase tracking-tight">{req.planName}</p>
+                                                <p className="text-[8px] font-mono text-white/30">ID: {req.transactionId}</p>
+                                            </div>
+                                            <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest border ${
+                                                req.status === 'approved' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' :
+                                                req.status === 'rejected' ? 'bg-red-500/10 border-red-500/20 text-red-500' :
+                                                'bg-amber-500/10 border-amber-500/20 text-amber-500'
+                                            }`}>
+                                                {req.status}
+                                            </span>
+                                        </div>
+                                        {req.status === 'rejected' && req.rejectionReason && (
+                                            <div className="p-2 rounded-lg bg-red-500/5 border border-red-500/10">
+                                                <p className="text-[9px] text-red-400/80 leading-relaxed italic">
+                                                    <span className="font-black uppercase tracking-widest mr-1 not-italic">Intel:</span>
+                                                    "{req.rejectionReason}"
+                                                </p>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))
+                            )}
                         </div>
                     </div>
 
