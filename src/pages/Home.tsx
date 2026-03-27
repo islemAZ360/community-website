@@ -282,6 +282,73 @@ export function Home() {
                 </div>
             </section>
 
+            {/* Strategic Investment Plans (Pricing) */}
+            <section className="px-6 lg:px-20 py-24 relative overflow-hidden">
+                {/* Background Accents */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
+
+                <div className="max-w-7xl mx-auto relative z-10">
+                    <Reveal amount={0.05}>
+                        <div className="text-center mb-16">
+                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 mb-6">
+                                <span className="material-symbols-outlined text-primary text-sm">payments</span>
+                                <span className="text-[10px] font-black text-primary uppercase tracking-[0.3em]">Capital Investment</span>
+                            </div>
+                            <h3 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter mb-6">
+                                {t('home.pricing.title')}
+                            </h3>
+                            <p className="max-w-2xl mx-auto text-white/40 text-lg font-medium leading-relaxed">
+                                {t('home.pricing.subtitle')}
+                            </p>
+                        </div>
+                    </Reveal>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        {[
+                            { key: 'monthly', icon: 'token', highlight: false },
+                            { key: 'sixMonths', icon: 'military_tech', highlight: true, badge: t('home.pricing.sixMonths.save') },
+                            { key: 'lifetime', icon: 'all_inclusive', highlight: false, badge: t('home.pricing.lifetime.save') }
+                        ].map((plan, idx) => (
+                            <Reveal key={plan.key} delay={idx * 0.15} variant="fadeUp" amount={0.05}>
+                                <div className={`group relative h-full flex flex-col p-8 md:p-10 rounded-[2.5rem] border transition-all duration-500 hover:-translate-y-2 ${plan.highlight ? 'bg-white/[0.05] border-primary/30 shadow-[0_20px_50px_rgba(19,236,164,0.15)] scale-105 z-10' : 'bg-white/[0.02] border-white/5 hover:border-white/20'}`}>
+                                    {plan.badge && (
+                                        <div className="absolute -top-4 right-8 px-4 py-1.5 rounded-full bg-primary text-background-dark text-[10px] font-black uppercase tracking-widest shadow-[0_0_20px_rgba(19,236,164,0.4)]">
+                                            {plan.badge}
+                                        </div>
+                                    )}
+
+                                    <div className="mb-10 text-left rtl:text-right">
+                                        <div className={`size-14 rounded-2xl flex items-center justify-center mb-6 border transition-transform duration-500 group-hover:scale-110 ${plan.highlight ? 'bg-primary/20 border-primary/30' : 'bg-white/5 border-white/10'}`}>
+                                            <span className={`material-symbols-outlined text-3xl ${plan.highlight ? 'text-primary' : 'text-white/40 group-hover:text-white'}`}>{plan.icon}</span>
+                                        </div>
+                                        <h4 className="text-xl font-black text-white uppercase tracking-tight mb-2">{t(`home.pricing.${plan.key}.name`)}</h4>
+                                        <p className="text-white/30 text-sm leading-relaxed">{t(`home.pricing.${plan.key}.desc`)}</p>
+                                    </div>
+
+                                    <div className="mt-auto pt-8 border-t border-white/5 text-left rtl:text-right">
+                                        <div className="flex items-baseline gap-1 mb-10">
+                                            <span className="text-5xl font-black text-white italic tracking-tighter">{t(`home.pricing.${plan.key}.price`)}</span>
+                                            <span className="text-xl font-bold text-white/40 ml-2 italic">₽</span>
+                                            <span className="text-white/20 text-sm ml-2 font-medium">/ {t(`home.pricing.${plan.key}.period`)}</span>
+                                        </div>
+
+                                        <a
+                                            href="https://t.me/islamazaizia"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className={`flex items-center justify-center gap-3 w-full h-14 rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all duration-500 ${plan.highlight ? 'bg-primary text-background-dark hover:shadow-[0_0_30px_rgba(19,236,164,0.5)] hover:scale-[1.02]' : 'bg-white/5 text-white border border-white/10 hover:bg-white/10'}`}
+                                        >
+                                            {t('home.pricing.cta')}
+                                            <span className="material-symbols-outlined text-lg">arrow_forward</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </Reveal>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
             {/* Usage Protocol & Archive */}
             <section className="px-6 lg:px-20 py-24 bg-black/20">
                 <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">

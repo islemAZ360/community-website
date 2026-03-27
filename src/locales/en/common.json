@@ -79,6 +79,31 @@
             "buildsAvailable": "{{count}} Builds Available",
             "released": "Released {{date}}",
             "noArchive": "No archive currently available."
+        },
+        "pricing": {
+            "title": "Tactical Investment Plans",
+            "subtitle": "Investing in your professional future is not just a cost—it's the strongest weapon in your arsenal. Choose your tier with a massive scale-down in price.",
+            "cta": "Get Instant Access",
+            "monthly": {
+                "name": "Monthly Node",
+                "price": "900",
+                "period": "month",
+                "desc": "Perfect for tactical testing and short missions."
+            },
+            "sixMonths": {
+                "name": "Strategic Command",
+                "price": "3000",
+                "period": "6 months",
+                "save": "45% OFF",
+                "desc": "The most popular choice for ambitious professionals."
+            },
+            "lifetime": {
+                "name": "Infinite Overlord",
+                "price": "5000",
+                "period": "Lifetime",
+                "save": "Best Investment",
+                "desc": "Unlimited access to all future neural updates with one click."
+            }
         }
     },
     "community": {
