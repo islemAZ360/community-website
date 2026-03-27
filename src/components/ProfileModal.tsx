@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, User, Mail, Camera, Save, CheckCircle2, AlertCircle, ShieldCheck, Copy, Check } from 'lucide-react';
+import { X, Mail, Camera, Save, CheckCircle2, ShieldCheck, Copy, Check, Activity, Globe, Zap, Cpu } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { db } from '../lib/firebase';
 import { doc, updateDoc, collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
@@ -13,7 +13,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
     const { user, userData, fetchUserData } = useAuthStore();
     const [isSaving, setIsSaving] = useState(false);
     const [previewImage, setPreviewImage] = useState<string | null>(null);
-    const [error, setError] = useState<string | null>(null);
+    const [, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
     const [paymentRequests, setPaymentRequests] = useState<any[]>([]);
     const [copiedKey, setCopiedKey] = useState(false);
@@ -54,7 +54,6 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
         setError(null);
         const file = e.target.files?.[0];
         if (file) {
-            // Check size (Limit to 500KB because Base64 encoding increases size by ~33%, and Firestore limit is 1MB)
             if (file.size > 500 * 1024) {
                 setError("Payload too large. Max allowed size is 500KB.");
                 return;
@@ -80,7 +79,6 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
             setSuccess(true);
             setTimeout(() => {
                 setSuccess(false);
-                onClose(); // Optional: Close modal after success
             }, 2000);
         } catch (err) {
             console.error("Error updating profile:", err);
@@ -93,220 +91,272 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
     const isUnchanged = previewImage === (userData?.profilePicture || null);
 
     return (
-        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-xl animate-in fade-in duration-300">
-            {/* Modal Container */}
-            <div className="bg-[#0a0a0a]/95 backdrop-blur-3xl border border-white/10 w-full max-w-md rounded-[2.5rem] overflow-hidden shadow-[0_0_80px_rgba(99,102,241,0.15)] relative animate-in zoom-in-95 duration-300">
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80 backdrop-blur-2xl animate-in fade-in duration-500">
+            <style>
+                {`
+                @keyframes scan-beam {
+                    0% { top: -10%; opacity: 0; }
+                    20% { opacity: 0.5; }
+                    80% { opacity: 0.5; }
+                    100% { top: 110%; opacity: 0; }
+                }
+                .scan-line {
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    height: 2px;
+                    background: #13eca4;
+                    box-shadow: 0 0 15px #13eca4;
+                    animation: scan-beam 3s linear infinite;
+                    z-index: 20;
+                    pointer-events: none;
+                }
+                `}
+            </style>
 
-                {/* Top Background Glow */}
-                <div className="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-indigo-500/10 to-transparent pointer-events-none" />
+            {/* Main Container */}
+            <div className="bg-[#030303] border border-white/5 w-full max-w-lg rounded-[2.5rem] overflow-hidden shadow-[0_0_100px_rgba(19,236,164,0.07)] relative animate-in zoom-in-95 duration-500 flex flex-col max-h-[90vh]">
+                
+                {/* Background Decor */}
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#13eca4]/30 to-transparent" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] h-[100px] bg-[#13eca4]/5 blur-[70px] rounded-full pointer-events-none" />
 
                 {/* Header */}
-                <div className="relative p-6 sm:p-8 border-b border-white/5 flex justify-between items-center bg-white/[0.01]">
-                    <div className="flex items-center gap-4">
-                        <div className="size-12 bg-indigo-500/10 rounded-2xl flex items-center justify-center text-indigo-400 border border-indigo-500/20 shadow-[0_0_15px_rgba(99,102,241,0.2)]">
-                            <User size={24} />
+                <div className="relative p-7 border-b border-white/[0.03] flex justify-between items-center bg-white/[0.01]">
+                    <div className="flex items-center gap-5">
+                        <div className="size-12 bg-[#13eca4]/10 rounded-2xl flex items-center justify-center text-[#13eca4] border border-[#13eca4]/20 shadow-[0_0_20px_rgba(19,236,164,0.1)]">
+                            <Cpu size={24} />
                         </div>
                         <div>
-                            <h3 className="text-xl font-black tracking-tighter text-white uppercase italic leading-tight">
-                                Tactical Profile
+                            <h3 className="text-2xl font-black tracking-widest text-white uppercase italic leading-none">
+                                Elite Profile
                             </h3>
-                            <p className="text-[10px] text-white/40 font-bold uppercase tracking-[0.2em] mt-0.5">
-                                Identity Module
-                            </p>
+                            <div className="flex items-center gap-2 mt-1.5">
+                                <span className="size-1.5 bg-[#13eca4] rounded-full animate-pulse shadow-[0_0_8px_#13eca4]" />
+                                <p className="text-[9px] text-white/30 font-black uppercase tracking-[0.3em]">
+                                    SECURE_TERMINAL_01
+                                </p>
+                            </div>
                         </div>
                     </div>
                     <button
                         onClick={onClose}
-                        className="size-10 flex items-center justify-center bg-white/5 hover:bg-white/10 rounded-xl text-white/40 hover:text-white transition-all active:scale-95"
+                        className="size-11 flex items-center justify-center bg-white/5 hover:bg-rose-500/20 rounded-xl text-white/30 hover:text-rose-400 border border-white/5 hover:border-rose-500/30 transition-all active:scale-95"
                     >
-                        <X size={20} />
+                        <X size={22} />
                     </button>
                 </div>
 
-                {/* Body */}
-                <div className="p-6 sm:p-8 space-y-8 relative">
-
-                    {/* Error Banner */}
-                    {error && (
-                        <div className="flex items-start gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-400 animate-in slide-in-from-top-2">
-                            <AlertCircle size={18} className="shrink-0 mt-0.5" />
-                            <p className="text-xs font-bold uppercase tracking-wider leading-relaxed">{error}</p>
-                        </div>
-                    )}
-
-                    {/* Avatar Section */}
-                    <div className="flex flex-col items-center text-center">
-                        <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
-                            {/* Animated Ring */}
-                            <div className="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-emerald-500 rounded-[2.5rem] opacity-20 group-hover:opacity-50 blur transition duration-500" />
-
-                            <div className="w-32 h-32 rounded-[2.5rem] bg-[#111] border border-white/10 flex items-center justify-center overflow-hidden relative z-10 transition-transform duration-300 group-hover:scale-[1.02]">
-                                {previewImage ? (
-                                    <img src={previewImage} alt="Profile" className="w-full h-full object-cover" />
-                                ) : (
-                                    <div className="text-5xl font-black text-white/10 uppercase">
-                                        {(userData?.nickname || user.email || 'X').charAt(0)}
-                                    </div>
-                                )}
-
-                                {/* Hover Overlay */}
-                                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white transition-all duration-300 backdrop-blur-[2px]">
-                                    <Camera size={26} className="mb-2 text-indigo-400" />
-                                    <span className="text-[9px] font-black uppercase tracking-widest text-indigo-100">Update Scan</span>
-                                </div>
-                            </div>
-                            <input
-                                type="file"
-                                ref={fileInputRef}
-                                onChange={handleImageChange}
-                                className="hidden"
-                                accept="image/jpeg, image/png, image/webp"
-                            />
-                        </div>
-
-                        <div className="mt-5 space-y-1">
-                            <h4 className="text-lg font-black text-white uppercase tracking-tight">
-                                {userData?.nickname || 'Anonymous Agent'}
-                            </h4>
-                            <div className="flex items-center justify-center gap-1.5 text-indigo-400">
-                                <ShieldCheck size={14} />
-                                <span className="text-[10px] font-black uppercase tracking-[0.2em]">
-                                    {userData?.licenseKey ? 'Authorized Agent' : 'Guest Explorer'}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Active License Section */}
-                    {userData?.licenseKey && (
-                        <div className="p-5 rounded-[2rem] bg-emerald-500/5 border border-emerald-500/10 space-y-3 relative overflow-hidden group animate-in slide-in-from-bottom-4 duration-500">
-                            <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
-                            <div className="flex items-center justify-between relative z-10">
-                                <div className="flex items-center gap-3">
-                                    <div className="size-8 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400">
-                                        <ShieldCheck size={16} />
-                                    </div>
-                                    <span className="text-[10px] font-black text-emerald-500/60 uppercase tracking-[0.2em]">Active License Sequence</span>
-                                </div>
-                                <button 
-                                    onClick={() => {
-                                        navigator.clipboard.writeText(userData.licenseKey!);
-                                        setCopiedKey(true);
-                                        setTimeout(() => setCopiedKey(false), 2000);
-                                    }}
-                                    className="p-2 rounded-lg bg-white/5 border border-white/10 text-white/40 hover:text-emerald-400 hover:border-emerald-500/30 transition-all flex items-center gap-2"
-                                >
-                                    {copiedKey ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
-                                    <span className="text-[9px] font-black uppercase tracking-widest leading-none">{copiedKey ? 'COPIED' : 'COPY'}</span>
-                                </button>
-                            </div>
-                            <div className="font-mono text-lg text-white font-bold tracking-[0.2em] bg-black/40 p-3 rounded-xl border border-white/5 text-center group-hover:border-emerald-500/20 transition-all">
-                                {userData.licenseKey}
-                            </div>
-                            <div className="text-[8px] font-mono text-white/30 text-center uppercase tracking-[0.3em]">
-                                Status: Operational • Encrypted High-Level Access
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Info Section */}
-                    <div className="space-y-3">
-                        <div className="bg-black/40 border border-white/5 rounded-2xl p-4 sm:p-5 flex items-center gap-4 hover:border-white/10 transition-colors">
-                            <div className="size-10 rounded-xl bg-white/5 flex items-center justify-center shrink-0">
-                                <Mail size={18} className="text-zinc-400" />
-                            </div>
-                            <div className="flex-1 overflow-hidden">
-                                <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.15em] block mb-1">Encrypted Comm</span>
-                                <span className="text-xs text-white/80 font-mono truncate block">
-                                    {userData?.email || user.email}
-                                </span>
-                            </div>
-                        </div>
-
-                        <div className="bg-black/40 border border-white/5 rounded-2xl p-4 sm:p-5 flex items-center gap-4 hover:border-white/10 transition-colors">
-                            <div className="size-10 rounded-xl bg-emerald-500/5 flex items-center justify-center shrink-0">
-                                <CheckCircle2 size={18} className="text-emerald-500/70" />
-                            </div>
-                            <div className="flex-1">
-                                <span className="text-[9px] font-black text-white/30 uppercase tracking-[0.15em] block mb-1">Network Status</span>
-                                <span className="text-[10px] font-black uppercase tracking-widest text-emerald-400">Connection Stable</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Mission History (Payment Requests) */}
-                    <div className="space-y-4">
-                        <div className="flex items-center justify-between px-2">
-                            <h4 className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em]">Mission History</h4>
-                            <span className="text-[8px] font-mono text-white/20 uppercase">{paymentRequests.length} LOGS</span>
-                        </div>
+                {/* Sub-Header / Avatar Overlay Section */}
+                <div className="relative overflow-y-auto custom-scrollbar flex-1">
+                    <div className="p-8 space-y-8">
                         
-                        <div className="space-y-3 max-h-[200px] overflow-y-auto pr-2 custom-scrollbar">
-                            {paymentRequests.length === 0 ? (
-                                <div className="text-center py-8 border border-dashed border-white/5 rounded-2xl">
-                                    <p className="text-[10px] font-black text-white/10 uppercase tracking-widest italic">No missions deployed yet</p>
-                                </div>
-                            ) : (
-                                paymentRequests.map((req) => (
-                                    <div key={req.id} className="p-4 rounded-2xl bg-white/[0.02] border border-white/5 flex flex-col gap-3">
-                                        <div className="flex items-center justify-between">
-                                            <div>
-                                                <p className="text-[10px] font-black text-white uppercase tracking-tight">{req.planName}</p>
-                                                <p className="text-[8px] font-mono text-white/30">ID: {req.transactionId}</p>
-                                            </div>
-                                            <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest border ${
-                                                req.status === 'approved' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' :
-                                                req.status === 'rejected' ? 'bg-red-500/10 border-red-500/20 text-red-500' :
-                                                'bg-amber-500/10 border-amber-500/20 text-amber-500'
-                                            }`}>
-                                                {req.status}
-                                            </span>
+                        {/* Avatar & Identity Section */}
+                        <div className="flex flex-col md:flex-row items-center gap-8 md:items-start text-center md:text-left">
+                            <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+                                {/* Animated Borders */}
+                                <div className="absolute -inset-1 bg-gradient-to-br from-[#13eca4]/20 via-transparent to-[#6366f1]/20 rounded-[2.5rem] opacity-50 blur-sm group-hover:opacity-100 transition duration-700" />
+                                
+                                <div className="w-36 h-36 rounded-[2.5rem] bg-[#080808] border border-white/[0.05] flex items-center justify-center overflow-hidden relative z-10 shadow-2xl transition-transform duration-500 group-hover:scale-105">
+                                    <div className="scan-line" />
+                                    {previewImage ? (
+                                        <img src={previewImage} alt="Profile" className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" />
+                                    ) : (
+                                        <div className="text-6xl font-black text-white/[0.03] uppercase italic">
+                                            {(userData?.nickname || user.email || 'X').charAt(0)}
                                         </div>
-                                        {req.status === 'rejected' && req.rejectionReason && (
-                                            <div className="p-2 rounded-lg bg-red-500/5 border border-red-500/10">
-                                                <p className="text-[9px] text-red-400/80 leading-relaxed italic">
-                                                    <span className="font-black uppercase tracking-widest mr-1 not-italic">Intel:</span>
-                                                    "{req.rejectionReason}"
-                                                </p>
-                                            </div>
-                                        )}
+                                    )}
+
+                                    {/* Action Hover */}
+                                    <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white transition-all duration-500 backdrop-blur-sm">
+                                        <Camera size={32} className="mb-2 text-[#13eca4]" />
+                                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#13eca4]/80 text-shadow-glow">Update DNA</span>
                                     </div>
-                                ))
-                            )}
+                                </div>
+                                <input type="file" ref={fileInputRef} onChange={handleImageChange} className="hidden" accept="image/*" />
+                            </div>
+
+                            <div className="flex-1 py-4 space-y-4">
+                                <div className="space-y-1">
+                                    <h4 className="text-3xl font-black text-white italic uppercase tracking-tighter leading-tight">
+                                        {userData?.nickname || 'Unknown Agent'}
+                                    </h4>
+                                    <div className="flex items-center justify-center md:justify-start gap-2.5">
+                                        <Activity size={12} className="text-[#13eca4]" />
+                                        <span className="text-[10px] font-black uppercase tracking-[0.25em] text-[#13eca4]/60">
+                                            Network Access: {userData?.licenseKey ? 'Premium' : 'Standard'}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                {/* Quick Stats Grid */}
+                                <div className="grid grid-cols-2 gap-3 mt-6">
+                                    <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-2xl flex flex-col items-start gap-1 group/stat hover:border-[#13eca4]/20 transition-colors">
+                                        <span className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em]">Status</span>
+                                        <span className="text-[10px] font-bold text-[#13eca4] uppercase tracking-widest flex items-center gap-1.5">
+                                            <span className="size-1.5 bg-[#13eca4] rounded-full animate-pulse" />
+                                            Active Link
+                                        </span>
+                                    </div>
+                                    <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-2xl flex flex-col items-start gap-1 hover:border-white/10 transition-colors">
+                                        <span className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em]">Missions</span>
+                                        <span className="text-[10px] font-bold text-white uppercase tracking-widest">{paymentRequests.length} Deployed</span>
+                                    </div>
+                                    <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-2xl flex flex-col items-start gap-1 hover:border-white/10 transition-colors">
+                                        <span className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em]">Security</span>
+                                        <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">Enhanced</span>
+                                    </div>
+                                    <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-2xl flex flex-col items-start gap-1 hover:border-white/10 transition-colors">
+                                        <span className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em]">Authority</span>
+                                        <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">L3 Clear</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
 
-                    {/* Actions */}
-                    <div className="pt-2">
-                        <button
-                            onClick={handleSave}
-                            disabled={isSaving || isUnchanged}
-                            className={`w-full h-14 border text-xs font-black uppercase tracking-[0.2em] rounded-2xl transition-all duration-300 flex items-center justify-center gap-3 relative overflow-hidden group ${success
-                                    ? 'bg-emerald-500 border-emerald-400 text-black'
-                                    : isUnchanged
-                                        ? 'bg-white/5 border-white/5 text-white/30 cursor-not-allowed'
-                                        : 'bg-indigo-500 hover:bg-indigo-400 border-indigo-400 text-white shadow-[0_0_30px_rgba(99,102,241,0.3)]'
-                                }`}
-                        >
-                            {isSaving ? (
-                                <>
-                                    <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                                    <span>Syncing...</span>
-                                </>
-                            ) : success ? (
-                                <>
-                                    <CheckCircle2 size={18} className="text-black" />
-                                    <span>Identity Synced</span>
-                                </>
-                            ) : (
-                                <>
-                                    <Save size={18} className={isUnchanged ? 'text-white/30' : 'text-indigo-100'} />
-                                    <span>Update Credentials</span>
-                                </>
-                            )}
-                        </button>
-                    </div>
+                        {/* License Module */}
+                        {userData?.licenseKey && (
+                            <div className="relative group animate-in slide-in-from-bottom-6 duration-700">
+                                <div className="absolute -inset-1 bg-gradient-to-r from-[#13eca4]/20 to-[#6366f1]/20 rounded-[2.5rem] blur opacity-20 group-hover:opacity-40 transition duration-1000" />
+                                <div className="relative p-6 rounded-[2.5rem] bg-gradient-to-br from-[#13eca4]/[0.03] to-transparent border border-[#13eca4]/10 space-y-4">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-3">
+                                            <div className="size-10 rounded-xl bg-[#13eca4]/10 flex items-center justify-center text-[#13eca4]">
+                                                <ShieldCheck size={20} />
+                                            </div>
+                                            <div>
+                                                <h5 className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Operational Access Key</h5>
+                                                <p className="text-[8px] text-white/30 font-bold uppercase tracking-[0.3em] mt-0.5">Encrypted Stream Active</p>
+                                            </div>
+                                        </div>
+                                        <button 
+                                            onClick={() => {
+                                                navigator.clipboard.writeText(userData.licenseKey!);
+                                                setCopiedKey(true);
+                                                setTimeout(() => setCopiedKey(false), 2000);
+                                            }}
+                                            className={`h-11 px-4 rounded-xl border transition-all flex items-center gap-3 active:scale-95 ${copiedKey ? 'bg-[#13eca4] border-transparent text-[#030303]' : 'bg-white/5 border-white/10 text-white/60 hover:border-[#13eca4]/50 hover:text-white'}`}
+                                        >
+                                            {copiedKey ? <Check size={16} /> : <Copy size={16} />}
+                                            <span className="text-[10px] font-black uppercase tracking-widest">{copiedKey ? 'INJECTED' : 'COPY KEY'}</span>
+                                        </button>
+                                    </div>
+                                    
+                                    <div className="font-mono text-xl sm:text-2xl text-white font-black tracking-[0.25em] bg-black/60 p-5 rounded-2xl border border-white/[0.03] text-center shadow-inner group-hover:border-[#13eca4]/20 transition-all">
+                                        {userData.licenseKey}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
 
+                        {/* Detail Info Grid */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="bg-white/[0.01] border border-white/[0.03] rounded-[1.5rem] p-5 flex items-center gap-5 hover:bg-white/[0.03] transition-all group">
+                                <div className="size-12 rounded-2xl bg-white/[0.03] flex items-center justify-center group-hover:bg-[#13eca4]/10 transition-colors">
+                                    <Mail size={20} className="text-white/20 group-hover:text-[#13eca4]" />
+                                </div>
+                                <div className="flex-1 overflow-hidden">
+                                    <span className="text-[9px] font-black text-white/20 uppercase tracking-[0.2em] block mb-1">Encrypted Relay</span>
+                                    <span className="text-xs text-white/70 font-mono truncate block group-hover:text-white transition-colors">
+                                        {userData?.email || user.email}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div className="bg-white/[0.01] border border-white/[0.03] rounded-[1.5rem] p-5 flex items-center gap-5 hover:bg-white/[0.03] transition-all group">
+                                <div className="size-12 rounded-2xl bg-white/[0.03] flex items-center justify-center group-hover:bg-indigo-500/10 transition-colors">
+                                    <Globe size={20} className="text-white/20 group-hover:text-indigo-400" />
+                                </div>
+                                <div className="flex-1">
+                                    <span className="text-[9px] font-black text-white/20 uppercase tracking-[0.2em] block mb-1">Grid Location</span>
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-[#13eca4]">Connection Stable</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Mission Log history */}
+                        <div className="space-y-5">
+                            <div className="flex items-center justify-between px-2 pt-4 border-t border-white/[0.03]">
+                                <h4 className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em]">Tactical Feed_</h4>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[9px] font-mono text-white/10">{paymentRequests.length} ENTRIES FOUND</span>
+                                    <div className="size-1.5 bg-[#13eca4]/20 rounded-full" />
+                                </div>
+                            </div>
+                            
+                            <div className="space-y-4 max-h-[250px] overflow-y-auto pr-3 custom-scrollbar">
+                                {paymentRequests.length === 0 ? (
+                                    <div className="text-center py-12 border border-dashed border-white/[0.03] rounded-3xl">
+                                        <Zap size={24} className="mx-auto mb-3 text-white/[0.03]" />
+                                        <p className="text-[10px] font-black text-white/10 uppercase tracking-widest italic">Awaiting first mission deployment</p>
+                                    </div>
+                                ) : (
+                                    paymentRequests.map((req) => (
+                                        <div key={req.id} className="p-5 rounded-3xl bg-white/[0.01] border border-white/[0.03] hover:border-white/10 hover:bg-white/[0.02] transition-all group/item">
+                                            <div className="flex items-center justify-between mb-4">
+                                                <div>
+                                                    <p className="text-xs font-black text-white uppercase tracking-wider group-hover/item:text-[#13eca4] transition-colors">{req.planName}</p>
+                                                    <p className="text-[9px] font-mono text-white/20 mt-1 uppercase tracking-widest">ID: {req.transactionId}</p>
+                                                </div>
+                                                <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border transition-all ${
+                                                    req.status === 'approved' ? 'bg-[#13eca4]/10 border-[#13eca4]/20 text-[#13eca4] shadow-[0_0_15px_rgba(19,236,164,0.1)]' :
+                                                    req.status === 'rejected' ? 'bg-rose-500/10 border-rose-500/20 text-rose-500' :
+                                                    'bg-amber-500/10 border-amber-500/20 text-amber-500'
+                                                }`}>
+                                                    {req.status}
+                                                </span>
+                                            </div>
+                                            {req.status === 'rejected' && req.rejectionReason && (
+                                                <div className="p-3 rounded-xl bg-rose-500/[0.03] border border-rose-500/10">
+                                                    <p className="text-[10px] text-rose-400/70 leading-relaxed italic">
+                                                        <span className="font-black uppercase tracking-[0.2em] mr-2 not-italic text-rose-500/40">ANOMALY:</span>
+                                                        "{req.rejectionReason}"
+                                                    </p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                {/* Footer Redesign */}
+                <div className="p-7 bg-white/[0.01] border-t border-white/[0.03]">
+                    <button
+                        onClick={handleSave}
+                        disabled={isSaving || isUnchanged}
+                        className={`w-full h-14 border text-[11px] font-black uppercase tracking-[0.3em] rounded-2xl transition-all duration-500 flex items-center justify-center gap-3 group relative overflow-hidden ${success
+                                ? 'bg-[#13eca4] border-transparent text-[#030303] shadow-[0_0_40px_rgba(19,236,164,0.3)]'
+                                : isUnchanged
+                                    ? 'bg-white/[0.02] border-white/5 text-white/10 cursor-not-allowed'
+                                    : 'bg-[#13eca4]/90 hover:bg-[#13eca4] border-transparent text-[#030303] shadow-[0_0_30px_rgba(19,236,164,0.15)] hover:shadow-[0_0_40px_rgba(19,236,164,0.25)] active:scale-[0.98]'
+                            }`}
+                    >
+                        {isSaving ? (
+                            <>
+                                <div className="w-5 h-5 border-2 border-[#030303]/20 border-t-[#030303] rounded-full animate-spin" />
+                                <span>SYNCING_PROTOCOLS...</span>
+                            </>
+                        ) : success ? (
+                            <>
+                                <CheckCircle2 size={18} />
+                                <span>PROTOCOL_SYNCED</span>
+                            </>
+                        ) : (
+                            <>
+                                <Save size={18} className="group-hover:rotate-12 transition-transform duration-500" />
+                                <span>UPDATE_CREDENTIALS</span>
+                            </>
+                        )}
+                        
+                        {/* Shine Effect */}
+                        {!isUnchanged && !isSaving && !success && (
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-[150%] skew-x-[-20deg] group-hover:translate-x-[150%] transition-transform duration-1000 ease-out" />
+                        )}
+                    </button>
                 </div>
             </div>
         </div>

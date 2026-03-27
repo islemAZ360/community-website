@@ -300,47 +300,6 @@ export function News() {
                         </Reveal>
                     )}
 
-                    {/* Magazine Issue Section */}
-                    <Reveal delay={0.2} variant="fadeUp" amount={0.1}>
-                        <div className="glass p-8 md:p-10 rounded-[2.5rem] border border-white/5">
-                            <div className="flex items-center justify-between border-b border-white/10 pb-6 mb-8">
-                                <h3 className="text-xs font-black text-white/50 uppercase tracking-[0.3em] italic flex items-center gap-2">
-                                    <span className="material-symbols-outlined text-sm">book</span>
-                                    {t('news.sidebar.magazine.title')}
-                                </h3>
-                                <span className="text-[10px] bg-white/5 px-3 py-1.5 rounded-lg border border-white/5 font-black text-primary uppercase tracking-widest">{format(new Date(), 'MMM yyyy')}</span>
-                            </div>
-
-                            <div className="relative group cursor-pointer w-full max-w-[280px] mx-auto perspective-1000">
-                                <div className="absolute -inset-4 bg-primary/20 rounded-[2.5rem] blur-2xl opacity-0 group-hover:opacity-100 transition-all duration-700 pointer-events-none"></div>
-
-                                <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-black shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10 group-hover:border-primary/30 transition-all duration-500 transform group-hover:-translate-y-2 group-hover:rotate-y-12">
-                                    <img
-                                        className="size-full object-cover group-hover:scale-110 transition-transform duration-[2000ms] opacity-80 group-hover:opacity-100"
-                                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAO5h-C2KBXLfLen4RugZa7_HzkLhDOY9odWjgRYXrPRiOjDTARMzrQIdfhQM7Ctm-3PC8_KOPiLzX-jQMWkYGxRzyujXvz6k7sO5RpTeO5xugXGI9eZucdjEhHqIuSudcSKnUGQ41i0320CYqHHSigQiruHhfCo7ugzTKkq-DSSx0HYDfpMUXpyWTp5MnGQFhPBsv76BDZpXumpB-ImCbrpQ3a_CEe6DpWOpzqL3iYsdx2RbsL-_IAkDLJkthFlZSsZsSPB29yUJI"
-                                        alt="Magazine Cover"
-                                    />
-                                    <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black via-black/80 to-transparent text-left rtl:text-right">
-                                        <h4 className="text-2xl font-black text-white leading-none uppercase italic tracking-tighter drop-shadow-md">{t('news.sidebar.magazine.edition')}</h4>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="mt-8 flex justify-between items-center bg-black/20 p-4 rounded-2xl border border-white/5">
-                                <div className="text-left rtl:text-right px-2">
-                                    <p className="text-base font-black text-white uppercase italic tracking-tighter leading-none">{t('news.sidebar.magazine.artIntel')}</p>
-                                    <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest mt-1.5 flex items-center gap-1">
-                                        <span className="material-symbols-outlined text-[12px]">description</span>
-                                        {t('news.sidebar.magazine.fieldReports', { count: 12 })}
-                                    </p>
-                                </div>
-
-                                <button className="size-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/60 hover:text-primary hover:border-primary/40 hover:bg-primary/10 transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg group/dl">
-                                    <span className="material-symbols-outlined text-2xl group-hover/dl:-translate-y-0.5 transition-transform">download</span>
-                                </button>
-                            </div>
-                        </div>
-                    </Reveal>
                 </aside>
             </div>
 
