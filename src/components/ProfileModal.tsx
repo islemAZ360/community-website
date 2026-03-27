@@ -165,7 +165,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
     const isUnchanged = previewImage === (userData?.profilePicture || null);
 
     return (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/80 backdrop-blur-2xl animate-in fade-in duration-500">
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-[#020503]/90 backdrop-blur-3xl animate-in fade-in duration-500">
             <style>
                 {`
                 @keyframes scan-beam {
@@ -189,20 +189,20 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
             </style>
 
             {/* Main Container */}
-            <div className="bg-[#030303] border border-white/5 w-full max-w-lg rounded-[2.5rem] overflow-hidden shadow-[0_0_100px_rgba(19,236,164,0.07)] relative animate-in zoom-in-95 duration-500 flex flex-col max-h-[90vh]">
+            <div className="bg-[#05150d] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-emerald-900/20 via-[#05150d]/80 to-[#020503] border border-[#13eca4]/20 w-full max-w-xl rounded-[2.5rem] overflow-hidden shadow-[0_0_150px_rgba(19,236,164,0.15)] relative animate-in zoom-in-95 duration-500 flex flex-col max-h-[90vh]">
                 
                 {/* Background Decor */}
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#13eca4]/30 to-transparent" />
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] h-[100px] bg-[#13eca4]/5 blur-[70px] rounded-full pointer-events-none" />
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#13eca4]/60 to-transparent shadow-[0_0_20px_#13eca4]" />
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-[#13eca4]/10 blur-[90px] rounded-full pointer-events-none" />
 
                 {/* Header */}
-                <div className="relative p-7 border-b border-white/[0.03] flex justify-between items-center bg-white/[0.01]">
+                <div className="relative p-7 border-b border-[#13eca4]/10 flex justify-between items-center bg-[#13eca4]/[0.02]">
                     <div className="flex items-center gap-5">
-                        <div className="size-12 bg-[#13eca4]/10 rounded-2xl flex items-center justify-center text-[#13eca4] border border-[#13eca4]/20 shadow-[0_0_20px_rgba(19,236,164,0.1)]">
-                            <Cpu size={24} />
+                        <div className="size-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-[#13eca4] border border-[#13eca4]/30 shadow-[0_0_30px_rgba(19,236,164,0.2)]">
+                            <Cpu size={24} className="animate-pulse" />
                         </div>
                         <div>
-                            <h3 className="text-2xl font-black tracking-widest text-white uppercase italic leading-none">
+                            <h3 className="text-2xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-white to-[#13eca4] uppercase italic leading-none drop-shadow-md">
                                 Elite Profile
                             </h3>
                             <div className="flex items-center gap-2 mt-1.5">
@@ -215,7 +215,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
                     </div>
                     <button
                         onClick={onClose}
-                        className="size-11 flex items-center justify-center bg-white/5 hover:bg-rose-500/20 rounded-xl text-white/30 hover:text-rose-400 border border-white/5 hover:border-rose-500/30 transition-all active:scale-95"
+                        className="size-11 flex items-center justify-center bg-rose-500/10 hover:bg-rose-500/20 rounded-xl text-rose-400 hover:text-rose-300 border border-rose-500/20 hover:border-rose-500/40 transition-all active:scale-95 shadow-[0_0_15px_rgba(244,63,94,0.1)]"
                     >
                         <X size={22} />
                     </button>
@@ -229,14 +229,14 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
                         <div className="flex flex-col md:flex-row items-center gap-8 md:items-start text-center md:text-left">
                             <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
                                 {/* Animated Borders */}
-                                <div className="absolute -inset-1 bg-gradient-to-br from-[#13eca4]/20 via-transparent to-[#6366f1]/20 rounded-[2.5rem] opacity-50 blur-sm group-hover:opacity-100 transition duration-700" />
+                                <div className="absolute -inset-1 bg-gradient-to-br from-[#13eca4] via-[#13eca4]/20 to-indigo-500/50 rounded-[2.5rem] opacity-70 blur-md group-hover:opacity-100 group-hover:blur-xl transition duration-700 animate-pulse" />
                                 
-                                <div className="w-36 h-36 rounded-[2.5rem] bg-[#080808] border border-white/[0.05] flex items-center justify-center overflow-hidden relative z-10 shadow-2xl transition-transform duration-500 group-hover:scale-105">
+                                <div className="w-36 h-36 md:w-40 md:h-40 rounded-[2.5rem] bg-[#020503] border border-[#13eca4]/30 flex items-center justify-center overflow-hidden relative z-10 shadow-[0_0_40px_rgba(19,236,164,0.2)] transition-transform duration-500 group-hover:scale-105">
                                     <div className="scan-line" />
                                     {previewImage ? (
                                         <img src={previewImage} alt="Profile" className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" />
                                     ) : (
-                                        <div className="text-6xl font-black text-white/[0.03] uppercase italic">
+                                        <div className="text-7xl font-black text-[#13eca4]/10 uppercase italic drop-shadow-lg">
                                             {(userData?.nickname || user.email || 'X').charAt(0)}
                                         </div>
                                     )}
@@ -252,12 +252,12 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
 
                             <div className="flex-1 py-4 space-y-4">
                                 <div className="space-y-1">
-                                    <h4 className="text-3xl font-black text-white italic uppercase tracking-tighter leading-tight">
+                                    <h4 className="text-3xl md:text-4xl font-black text-white italic uppercase tracking-tighter leading-none drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
                                         {userData?.nickname || 'Unknown Agent'}
                                     </h4>
-                                    <div className="flex items-center justify-center md:justify-start gap-2.5">
-                                        <Activity size={12} className="text-[#13eca4]" />
-                                        <span className="text-[10px] font-black uppercase tracking-[0.25em] text-[#13eca4]/60">
+                                    <div className="flex items-center justify-center md:justify-start gap-2.5 mt-2">
+                                        <Activity size={14} className="text-[#13eca4] animate-bounce" />
+                                        <span className="text-[11px] font-black uppercase tracking-[0.25em] text-[#13eca4]">
                                             Network Access: {userData?.licenseKey ? 'Premium' : 'Standard'}
                                         </span>
                                     </div>
@@ -265,26 +265,26 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
 
                                 {/* Quick Stats Grid */}
                                 <div className="grid grid-cols-2 gap-3 mt-6">
-                                    <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-2xl flex flex-col items-start gap-1 group/stat hover:border-[#13eca4]/20 transition-colors">
+                                    <div className="bg-[#13eca4]/5 border border-[#13eca4]/20 p-4 rounded-2xl flex flex-col items-start gap-1 shadow-[inset_0_0_20px_rgba(19,236,164,0.02)] group/stat hover:border-[#13eca4]/50 hover:bg-[#13eca4]/10 transition-all">
                                         <span className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em]">Status</span>
                                         <span className={`text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 ${userData?.status === 'approved' ? 'text-[#13eca4]' : 'text-amber-500'}`}>
                                             <span className={`size-1.5 rounded-full animate-pulse ${userData?.status === 'approved' ? 'bg-[#13eca4]' : 'bg-amber-500'}`} />
                                             {userData?.status === 'approved' ? 'Active Link' : 'Pending'}
                                         </span>
                                     </div>
-                                    <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-2xl flex flex-col items-start gap-1 hover:border-white/10 transition-colors">
-                                        <span className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em]">Missions</span>
-                                        <span className="text-[10px] font-bold text-white uppercase tracking-widest">{paymentRequests.length} Deployed</span>
+                                    <div className="bg-[#13eca4]/5 border border-[#13eca4]/20 p-4 rounded-2xl flex flex-col items-start gap-1 hover:border-[#13eca4]/50 hover:bg-[#13eca4]/10 transition-all shadow-[inset_0_0_20px_rgba(19,236,164,0.02)]">
+                                        <span className="text-[8px] font-black text-[#13eca4]/60 uppercase tracking-[0.3em]">Missions</span>
+                                        <span className="text-[10px] font-bold text-white uppercase tracking-widest drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]">{paymentRequests.length} Deployed</span>
                                     </div>
-                                    <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-2xl flex flex-col items-start gap-1 hover:border-white/10 transition-colors">
-                                        <span className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em]">Security</span>
-                                        <span className={`text-[10px] font-bold uppercase tracking-widest ${userData?.licenseKey ? 'text-indigo-400' : 'text-white/50'}`}>
+                                    <div className="bg-[#13eca4]/5 border border-[#13eca4]/20 p-4 rounded-2xl flex flex-col items-start gap-1 hover:border-[#13eca4]/50 hover:bg-[#13eca4]/10 transition-all shadow-[inset_0_0_20px_rgba(19,236,164,0.02)]">
+                                        <span className="text-[8px] font-black text-[#13eca4]/60 uppercase tracking-[0.3em]">Security</span>
+                                        <span className={`text-[10px] font-bold uppercase tracking-widest ${userData?.licenseKey ? 'text-indigo-400 drop-shadow-[0_0_8px_rgba(99,102,241,0.5)]' : 'text-white/50'}`}>
                                             {userData?.licenseKey ? 'Enhanced' : 'Standard'}
                                         </span>
                                     </div>
-                                    <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-2xl flex flex-col items-start gap-1 hover:border-white/10 transition-colors">
-                                        <span className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em]">Authority</span>
-                                        <span className={`text-[10px] font-bold uppercase tracking-widest ${userData?.role === 'admin' ? 'text-rose-400' : (userData?.licenseKey ? 'text-emerald-400' : 'text-white/50')}`}>
+                                    <div className="bg-[#13eca4]/5 border border-[#13eca4]/20 p-4 rounded-2xl flex flex-col items-start gap-1 hover:border-[#13eca4]/50 hover:bg-[#13eca4]/10 transition-all shadow-[inset_0_0_20px_rgba(19,236,164,0.02)]">
+                                        <span className="text-[8px] font-black text-[#13eca4]/60 uppercase tracking-[0.3em]">Authority</span>
+                                        <span className={`text-[10px] font-bold uppercase tracking-widest drop-shadow-[0_0_8px_currentColor] ${userData?.role === 'admin' ? 'text-rose-400' : (userData?.licenseKey ? 'text-[#13eca4]' : 'text-white/50')}`}>
                                             {userData?.role === 'admin' ? 'L5 Command' : (userData?.licenseKey ? 'L3 Clear' : 'L1 Guest')}
                                         </span>
                                     </div>
@@ -295,36 +295,38 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
                         {/* License Module */}
                         {userData?.licenseKey && (
                             <div className="relative group animate-in slide-in-from-bottom-6 duration-700">
-                                <div className="absolute -inset-1 bg-gradient-to-r from-[#13eca4]/20 to-[#6366f1]/20 rounded-[2.5rem] blur opacity-20 group-hover:opacity-40 transition duration-1000" />
-                                <div className="relative p-7 rounded-[2.5rem] bg-gradient-to-br from-[#13eca4]/[0.05] to-transparent border border-[#13eca4]/20 space-y-6">
-                                    <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-4">
-                                            <div className="size-12 rounded-2xl bg-[#13eca4]/10 flex items-center justify-center text-[#13eca4] shadow-[0_0_15px_rgba(19,236,164,0.15)]">
-                                                <ShieldCheck size={24} />
-                                            </div>
-                                            <div>
-                                                <h5 className="text-xs font-black text-white uppercase tracking-[0.2em]">API Gateway Identity</h5>
-                                                <p className="text-[9px] text-[#13eca4]/60 font-black uppercase tracking-[0.3em] mt-1 flex items-center gap-1.5">
-                                                    <span className="size-1 bg-[#13eca4] rounded-full animate-pulse" /> Encrypted Stream Active
-                                                </p>
-                                            </div>
+                                <div className="absolute -inset-1 bg-gradient-to-r from-[#13eca4] via-[#13eca4]/50 to-indigo-500 rounded-[2.5rem] blur-xl opacity-30 group-hover:opacity-60 transition duration-1000 animate-pulse" />
+                                <div className="relative p-7 rounded-[2.5rem] bg-[#020503]/80 backdrop-blur-md border-[2px] border-[#13eca4]/40 space-y-6 shadow-[0_0_50px_rgba(19,236,164,0.15)] overflow-hidden">
+                                    <div className="absolute inset-0 bg-[#13eca4]/10 blur-[50px] mix-blend-screen pointer-events-none" />
+                                    <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMTksMjM2LDE2NCwwLjEpIi8+PC9zdmc+')] opacity-50" />
+                                    
+                                    <div className="relative flex items-center gap-5">
+                                        <div className="size-14 rounded-2xl bg-[#13eca4]/20 flex items-center justify-center text-[#13eca4] shadow-[0_0_30px_rgba(19,236,164,0.4)] border border-[#13eca4]/40 backdrop-blur-md shrink-0">
+                                            <ShieldCheck size={28} />
+                                        </div>
+                                        <div className="flex-1">
+                                            <h5 className="text-[13px] font-black text-white uppercase tracking-[0.25em] drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]">API Gateway Identity</h5>
+                                            <p className="text-[10px] text-[#13eca4] font-black uppercase tracking-[0.3em] mt-1 flex items-center gap-2 drop-shadow-[0_0_5px_rgba(19,236,164,0.5)]">
+                                                <span className="size-1.5 bg-[#13eca4] rounded-full animate-ping" /> Encrypted Stream Active
+                                            </p>
                                         </div>
                                     </div>
                                     
-                                    <div className="flex flex-col gap-4">
+                                    <div className="relative flex flex-col gap-4">
                                         {/* Status row */}
-                                        <div className="flex justify-between items-center bg-black/40 p-5 rounded-2xl border border-white/[0.03]">
-                                            <div className="flex items-center gap-2 text-white/50 text-[10px] uppercase font-black tracking-widest">
-                                                <Clock size={16} className="text-[#13eca4]"/> SYSTEM TTL (TIME TO LIVE)
+                                        <div className="flex justify-between items-center bg-black/60 p-5 rounded-2xl border border-[#13eca4]/20 shadow-inner backdrop-blur-sm relative">
+                                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#13eca4]/5 to-transparent animate-[scan-beam_2s_linear_infinite]" />
+                                            <div className="flex items-center gap-3 text-[#13eca4]/80 text-[11px] uppercase font-black tracking-widest relative z-10">
+                                                <Clock size={18} className="text-[#13eca4] animate-pulse"/> SYSTEM TTL (TIME TO LIVE)
                                             </div>
-                                            <div className={`font-mono text-sm font-black tracking-widest ${timeRemaining === 'EXPIRED' ? 'text-rose-500' : 'text-[#13eca4]'}`} style={{ textShadow: timeRemaining !== 'EXPIRED' ? '0 0 10px rgba(19,236,164,0.5)' : 'none' }}>
+                                            <div className={`font-mono text-base font-black tracking-widest relative z-10 ${timeRemaining === 'EXPIRED' ? 'text-rose-500 drop-shadow-[0_0_10px_rgba(244,63,94,0.8)]' : 'text-[#13eca4] drop-shadow-[0_0_15px_rgba(19,236,164,1)]'}`}>
                                                 {timeRemaining || 'CALCULATING...'}
                                             </div>
                                         </div>
 
                                         {/* Key block */}
-                                        <div className="relative bg-black/80 px-6 py-4 rounded-2xl border border-white/[0.05] text-center shadow-inner group/keybox hover:border-[#13eca4]/30 transition-all flex justify-between items-center group-hover:bg-black/90">
-                                            <div className="font-mono text-lg sm:text-2xl text-white font-black tracking-[0.2em] opacity-90">
+                                        <div className="relative bg-black/90 px-6 py-5 rounded-2xl border border-[#13eca4]/30 text-center shadow-[inset_0_0_30px_rgba(19,236,164,0.1)] group/keybox hover:border-[#13eca4]/60 transition-all flex justify-between items-center hover:shadow-[inset_0_0_50px_rgba(19,236,164,0.2)]">
+                                            <div className="font-mono text-xl sm:text-3xl text-white font-black tracking-[0.25em] drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]">
                                                 {userData.licenseKey}
                                             </div>
                                             <button 
@@ -333,9 +335,9 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
                                                     setCopiedKey(true);
                                                     setTimeout(() => setCopiedKey(false), 2000);
                                                 }}
-                                                className={`size-11 rounded-xl flex items-center justify-center transition-all ${copiedKey ? 'bg-[#13eca4] text-black scale-105 shadow-[0_0_15px_rgba(19,236,164,0.5)]' : 'bg-white/5 hover:bg-white/10 text-white/50 hover:text-white'}`}
+                                                className={`size-12 rounded-xl border-2 flex items-center justify-center transition-all ${copiedKey ? 'bg-[#13eca4] border-[#13eca4] text-black scale-110 shadow-[0_0_30px_rgba(19,236,164,0.8)]' : 'bg-[#13eca4]/10 border-[#13eca4]/30 hover:bg-[#13eca4]/30 text-[#13eca4] hover:shadow-[0_0_20px_rgba(19,236,164,0.4)] hover:scale-105'}`}
                                             >
-                                                {copiedKey ? <Check size={18} /> : <Copy size={18} />}
+                                                {copiedKey ? <Check size={20} /> : <Copy size={20} />}
                                             </button>
                                         </div>
                                     </div>
@@ -345,25 +347,25 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
 
                         {/* Detail Info Grid */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="bg-white/[0.01] border border-white/[0.03] rounded-[1.5rem] p-5 flex items-center gap-5 hover:bg-white/[0.03] transition-all group">
-                                <div className="size-12 rounded-2xl bg-white/[0.03] flex items-center justify-center group-hover:bg-[#13eca4]/10 transition-colors">
+                            <div className="bg-[#13eca4]/[0.02] border border-[#13eca4]/10 rounded-[1.5rem] p-5 flex items-center gap-5 hover:bg-[#13eca4]/[0.05] hover:border-[#13eca4]/30 shadow-[0_0_20px_rgba(19,236,164,0.02)] transition-all group">
+                                <div className="size-12 rounded-2xl bg-white/[0.03] flex items-center justify-center group-hover:bg-[#13eca4]/20 group-hover:shadow-[0_0_20px_rgba(19,236,164,0.3)] transition-all">
                                     <Mail size={20} className="text-white/20 group-hover:text-[#13eca4]" />
                                 </div>
                                 <div className="flex-1 overflow-hidden">
-                                    <span className="text-[9px] font-black text-white/20 uppercase tracking-[0.2em] block mb-1">Encrypted Relay</span>
-                                    <span className="text-xs text-white/70 font-mono truncate block group-hover:text-white transition-colors">
+                                    <span className="text-[9px] font-black text-[#13eca4]/40 uppercase tracking-[0.2em] block mb-1">Encrypted Relay</span>
+                                    <span className="text-xs text-white/90 font-mono truncate block group-hover:text-white transition-colors">
                                         {userData?.email || user.email}
                                     </span>
                                 </div>
                             </div>
 
-                            <div className="bg-white/[0.01] border border-white/[0.03] rounded-[1.5rem] p-5 flex items-center gap-5 hover:bg-white/[0.03] transition-all group">
-                                <div className="size-12 rounded-2xl bg-white/[0.03] flex items-center justify-center group-hover:bg-indigo-500/10 transition-colors">
+                            <div className="bg-[#13eca4]/[0.02] border border-[#13eca4]/10 rounded-[1.5rem] p-5 flex items-center gap-5 hover:bg-[#13eca4]/[0.05] hover:border-[#13eca4]/30 shadow-[0_0_20px_rgba(19,236,164,0.02)] transition-all group">
+                                <div className="size-12 rounded-2xl bg-white/[0.03] flex items-center justify-center group-hover:bg-indigo-500/20 group-hover:shadow-[0_0_20px_rgba(99,102,241,0.3)] transition-all">
                                     <Globe size={20} className="text-white/20 group-hover:text-indigo-400" />
                                 </div>
                                 <div className="flex-1">
-                                    <span className="text-[9px] font-black text-white/20 uppercase tracking-[0.2em] block mb-1">Grid Location</span>
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-[#13eca4]">Connection Stable</span>
+                                    <span className="text-[9px] font-black text-[#13eca4]/40 uppercase tracking-[0.2em] block mb-1">Grid Location</span>
+                                    <span className="text-[10px] font-black uppercase tracking-widest text-[#13eca4] drop-shadow-[0_0_5px_rgba(19,236,164,0.5)]">Connection Stable</span>
                                 </div>
                             </div>
                         </div>
@@ -418,37 +420,38 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
                 </div>
 
                 {/* Footer Redesign */}
-                <div className="p-7 bg-white/[0.01] border-t border-white/[0.03]">
+                <div className="p-7 bg-[#020503] border-t border-[#13eca4]/20 relative">
+                    <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#13eca4]/50 to-transparent" />
                     <button
                         onClick={handleSave}
                         disabled={isSaving || isUnchanged}
-                        className={`w-full h-14 border text-[11px] font-black uppercase tracking-[0.3em] rounded-2xl transition-all duration-500 flex items-center justify-center gap-3 group relative overflow-hidden ${success
-                                ? 'bg-[#13eca4] border-transparent text-[#030303] shadow-[0_0_40px_rgba(19,236,164,0.3)]'
+                        className={`w-full h-16 border text-[13px] font-black uppercase tracking-[0.3em] rounded-2xl transition-all duration-500 flex items-center justify-center gap-3 group relative overflow-hidden ${success
+                                ? 'bg-[#13eca4] border-[#13eca4] text-[#05150d] shadow-[0_0_50px_rgba(19,236,164,0.6)]'
                                 : isUnchanged
-                                    ? 'bg-white/[0.02] border-white/5 text-white/10 cursor-not-allowed'
-                                    : 'bg-[#13eca4]/90 hover:bg-[#13eca4] border-transparent text-[#030303] shadow-[0_0_30px_rgba(19,236,164,0.15)] hover:shadow-[0_0_40px_rgba(19,236,164,0.25)] active:scale-[0.98]'
+                                    ? 'bg-white/[0.02] border-[#13eca4]/10 text-[#13eca4]/30 cursor-not-allowed'
+                                    : 'bg-[#13eca4] hover:bg-[#13eca4] border-transparent text-[#05150d] shadow-[0_0_40px_rgba(19,236,164,0.3)] hover:shadow-[0_0_60px_rgba(19,236,164,0.5)] active:scale-[0.98]'
                             }`}
                     >
                         {isSaving ? (
                             <>
-                                <div className="w-5 h-5 border-2 border-[#030303]/20 border-t-[#030303] rounded-full animate-spin" />
+                                <div className="w-6 h-6 border-2 border-[#05150d]/20 border-t-[#05150d] rounded-full animate-spin" />
                                 <span>SYNCING_PROTOCOLS...</span>
                             </>
                         ) : success ? (
                             <>
-                                <CheckCircle2 size={18} />
+                                <CheckCircle2 size={22} />
                                 <span>PROTOCOL_SYNCED</span>
                             </>
                         ) : (
                             <>
-                                <Save size={18} className="group-hover:rotate-12 transition-transform duration-500" />
+                                <Save size={22} className="group-hover:rotate-12 transition-transform duration-500" />
                                 <span>UPDATE_CREDENTIALS</span>
                             </>
                         )}
                         
                         {/* Shine Effect */}
                         {!isUnchanged && !isSaving && !success && (
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-[150%] skew-x-[-20deg] group-hover:translate-x-[150%] transition-transform duration-1000 ease-out" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-[150%] skew-x-[-20deg] group-hover:translate-x-[150%] transition-transform duration-1000 ease-out" />
                         )}
                     </button>
                 </div>
