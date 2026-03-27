@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Mail, Camera, Save, CheckCircle2, ShieldCheck, Copy, Check, Activity, Globe, Zap, Cpu } from 'lucide-react';
+import { X, Mail, Camera, Save, CheckCircle2, ShieldCheck, Copy, Check, Activity, Globe, Zap, Cpu, Clock } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { db, storage } from '../lib/firebase';
-import { doc, updateDoc, collection, query, where, onSnapshot } from 'firebase/firestore';
+import { doc, updateDoc, collection, query, where, onSnapshot, getDoc } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 interface ProfileModalProps {
@@ -19,6 +19,8 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
     const [success, setSuccess] = useState(false);
     const [paymentRequests, setPaymentRequests] = useState<any[]>([]);
     const [copiedKey, setCopiedKey] = useState(false);
+    const [licenseData, setLicenseData] = useState<any>(null);
+    const [timeRemaining, setTimeRemaining] = useState<string>('');
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Sync initial state and fetch payments when modal opens
@@ -53,9 +55,21 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
 
             // Real-time user data sync (for license key approval)
             const userRef = doc(db, 'users', user.uid);
-            const unsubscribeUser = onSnapshot(userRef, (snapshot) => {
+            const unsubscribeUser = onSnapshot(userRef, async (snapshot) => {
                 if (snapshot.exists()) {
-                    useAuthStore.setState({ userData: snapshot.data() as any });
+                    const data = snapshot.data();
+                    useAuthStore.setState({ userData: data as any });
+                    
+                    if (data.licenseKey) {
+                        try {
+                            const keySnap = await getDoc(doc(db, 'license_keys', data.licenseKey));
+                            if (keySnap.exists()) {
+                                setLicenseData(keySnap.data());
+                            }
+                        } catch (e) {
+                            console.error("Failed to load license details");
+                        }
+                    }
                 }
             });
 
@@ -65,6 +79,37 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
             };
         }
     }, [isOpen, user]);
+
+    // Timer logic
+    useEffect(() => {
+        if (!licenseData) return;
+        
+        const updateTimer = () => {
+             if (licenseData.durationDays === null) {
+                 setTimeRemaining("ETERNAL ACCESS");
+                 return;
+             }
+             const activatedAt = new Date(licenseData.activatedAt || licenseData.createdAt).getTime();
+             const durationMs = licenseData.durationDays * 24 * 60 * 60 * 1000;
+             const expiresAt = activatedAt + durationMs;
+             const now = new Date().getTime();
+             const diff = expiresAt - now;
+
+             if (diff <= 0) {
+                 setTimeRemaining("EXPIRED");
+             } else {
+                 const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                 const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                 const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                 const s = Math.floor((diff % (1000 * 60)) / 1000);
+                 setTimeRemaining(`${d}d ${h.toString().padStart(2, '0')}h ${m.toString().padStart(2, '0')}m ${s.toString().padStart(2, '0')}s`);
+             }
+        };
+        
+        updateTimer();
+        const interval = setInterval(updateTimer, 1000);
+        return () => clearInterval(interval);
+    }, [licenseData]);
 
     if (!isOpen || !user) return null;
 
@@ -251,32 +296,48 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
                         {userData?.licenseKey && (
                             <div className="relative group animate-in slide-in-from-bottom-6 duration-700">
                                 <div className="absolute -inset-1 bg-gradient-to-r from-[#13eca4]/20 to-[#6366f1]/20 rounded-[2.5rem] blur opacity-20 group-hover:opacity-40 transition duration-1000" />
-                                <div className="relative p-6 rounded-[2.5rem] bg-gradient-to-br from-[#13eca4]/[0.03] to-transparent border border-[#13eca4]/10 space-y-4">
+                                <div className="relative p-7 rounded-[2.5rem] bg-gradient-to-br from-[#13eca4]/[0.05] to-transparent border border-[#13eca4]/20 space-y-6">
                                     <div className="flex items-center justify-between">
-                                        <div className="flex items-center gap-3">
-                                            <div className="size-10 rounded-xl bg-[#13eca4]/10 flex items-center justify-center text-[#13eca4]">
-                                                <ShieldCheck size={20} />
+                                        <div className="flex items-center gap-4">
+                                            <div className="size-12 rounded-2xl bg-[#13eca4]/10 flex items-center justify-center text-[#13eca4] shadow-[0_0_15px_rgba(19,236,164,0.15)]">
+                                                <ShieldCheck size={24} />
                                             </div>
                                             <div>
-                                                <h5 className="text-[10px] font-black text-white uppercase tracking-[0.2em]">Operational Access Key</h5>
-                                                <p className="text-[8px] text-white/30 font-bold uppercase tracking-[0.3em] mt-0.5">Encrypted Stream Active</p>
+                                                <h5 className="text-xs font-black text-white uppercase tracking-[0.2em]">API Gateway Identity</h5>
+                                                <p className="text-[9px] text-[#13eca4]/60 font-black uppercase tracking-[0.3em] mt-1 flex items-center gap-1.5">
+                                                    <span className="size-1 bg-[#13eca4] rounded-full animate-pulse" /> Encrypted Stream Active
+                                                </p>
                                             </div>
                                         </div>
-                                        <button 
-                                            onClick={() => {
-                                                navigator.clipboard.writeText(userData.licenseKey!);
-                                                setCopiedKey(true);
-                                                setTimeout(() => setCopiedKey(false), 2000);
-                                            }}
-                                            className={`h-11 px-4 rounded-xl border transition-all flex items-center gap-3 active:scale-95 ${copiedKey ? 'bg-[#13eca4] border-transparent text-[#030303]' : 'bg-white/5 border-white/10 text-white/60 hover:border-[#13eca4]/50 hover:text-white'}`}
-                                        >
-                                            {copiedKey ? <Check size={16} /> : <Copy size={16} />}
-                                            <span className="text-[10px] font-black uppercase tracking-widest">{copiedKey ? 'INJECTED' : 'COPY KEY'}</span>
-                                        </button>
                                     </div>
                                     
-                                    <div className="font-mono text-xl sm:text-2xl text-white font-black tracking-[0.25em] bg-black/60 p-5 rounded-2xl border border-white/[0.03] text-center shadow-inner group-hover:border-[#13eca4]/20 transition-all">
-                                        {userData.licenseKey}
+                                    <div className="flex flex-col gap-4">
+                                        {/* Status row */}
+                                        <div className="flex justify-between items-center bg-black/40 p-5 rounded-2xl border border-white/[0.03]">
+                                            <div className="flex items-center gap-2 text-white/50 text-[10px] uppercase font-black tracking-widest">
+                                                <Clock size={16} className="text-[#13eca4]"/> SYSTEM TTL (TIME TO LIVE)
+                                            </div>
+                                            <div className={`font-mono text-sm font-black tracking-widest ${timeRemaining === 'EXPIRED' ? 'text-rose-500' : 'text-[#13eca4]'}`} style={{ textShadow: timeRemaining !== 'EXPIRED' ? '0 0 10px rgba(19,236,164,0.5)' : 'none' }}>
+                                                {timeRemaining || 'CALCULATING...'}
+                                            </div>
+                                        </div>
+
+                                        {/* Key block */}
+                                        <div className="relative bg-black/80 px-6 py-4 rounded-2xl border border-white/[0.05] text-center shadow-inner group/keybox hover:border-[#13eca4]/30 transition-all flex justify-between items-center group-hover:bg-black/90">
+                                            <div className="font-mono text-lg sm:text-2xl text-white font-black tracking-[0.2em] opacity-90">
+                                                {userData.licenseKey}
+                                            </div>
+                                            <button 
+                                                onClick={() => {
+                                                    navigator.clipboard.writeText(userData.licenseKey!);
+                                                    setCopiedKey(true);
+                                                    setTimeout(() => setCopiedKey(false), 2000);
+                                                }}
+                                                className={`size-11 rounded-xl flex items-center justify-center transition-all ${copiedKey ? 'bg-[#13eca4] text-black scale-105 shadow-[0_0_15px_rgba(19,236,164,0.5)]' : 'bg-white/5 hover:bg-white/10 text-white/50 hover:text-white'}`}
+                                            >
+                                                {copiedKey ? <Check size={18} /> : <Copy size={18} />}
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
