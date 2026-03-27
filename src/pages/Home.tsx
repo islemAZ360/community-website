@@ -511,9 +511,9 @@ export function Home() {
                         </Reveal>
 
                         <Reveal delay={0.1} amount={0.05}>
-                            <h1 className="text-5xl md:text-7xl lg:text-[7.5rem] font-extrabold text-white mb-6 tracking-tight leading-[1.1] drop-shadow-[0_0_30px_rgba(255,255,255,0.2)]">
-                                <span className="bg-clip-text text-transparent bg-gradient-to-b from-white via-white/90 to-white/60">
-                                    Tactical<br />Mesh
+                            <h1 className="text-5xl md:text-8xl lg:text-[9rem] font-black text-white mb-6 tracking-tighter leading-[0.9] drop-shadow-[0_0_50px_rgba(19,236,164,0.3)]">
+                                <span className="bg-clip-text text-transparent bg-gradient-to-br from-white via-[#13eca4] to-[#0a5c44]">
+                                    OUR-FIX
                                 </span>
                             </h1>
                         </Reveal>
