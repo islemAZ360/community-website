@@ -3,7 +3,6 @@ import { collection, query, orderBy, limit, onSnapshot, addDoc, serverTimestamp 
 import { db } from '../lib/firebase';
 import { useAuthStore } from '../store/authStore';
 import { Star, MessageSquare, Send, UserCircle2, ShieldCheck, Lock } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 import { Reveal } from './Reveal';
 
 interface Review {
@@ -18,7 +17,6 @@ interface Review {
 }
 
 export const ReviewSection: React.FC = () => {
-    const { t } = useTranslation();
     const { user, userData } = useAuthStore();
     const [reviews, setReviews] = useState<Review[]>([]);
     const [newComment, setNewComment] = useState('');
