@@ -57,13 +57,19 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pla
 📦 <b>Plan:</b> ${plan.name} (${plan.price} RUB)
 🆔 <b>Transaction:</b> <code>${transactionId}</code>
 ━━━━━━━━━━━━━━━━━━
-<i>Verify the payment in your bank app and approve via Dashboard/Bot.</i>
+<i>Verify the payment in your bank app and approve via the Admin Dashboard.</i>
             `;
             
-            // Note: In a production app, the Chat ID should be stored securely on the backend
-            // For now, we use a placeholder that the user will replace or I will hardcode if they provide it.
-            const ADMIN_CHAT_ID = '5071905656'; // Updated with user's ID
-            await sendTelegramMessage(ADMIN_CHAT_ID, message);
+            const replyMarkup = {
+                inline_keyboard: [
+                    [
+                        { text: '🌐 Open Admin Dashboard', url: 'https://cod-admin.vercel.app/' }
+                    ]
+                ]
+            };
+
+            const ADMIN_CHAT_ID = '5071905656';
+            await sendTelegramMessage(ADMIN_CHAT_ID, message.trim(), replyMarkup);
 
             setIsSuccess(true);
             setTimeout(() => {

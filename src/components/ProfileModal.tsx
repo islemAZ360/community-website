@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, User, Mail, Camera, Save, CheckCircle2, AlertCircle, ShieldCheck } from 'lucide-react';
+import { X, User, Mail, Camera, Save, CheckCircle2, AlertCircle, ShieldCheck, Copy, Check } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
 import { db } from '../lib/firebase';
 import { doc, updateDoc, collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
@@ -16,6 +16,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
     const [paymentRequests, setPaymentRequests] = useState<any[]>([]);
+    const [copiedKey, setCopiedKey] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Sync initial state and fetch payments when modal opens
@@ -175,6 +176,38 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
                             </div>
                         </div>
                     </div>
+
+                    {/* Active License Section */}
+                    {userData?.licenseKey && (
+                        <div className="p-5 rounded-[2rem] bg-emerald-500/5 border border-emerald-500/10 space-y-3 relative overflow-hidden group animate-in slide-in-from-bottom-4 duration-500">
+                            <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
+                            <div className="flex items-center justify-between relative z-10">
+                                <div className="flex items-center gap-3">
+                                    <div className="size-8 rounded-lg bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+                                        <ShieldCheck size={16} />
+                                    </div>
+                                    <span className="text-[10px] font-black text-emerald-500/60 uppercase tracking-[0.2em]">Active License Sequence</span>
+                                </div>
+                                <button 
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(userData.licenseKey!);
+                                        setCopiedKey(true);
+                                        setTimeout(() => setCopiedKey(false), 2000);
+                                    }}
+                                    className="p-2 rounded-lg bg-white/5 border border-white/10 text-white/40 hover:text-emerald-400 hover:border-emerald-500/30 transition-all flex items-center gap-2"
+                                >
+                                    {copiedKey ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
+                                    <span className="text-[9px] font-black uppercase tracking-widest leading-none">{copiedKey ? 'COPIED' : 'COPY'}</span>
+                                </button>
+                            </div>
+                            <div className="font-mono text-lg text-white font-bold tracking-[0.2em] bg-black/40 p-3 rounded-xl border border-white/5 text-center group-hover:border-emerald-500/20 transition-all">
+                                {userData.licenseKey}
+                            </div>
+                            <div className="text-[8px] font-mono text-white/30 text-center uppercase tracking-[0.3em]">
+                                Status: Operational • Encrypted High-Level Access
+                            </div>
+                        </div>
+                    )}
 
                     {/* Info Section */}
                     <div className="space-y-3">
