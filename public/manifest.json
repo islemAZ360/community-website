@@ -3,13 +3,13 @@
     "name": "OUR-FIX Community Hub",
     "icons": [
         {
-            "src": "our-fix.png",
+            "src": "community.png",
             "sizes": "192x192",
             "type": "image/png",
             "purpose": "any"
         },
         {
-            "src": "our-fix.png",
+            "src": "community.png",
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "maskable"
