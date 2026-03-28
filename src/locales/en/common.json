@@ -104,7 +104,13 @@
                 "save": "Best Investment",
                 "desc": "Unlimited access to all future neural updates with one click."
             },
-            "paymentNote": "Note: The website currently only supports payments via Rubles. Additional payment methods (including Crypto and Global Cards) will be available in the coming days."
+            "paymentNote": "Note: The website currently only supports payments via Rubles. Additional payment methods (including Crypto and Global Cards) will be available in the coming days.",
+            "paymentModal": {
+                "sberbank": "Via Sberbank (SBP)",
+                "scanInstructions": "Scan via your Banking App (SBP)",
+                "verificationTitle": "Tactical Verification",
+                "verificationDesc": "The admin will manually review your request for security. Once approved, your subscription will be activated and you will find your License Key directly in your Profile on the website."
+            }
         },
         "faq": {
             "title": "Frequently Asked Questions",

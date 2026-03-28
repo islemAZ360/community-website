@@ -111,6 +111,7 @@ interface PaymentModalProps {
 }
 
 const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, plan }) => {
+    const { t } = useTranslation('common');
     const { user, userData } = useAuthStore();
     const [transactionId, setTransactionId] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -228,8 +229,8 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, plan }) =>
                                             <span>{plan.price}</span>
                                             <span className="text-primary text-lg">RUB</span>
                                         </div>
-                                        <p className="text-[10px] font-bold text-primary uppercase tracking-wider mb-1">Via Sberbank (SBP)</p>
-                                        <p className="text-xs text-white/40 font-medium">Scan to pay via Banking App / سبير بانك</p>
+                                        <p className="text-[10px] font-bold text-primary uppercase tracking-wider mb-1">{t('home.pricing.paymentModal.sberbank')}</p>
+                                        <p className="text-xs text-white/40 font-medium">{t('home.pricing.paymentModal.scanInstructions')}</p>
                                     </div>
                                 </div>
                             </div>
@@ -238,16 +239,16 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, plan }) =>
                                 <div className="space-y-4">
                                     <div className="flex items-center gap-3">
                                         <div className="size-6 bg-white/10 rounded-md flex items-center justify-center text-white text-xs font-semibold">2</div>
-                                        <h4 className="text-sm font-semibold text-white/90">Verify Transaction</h4>
+                                        <h4 className="text-sm font-semibold text-white/90">{t('home.pricing.paymentModal.verifyTitle', 'Verify Transaction')}</h4>
                                     </div>
                                     <div className="space-y-2">
-                                        <label className="text-xs font-medium text-white/50 ml-1">Terminal Reference (ID)</label>
+                                        <label className="text-xs font-medium text-white/50 ml-1">{t('home.pricing.paymentModal.referenceLabel', 'Terminal Reference (ID)')}</label>
                                         <div className="relative group">
                                             <input
                                                 type="text"
                                                 value={transactionId}
                                                 onChange={(e) => setTransactionId(e.target.value)}
-                                                placeholder="Enter Transaction ID from Bank..."
+                                                placeholder={t('home.pricing.paymentModal.idPlaceholder', 'Enter Transaction ID from Bank...')}
                                                 className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-white placeholder:text-white/20 focus:outline-none focus:border-primary/50 focus:bg-white/10 transition-all text-sm"
                                             />
                                             <div className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-primary transition-colors">
@@ -260,10 +261,10 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, plan }) =>
                                 <div className="p-4 bg-white/[0.03] border border-white/5 rounded-2xl space-y-2">
                                     <div className="flex items-center gap-2 text-white/60">
                                         <ShieldCheck size={14} className="text-primary" />
-                                        <span className="text-[10px] font-bold uppercase tracking-wider">Tactical Verification</span>
+                                        <span className="text-[10px] font-bold uppercase tracking-wider">{t('home.pricing.paymentModal.verificationTitle')}</span>
                                     </div>
                                     <p className="text-[11px] text-white/40 leading-relaxed">
-                                        سيقوم المسؤول بمراجعة طلبك يدويًا لضمان الأمان. عند الموافقة، سيتم تفعيل اشتراكك وستجد مفتاح الترخيص (License Key) الخاص بك مباشرة في ملفك الشخصي (Profile) على الموقع.
+                                        {t('home.pricing.paymentModal.verificationDesc')}
                                     </p>
                                 </div>
 
