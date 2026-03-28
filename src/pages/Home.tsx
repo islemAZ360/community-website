@@ -228,7 +228,8 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, plan }) =>
                                             <span>{plan.price}</span>
                                             <span className="text-primary text-lg">RUB</span>
                                         </div>
-                                        <p className="text-xs text-white/40 font-medium">Scan via your Banking App (SBP)</p>
+                                        <p className="text-[10px] font-bold text-primary uppercase tracking-wider mb-1">Via Sberbank (SBP)</p>
+                                        <p className="text-xs text-white/40 font-medium">Scan to pay via Banking App / سبير بانك</p>
                                     </div>
                                 </div>
                             </div>
@@ -254,6 +255,16 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, plan }) =>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+
+                                <div className="p-4 bg-white/[0.03] border border-white/5 rounded-2xl space-y-2">
+                                    <div className="flex items-center gap-2 text-white/60">
+                                        <ShieldCheck size={14} className="text-primary" />
+                                        <span className="text-[10px] font-bold uppercase tracking-wider">Tactical Verification</span>
+                                    </div>
+                                    <p className="text-[11px] text-white/40 leading-relaxed">
+                                        سيقوم المسؤول بمراجعة طلبك يدويًا لضمان الأمان. عند الموافقة، سيتم تفعيل اشتراكك وستجد مفتاح الترخيص (License Key) الخاص بك مباشرة في ملفك الشخصي (Profile) على الموقع.
+                                    </p>
                                 </div>
 
                                 {error && (
