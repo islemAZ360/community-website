@@ -165,50 +165,30 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
     const isUnchanged = previewImage === (userData?.profilePicture || null);
 
     return (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-[#020503]/90 backdrop-blur-3xl animate-in fade-in duration-500">
-            <style>
-                {`
-                @keyframes scan-beam {
-                    0% { top: -10%; opacity: 0; }
-                    20% { opacity: 0.5; }
-                    80% { opacity: 0.5; }
-                    100% { top: 110%; opacity: 0; }
-                }
-                .scan-line {
-                    position: absolute;
-                    left: 0;
-                    right: 0;
-                    height: 2px;
-                    background: #13eca4;
-                    box-shadow: 0 0 15px #13eca4;
-                    animation: scan-beam 3s linear infinite;
-                    z-index: 20;
-                    pointer-events: none;
-                }
-                `}
-            </style>
+        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+            {/* Dark Overlay Backdrop - No Blur for Performance */}
+            <div className="fixed inset-0 bg-black/90" onClick={onClose} />
 
-            {/* Main Container */}
-            <div className="bg-[#05150d] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-emerald-900/20 via-[#05150d]/80 to-[#020503] border border-[#13eca4]/20 w-full max-w-xl rounded-[2.5rem] overflow-hidden shadow-[0_0_150px_rgba(19,236,164,0.15)] relative animate-in zoom-in-95 duration-500 flex flex-col max-h-[90vh]">
+            {/* Main Container - Minimal Layout */}
+            <div className="bg-[#0a0a0a] border border-white/10 w-full max-w-xl rounded-3xl overflow-hidden relative flex flex-col max-h-[90vh] z-[201] shadow-xl">
                 
-                {/* Background Decor */}
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#13eca4]/60 to-transparent shadow-[0_0_20px_#13eca4]" />
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[400px] h-[200px] bg-[#13eca4]/10 blur-[90px] rounded-full pointer-events-none" />
+                {/* Minimal Background Decor */}
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent" />
 
                 {/* Header */}
-                <div className="relative p-7 border-b border-[#13eca4]/10 flex justify-between items-center bg-[#13eca4]/[0.02]">
-                    <div className="flex items-center gap-5">
-                        <div className="size-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center text-[#13eca4] border border-[#13eca4]/30 shadow-[0_0_30px_rgba(19,236,164,0.2)]">
-                            <Cpu size={24} className="animate-pulse" />
+                <div className="relative p-6 border-b border-white/5 flex justify-between items-center bg-[#111111]">
+                    <div className="flex items-center gap-4">
+                        <div className="size-10 bg-emerald-500/10 rounded-xl flex items-center justify-center text-emerald-400 border border-emerald-500/20">
+                            <Cpu size={20} />
                         </div>
                         <div>
-                            <h3 className="text-2xl font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-white to-[#13eca4] uppercase italic leading-none drop-shadow-md">
+                            <h3 className="text-xl font-bold text-white tracking-tight leading-none">
                                 Elite Profile
                             </h3>
-                            <div className="flex items-center gap-2 mt-1.5">
-                                <span className="size-1.5 bg-[#13eca4] rounded-full animate-pulse shadow-[0_0_8px_#13eca4]" />
-                                <p className="text-[9px] text-white/30 font-black uppercase tracking-[0.3em]">
-                                    SECURE_TERMINAL_01
+                            <div className="flex items-center gap-2 mt-1">
+                                <span className="size-1.5 bg-emerald-500 rounded-full" />
+                                <p className="text-[10px] text-white/40 font-medium uppercase tracking-wider">
+                                    Account Settings
                                 </p>
                             </div>
                         </div>
@@ -226,67 +206,60 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
                     <div className="p-8 space-y-8">
                         
                         {/* Avatar & Identity Section */}
-                        <div className="flex flex-col md:flex-row items-center gap-8 md:items-start text-center md:text-left">
+                        <div className="flex flex-col md:flex-row items-center gap-6 md:items-start text-center md:text-left">
                             <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
-                                {/* Animated Borders */}
-                                <div className="absolute -inset-1 bg-gradient-to-br from-[#13eca4] via-[#13eca4]/20 to-indigo-500/50 rounded-[2.5rem] opacity-70 blur-md group-hover:opacity-100 group-hover:blur-xl transition duration-700 animate-pulse" />
-                                
-                                <div className="w-36 h-36 md:w-40 md:h-40 rounded-[2.5rem] bg-[#020503] border border-[#13eca4]/30 flex items-center justify-center overflow-hidden relative z-10 shadow-[0_0_40px_rgba(19,236,164,0.2)] transition-transform duration-500 group-hover:scale-105">
-                                    <div className="scan-line" />
+                                <div className="w-32 h-32 md:w-36 md:h-36 rounded-2xl bg-zinc-900 border border-white/10 flex items-center justify-center overflow-hidden relative z-10 transition-all duration-300 group-hover:border-emerald-500/50">
                                     {previewImage ? (
-                                        <img src={previewImage} alt="Profile" className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity" />
+                                        <img src={previewImage} alt="Profile" className="w-full h-full object-cover" />
                                     ) : (
-                                        <div className="text-7xl font-black text-[#13eca4]/10 uppercase italic drop-shadow-lg">
+                                        <div className="text-5xl font-bold text-white/10">
                                             {(userData?.nickname || user.email || 'X').charAt(0)}
                                         </div>
                                     )}
-
                                     {/* Action Hover */}
-                                    <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white transition-all duration-500 backdrop-blur-sm">
-                                        <Camera size={32} className="mb-2 text-[#13eca4]" />
-                                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-[#13eca4]/80 text-shadow-glow">Update DNA</span>
+                                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 flex flex-col items-center justify-center text-white transition-opacity duration-300">
+                                        <Camera size={24} className="mb-1 text-emerald-400" />
+                                        <span className="text-[10px] font-medium uppercase tracking-wider">Update Photo</span>
                                     </div>
                                 </div>
                                 <input type="file" ref={fileInputRef} onChange={handleImageChange} className="hidden" accept="image/*" />
                             </div>
 
-                            <div className="flex-1 py-4 space-y-4">
+                            <div className="flex-1 py-2 space-y-3">
                                 <div className="space-y-1">
-                                    <h4 className="text-3xl md:text-4xl font-black text-white italic uppercase tracking-tighter leading-none drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]">
+                                    <h4 className="text-2xl md:text-3xl font-bold text-white tracking-tight">
                                         {userData?.nickname || 'Unknown Agent'}
                                     </h4>
-                                    <div className="flex items-center justify-center md:justify-start gap-2.5 mt-2">
-                                        <Activity size={14} className="text-[#13eca4] animate-bounce" />
-                                        <span className="text-[11px] font-black uppercase tracking-[0.25em] text-[#13eca4]">
-                                            Network Access: {userData?.licenseKey ? 'Premium' : 'Standard'}
+                                    <div className="flex items-center justify-center md:justify-start gap-2 mt-1">
+                                        <Activity size={12} className="text-emerald-400" />
+                                        <span className="text-[11px] font-medium text-emerald-400/80 uppercase tracking-wider">
+                                            {userData?.licenseKey ? 'Premium Member' : 'Standard Member'}
                                         </span>
                                     </div>
                                 </div>
 
                                 {/* Quick Stats Grid */}
-                                <div className="grid grid-cols-2 gap-3 mt-6">
-                                    <div className="bg-[#13eca4]/5 border border-[#13eca4]/20 p-4 rounded-2xl flex flex-col items-start gap-1 shadow-[inset_0_0_20px_rgba(19,236,164,0.02)] group/stat hover:border-[#13eca4]/50 hover:bg-[#13eca4]/10 transition-all">
-                                        <span className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em]">Status</span>
-                                        <span className={`text-[10px] font-bold uppercase tracking-widest flex items-center gap-1.5 ${userData?.status === 'approved' ? 'text-[#13eca4]' : 'text-amber-500'}`}>
-                                            <span className={`size-1.5 rounded-full animate-pulse ${userData?.status === 'approved' ? 'bg-[#13eca4]' : 'bg-amber-500'}`} />
-                                            {userData?.status === 'approved' ? 'Active Link' : 'Pending'}
-                                        </span>
+                                <div className="grid grid-cols-2 gap-3 mt-4">
+                                    <div className="bg-zinc-900 border border-white/5 p-3 rounded-xl hover:border-white/10 transition-all">
+                                        <span className="text-[9px] font-medium text-white/30 uppercase tracking-widest block mb-1">Status</span>
+                                        <div className="flex items-center gap-2">
+                                            <span className={`size-1.5 rounded-full ${userData?.status === 'approved' ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-amber-500'}`} />
+                                            <span className={`text-[10px] font-bold uppercase tracking-wider ${userData?.status === 'approved' ? 'text-emerald-400' : 'text-amber-500'}`}>
+                                                {userData?.status === 'approved' ? 'Active' : 'Pending'}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div className="bg-[#13eca4]/5 border border-[#13eca4]/20 p-4 rounded-2xl flex flex-col items-start gap-1 hover:border-[#13eca4]/50 hover:bg-[#13eca4]/10 transition-all shadow-[inset_0_0_20px_rgba(19,236,164,0.02)]">
-                                        <span className="text-[8px] font-black text-[#13eca4]/60 uppercase tracking-[0.3em]">Missions</span>
-                                        <span className="text-[10px] font-bold text-white uppercase tracking-widest drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]">{paymentRequests.length} Deployed</span>
+                                    <div className="bg-zinc-900 border border-white/5 p-3 rounded-xl hover:border-white/10 transition-all">
+                                        <span className="text-[9px] font-medium text-white/30 uppercase tracking-widest block mb-1">History</span>
+                                        <span className="text-[10px] font-bold text-white uppercase tracking-wider">{paymentRequests.length} Requests</span>
                                     </div>
-                                    <div className="bg-[#13eca4]/5 border border-[#13eca4]/20 p-4 rounded-2xl flex flex-col items-start gap-1 hover:border-[#13eca4]/50 hover:bg-[#13eca4]/10 transition-all shadow-[inset_0_0_20px_rgba(19,236,164,0.02)]">
-                                        <span className="text-[8px] font-black text-[#13eca4]/60 uppercase tracking-[0.3em]">Security</span>
-                                        <span className={`text-[10px] font-bold uppercase tracking-widest ${userData?.licenseKey ? 'text-indigo-400 drop-shadow-[0_0_8px_rgba(99,102,241,0.5)]' : 'text-white/50'}`}>
-                                            {userData?.licenseKey ? 'Enhanced' : 'Standard'}
-                                        </span>
+                                    <div className="bg-zinc-900 border border-white/5 p-3 rounded-xl hover:border-white/10 transition-all">
+                                        <span className="text-[9px] font-medium text-white/30 uppercase tracking-widest block mb-1">Security</span>
+                                        <span className="text-[10px] font-bold text-white uppercase tracking-wider">{userData?.licenseKey ? 'High' : 'Basic'}</span>
                                     </div>
-                                    <div className="bg-[#13eca4]/5 border border-[#13eca4]/20 p-4 rounded-2xl flex flex-col items-start gap-1 hover:border-[#13eca4]/50 hover:bg-[#13eca4]/10 transition-all shadow-[inset_0_0_20px_rgba(19,236,164,0.02)]">
-                                        <span className="text-[8px] font-black text-[#13eca4]/60 uppercase tracking-[0.3em]">Authority</span>
-                                        <span className={`text-[10px] font-bold uppercase tracking-widest drop-shadow-[0_0_8px_currentColor] ${userData?.role === 'admin' ? 'text-rose-400' : (userData?.licenseKey ? 'text-[#13eca4]' : 'text-white/50')}`}>
-                                            {userData?.role === 'admin' ? 'L5 Command' : (userData?.licenseKey ? 'L3 Clear' : 'L1 Guest')}
-                                        </span>
+                                    <div className="bg-zinc-900 border border-white/5 p-3 rounded-xl hover:border-white/10 transition-all">
+                                        <span className="text-[9px] font-medium text-white/30 uppercase tracking-widest block mb-1">Role</span>
+                                        <span className="text-[10px] font-bold text-white uppercase tracking-wider">{userData?.role || 'User'}</span>
                                     </div>
                                 </div>
                             </div>
@@ -294,39 +267,32 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
 
                         {/* License Module */}
                         {userData?.licenseKey && (
-                            <div className="relative group animate-in slide-in-from-bottom-6 duration-700">
-                                <div className="absolute -inset-1 bg-gradient-to-r from-[#13eca4] via-[#13eca4]/50 to-indigo-500 rounded-[2.5rem] blur-xl opacity-30 group-hover:opacity-60 transition duration-1000 animate-pulse" />
-                                <div className="relative p-7 rounded-[2.5rem] bg-[#020503]/80 backdrop-blur-md border-[2px] border-[#13eca4]/40 space-y-6 shadow-[0_0_50px_rgba(19,236,164,0.15)] overflow-hidden">
-                                    <div className="absolute inset-0 bg-[#13eca4]/10 blur-[50px] mix-blend-screen pointer-events-none" />
-                                    <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMTksMjM2LDE2NCwwLjEpIi8+PC9zdmc+')] opacity-50" />
-                                    
-                                    <div className="relative flex items-center gap-5">
-                                        <div className="size-14 rounded-2xl bg-[#13eca4]/20 flex items-center justify-center text-[#13eca4] shadow-[0_0_30px_rgba(19,236,164,0.4)] border border-[#13eca4]/40 backdrop-blur-md shrink-0">
-                                            <ShieldCheck size={28} />
+                            <div className="space-y-4">
+                                <div className="p-6 rounded-2xl bg-zinc-900 border border-emerald-500/20 space-y-5">
+                                    <div className="flex items-center gap-4">
+                                        <div className="size-12 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 border border-emerald-500/20">
+                                            <ShieldCheck size={24} />
                                         </div>
-                                        <div className="flex-1">
-                                            <h5 className="text-[13px] font-black text-white uppercase tracking-[0.25em] drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]">API Gateway Identity</h5>
-                                            <p className="text-[10px] text-[#13eca4] font-black uppercase tracking-[0.3em] mt-1 flex items-center gap-2 drop-shadow-[0_0_5px_rgba(19,236,164,0.5)]">
-                                                <span className="size-1.5 bg-[#13eca4] rounded-full animate-ping" /> Encrypted Stream Active
+                                        <div>
+                                            <h5 className="text-sm font-bold text-white uppercase tracking-wider">License Identity</h5>
+                                            <p className="text-[10px] text-emerald-500 font-medium uppercase tracking-widest mt-0.5">
+                                                Active Subscription
                                             </p>
                                         </div>
                                     </div>
                                     
-                                    <div className="relative flex flex-col gap-4">
-                                        {/* Status row */}
-                                        <div className="flex justify-between items-center bg-black/60 p-5 rounded-2xl border border-[#13eca4]/20 shadow-inner backdrop-blur-sm relative">
-                                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#13eca4]/5 to-transparent animate-[scan-beam_2s_linear_infinite]" />
-                                            <div className="flex items-center gap-3 text-[#13eca4]/80 text-[11px] uppercase font-black tracking-widest relative z-10">
-                                                <Clock size={18} className="text-[#13eca4] animate-pulse"/> SYSTEM TTL (TIME TO LIVE)
+                                    <div className="space-y-3">
+                                        <div className="flex justify-between items-center bg-black/40 px-4 py-3 rounded-xl border border-white/5">
+                                            <div className="flex items-center gap-2 text-white/40 text-[10px] uppercase font-bold tracking-wider">
+                                                <Clock size={14}/> Time Remaining
                                             </div>
-                                            <div className={`font-mono text-base font-black tracking-widest relative z-10 ${timeRemaining === 'EXPIRED' ? 'text-rose-500 drop-shadow-[0_0_10px_rgba(244,63,94,0.8)]' : 'text-[#13eca4] drop-shadow-[0_0_15px_rgba(19,236,164,1)]'}`}>
-                                                {timeRemaining || 'CALCULATING...'}
+                                            <div className={`font-mono text-sm font-bold ${timeRemaining === 'EXPIRED' ? 'text-rose-500' : 'text-emerald-400'}`}>
+                                                {timeRemaining || 'Loading...'}
                                             </div>
                                         </div>
 
-                                        {/* Key block */}
-                                        <div className="relative bg-black/90 px-6 py-5 rounded-2xl border border-[#13eca4]/30 text-center shadow-[inset_0_0_30px_rgba(19,236,164,0.1)] group/keybox hover:border-[#13eca4]/60 transition-all flex justify-between items-center hover:shadow-[inset_0_0_50px_rgba(19,236,164,0.2)]">
-                                            <div className="font-mono text-xl sm:text-3xl text-white font-black tracking-[0.25em] drop-shadow-[0_0_10px_rgba(255,255,255,0.4)]">
+                                        <div className="flex justify-between items-center bg-black px-4 py-3 rounded-xl border border-white/10 group/key">
+                                            <div className="font-mono text-lg text-white font-bold tracking-widest">
                                                 {userData.licenseKey}
                                             </div>
                                             <button 
@@ -335,9 +301,9 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
                                                     setCopiedKey(true);
                                                     setTimeout(() => setCopiedKey(false), 2000);
                                                 }}
-                                                className={`size-12 rounded-xl border-2 flex items-center justify-center transition-all ${copiedKey ? 'bg-[#13eca4] border-[#13eca4] text-black scale-110 shadow-[0_0_30px_rgba(19,236,164,0.8)]' : 'bg-[#13eca4]/10 border-[#13eca4]/30 hover:bg-[#13eca4]/30 text-[#13eca4] hover:shadow-[0_0_20px_rgba(19,236,164,0.4)] hover:scale-105'}`}
+                                                className={`size-10 rounded-lg flex items-center justify-center transition-all ${copiedKey ? 'bg-emerald-500 text-black' : 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20'}`}
                                             >
-                                                {copiedKey ? <Check size={20} /> : <Copy size={20} />}
+                                                {copiedKey ? <Check size={18} /> : <Copy size={18} />}
                                             </button>
                                         </div>
                                     </div>
@@ -347,55 +313,52 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
 
                         {/* Detail Info Grid */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="bg-[#13eca4]/[0.02] border border-[#13eca4]/10 rounded-[1.5rem] p-5 flex items-center gap-5 hover:bg-[#13eca4]/[0.05] hover:border-[#13eca4]/30 shadow-[0_0_20px_rgba(19,236,164,0.02)] transition-all group">
-                                <div className="size-12 rounded-2xl bg-white/[0.03] flex items-center justify-center group-hover:bg-[#13eca4]/20 group-hover:shadow-[0_0_20px_rgba(19,236,164,0.3)] transition-all">
-                                    <Mail size={20} className="text-white/20 group-hover:text-[#13eca4]" />
+                            <div className="bg-zinc-900 border border-white/5 rounded-2xl p-4 flex items-center gap-4 hover:border-white/10 transition-all">
+                                <div className="size-10 rounded-xl bg-white/5 flex items-center justify-center">
+                                    <Mail size={18} className="text-white/40" />
                                 </div>
                                 <div className="flex-1 overflow-hidden">
-                                    <span className="text-[9px] font-black text-[#13eca4]/40 uppercase tracking-[0.2em] block mb-1">Encrypted Relay</span>
-                                    <span className="text-xs text-white/90 font-mono truncate block group-hover:text-white transition-colors">
+                                    <span className="text-[9px] font-medium text-white/30 uppercase tracking-widest block mb-0.5">Email Relay</span>
+                                    <span className="text-xs text-white/80 font-mono truncate block">
                                         {userData?.email || user.email}
                                     </span>
                                 </div>
                             </div>
 
-                            <div className="bg-[#13eca4]/[0.02] border border-[#13eca4]/10 rounded-[1.5rem] p-5 flex items-center gap-5 hover:bg-[#13eca4]/[0.05] hover:border-[#13eca4]/30 shadow-[0_0_20px_rgba(19,236,164,0.02)] transition-all group">
-                                <div className="size-12 rounded-2xl bg-white/[0.03] flex items-center justify-center group-hover:bg-indigo-500/20 group-hover:shadow-[0_0_20px_rgba(99,102,241,0.3)] transition-all">
-                                    <Globe size={20} className="text-white/20 group-hover:text-indigo-400" />
+                            <div className="bg-zinc-900 border border-white/5 rounded-2xl p-4 flex items-center gap-4 hover:border-white/10 transition-all">
+                                <div className="size-10 rounded-xl bg-white/5 flex items-center justify-center">
+                                    <Globe size={18} className="text-white/40" />
                                 </div>
                                 <div className="flex-1">
-                                    <span className="text-[9px] font-black text-[#13eca4]/40 uppercase tracking-[0.2em] block mb-1">Grid Location</span>
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-[#13eca4] drop-shadow-[0_0_5px_rgba(19,236,164,0.5)]">Connection Stable</span>
+                                    <span className="text-[9px] font-medium text-white/30 uppercase tracking-widest block mb-0.5">Location</span>
+                                    <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-400">Stable Connection</span>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Mission Log history */}
-                        <div className="space-y-5">
-                            <div className="flex items-center justify-between px-2 pt-4 border-t border-white/[0.03]">
-                                <h4 className="text-[10px] font-black text-white/30 uppercase tracking-[0.4em]">Tactical Feed_</h4>
-                                <div className="flex items-center gap-2">
-                                    <span className="text-[9px] font-mono text-white/10">{paymentRequests.length} ENTRIES FOUND</span>
-                                    <div className="size-1.5 bg-[#13eca4]/20 rounded-full" />
-                                </div>
+                        {/* History section */}
+                        <div className="space-y-4">
+                            <div className="flex items-center justify-between px-1">
+                                <h4 className="text-[10px] font-bold text-white/20 uppercase tracking-[0.3em]">Request History</h4>
+                                <span className="text-[9px] font-mono text-white/10">{paymentRequests.length} ITEMS</span>
                             </div>
                             
-                            <div className="space-y-4 max-h-[250px] overflow-y-auto pr-3 custom-scrollbar">
+                            <div className="space-y-3 max-h-[220px] overflow-y-auto pr-2 custom-scrollbar">
                                 {paymentRequests.length === 0 ? (
-                                    <div className="text-center py-12 border border-dashed border-white/[0.03] rounded-3xl">
-                                        <Zap size={24} className="mx-auto mb-3 text-white/[0.03]" />
-                                        <p className="text-[10px] font-black text-white/10 uppercase tracking-widest italic">Awaiting first mission deployment</p>
+                                    <div className="text-center py-10 border border-dashed border-white/5 rounded-2xl">
+                                        <Zap size={20} className="mx-auto mb-2 text-white/5" />
+                                        <p className="text-[10px] font-medium text-white/20 uppercase tracking-wider">No requests found</p>
                                     </div>
                                 ) : (
                                     paymentRequests.map((req) => (
-                                        <div key={req.id} className="p-5 rounded-3xl bg-white/[0.01] border border-white/[0.03] hover:border-white/10 hover:bg-white/[0.02] transition-all group/item">
-                                            <div className="flex items-center justify-between mb-4">
+                                        <div key={req.id} className="p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-all">
+                                            <div className="flex items-center justify-between">
                                                 <div>
-                                                    <p className="text-xs font-black text-white uppercase tracking-wider group-hover/item:text-[#13eca4] transition-colors">{req.planName}</p>
-                                                    <p className="text-[9px] font-mono text-white/20 mt-1 uppercase tracking-widest">ID: {req.transactionId}</p>
+                                                    <p className="text-xs font-bold text-white uppercase tracking-wider">{req.planName}</p>
+                                                    <p className="text-[9px] font-mono text-white/20 mt-0.5">ID: {req.transactionId}</p>
                                                 </div>
-                                                <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border transition-all ${
-                                                    req.status === 'approved' ? 'bg-[#13eca4]/10 border-[#13eca4]/20 text-[#13eca4] shadow-[0_0_15px_rgba(19,236,164,0.1)]' :
+                                                <span className={`px-2.5 py-1 rounded-md text-[9px] font-bold uppercase tracking-wider border ${
+                                                    req.status === 'approved' ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400' :
                                                     req.status === 'rejected' ? 'bg-rose-500/10 border-rose-500/20 text-rose-500' :
                                                     'bg-amber-500/10 border-amber-500/20 text-amber-500'
                                                 }`}>
@@ -403,11 +366,8 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
                                                 </span>
                                             </div>
                                             {req.status === 'rejected' && req.rejectionReason && (
-                                                <div className="p-3 rounded-xl bg-rose-500/[0.03] border border-rose-500/10">
-                                                    <p className="text-[10px] text-rose-400/70 leading-relaxed italic">
-                                                        <span className="font-black uppercase tracking-[0.2em] mr-2 not-italic text-rose-500/40">ANOMALY:</span>
-                                                        "{req.rejectionReason}"
-                                                    </p>
+                                                <div className="mt-2 p-2 rounded-lg bg-rose-500/5 border border-rose-500/10 text-[10px] text-rose-400/70 italic">
+                                                    Reason: "{req.rejectionReason}"
                                                 </div>
                                             )}
                                         </div>
@@ -419,39 +379,33 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({ isOpen, onClose }) =
                     </div>
                 </div>
 
-                {/* Footer Redesign */}
-                <div className="p-7 bg-[#020503] border-t border-[#13eca4]/20 relative">
-                    <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#13eca4]/50 to-transparent" />
+                {/* Footer */}
+                <div className="p-6 bg-[#0a0a0a] border-t border-white/5">
                     <button
                         onClick={handleSave}
                         disabled={isSaving || isUnchanged}
-                        className={`w-full h-16 border text-[13px] font-black uppercase tracking-[0.3em] rounded-2xl transition-all duration-500 flex items-center justify-center gap-3 group relative overflow-hidden ${success
-                                ? 'bg-[#13eca4] border-[#13eca4] text-[#05150d] shadow-[0_0_50px_rgba(19,236,164,0.6)]'
+                        className={`w-full h-14 text-sm font-bold uppercase tracking-wider rounded-xl transition-all duration-300 flex items-center justify-center gap-2 ${success
+                                ? 'bg-emerald-500 text-black shadow-lg shadow-emerald-500/20'
                                 : isUnchanged
-                                    ? 'bg-white/[0.02] border-[#13eca4]/10 text-[#13eca4]/30 cursor-not-allowed'
-                                    : 'bg-[#13eca4] hover:bg-[#13eca4] border-transparent text-[#05150d] shadow-[0_0_40px_rgba(19,236,164,0.3)] hover:shadow-[0_0_60px_rgba(19,236,164,0.5)] active:scale-[0.98]'
+                                    ? 'bg-white/5 border border-white/5 text-white/20 cursor-not-allowed'
+                                    : 'bg-emerald-500 hover:bg-emerald-400 text-black shadow-lg shadow-emerald-500/10 active:scale-[0.98]'
                             }`}
                     >
                         {isSaving ? (
                             <>
-                                <div className="w-6 h-6 border-2 border-[#05150d]/20 border-t-[#05150d] rounded-full animate-spin" />
-                                <span>SYNCING_PROTOCOLS...</span>
+                                <div className="w-5 h-5 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+                                <span>Saving Changes...</span>
                             </>
                         ) : success ? (
                             <>
-                                <CheckCircle2 size={22} />
-                                <span>PROTOCOL_SYNCED</span>
+                                <CheckCircle2 size={20} />
+                                <span>Profile Saved</span>
                             </>
                         ) : (
                             <>
-                                <Save size={22} className="group-hover:rotate-12 transition-transform duration-500" />
-                                <span>UPDATE_CREDENTIALS</span>
+                                <Save size={20} />
+                                <span>Update Profile</span>
                             </>
-                        )}
-                        
-                        {/* Shine Effect */}
-                        {!isUnchanged && !isSaving && !success && (
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent -translate-x-[150%] skew-x-[-20deg] group-hover:translate-x-[150%] transition-transform duration-1000 ease-out" />
                         )}
                     </button>
                 </div>
