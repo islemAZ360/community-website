@@ -86,20 +86,20 @@
             "cta": "Get Instant Access",
             "monthly": {
                 "name": "Monthly Node",
-                "price": "900",
+                "price": "500",
                 "period": "month",
                 "desc": "Perfect for tactical testing and short missions."
             },
             "sixMonths": {
                 "name": "Strategic Command",
-                "price": "3000",
+                "price": "1500",
                 "period": "6 months",
                 "save": "45% OFF",
                 "desc": "The most popular choice for ambitious professionals."
             },
             "lifetime": {
                 "name": "Infinite Overlord",
-                "price": "5000",
+                "price": "3000",
                 "period": "Lifetime",
                 "save": "Best Investment",
                 "desc": "Unlimited access to all future neural updates with one click."
