@@ -21,6 +21,7 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pla
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [paymentMethod, setPaymentMethod] = useState<'ggsel' | 'manual'>('ggsel');
 
     if (!isOpen || !plan || !user) return null;
 
@@ -129,8 +130,46 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pla
 
                         {/* Body - Scrollable */}
                         <div className="p-8 space-y-8 overflow-y-auto custom-scrollbar">
-                            {/* Step 1: QR Code */}
-                            <div className="space-y-4">
+
+                            {/* Payment Method Selector */}
+                            <div className="flex gap-4">
+                                <button
+                                    onClick={() => setPaymentMethod('ggsel')}
+                                    className={`flex-1 p-4 rounded-2xl flex flex-col items-center justify-center gap-3 border transition-all ${paymentMethod === 'ggsel' ? 'bg-primary/10 border-primary/40 shadow-[0_0_20px_rgba(19,236,164,0.1)]' : 'bg-white/5 border-white/10 hover:bg-white/10 opacity-70 hover:opacity-100'}`}
+                                >
+                                    <img src="/ggsel-logo.png" alt="GGSel" className="h-8 object-contain" />
+                                    <span className={`text-[10px] font-black uppercase tracking-widest ${paymentMethod === 'ggsel' ? 'text-primary' : 'text-white/50'}`}>Instant & Auto</span>
+                                </button>
+                                <button
+                                    onClick={() => setPaymentMethod('manual')}
+                                    className={`flex-1 p-4 rounded-2xl flex flex-col items-center justify-center gap-3 border transition-all ${paymentMethod === 'manual' ? 'bg-primary/10 border-primary/40 shadow-[0_0_20px_rgba(19,236,164,0.1)]' : 'bg-white/5 border-white/10 hover:bg-white/10 opacity-70 hover:opacity-100'}`}
+                                >
+                                    <QrCode size={32} className={paymentMethod === 'manual' ? 'text-primary' : 'text-white/40'} />
+                                    <span className={`text-[10px] font-black uppercase tracking-widest ${paymentMethod === 'manual' ? 'text-primary' : 'text-white/50'}`}>Manual (Crypto/QR)</span>
+                                </button>
+                            </div>
+
+                            {paymentMethod === 'ggsel' ? (
+                                <div className="space-y-6 animate-in fade-in zoom-in-95 duration-300">
+                                    <div className="p-6 bg-primary/5 border border-primary/20 rounded-3xl text-center space-y-6 flex flex-col items-center">
+                                        <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center border border-primary/30">
+                                            <Send size={24} className="text-primary" />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <h4 className="text-white font-bold text-lg">Fastest Way to Start</h4>
+                                            <p className="text-xs text-white/50 leading-relaxed max-w-xs mx-auto">
+                                                Pay securely via GGSel using Cards, Crypto, or chosen local payment providers. Receive your License Key instantly after payment.
+                                            </p>
+                                        </div>
+                                        <a href="https://ggsel.net/catalog/product/our-fix-ai-assistent-dlia-texniceskix-sobesedovanii-nevidimyi-102212962" target="_blank" rel="noopener noreferrer" className="w-full h-14 bg-[#1FC73B] text-black rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-[0_0_30px_rgba(31,199,59,0.3)] hover:shadow-[0_0_50px_rgba(31,199,59,0.5)] transition-all flex items-center justify-center gap-3 hover:scale-[1.02]">
+                                            Open GGSel
+                                        </a>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="space-y-8 animate-in fade-in zoom-in-95 duration-300">
+                                    {/* Step 1: QR Code */}
+                                    <div className="space-y-4">
                                 <div className="flex items-center gap-3">
                                     <div className="size-6 bg-primary/20 rounded-md flex items-center justify-center text-primary font-black text-[10px]">01</div>
                                     <h4 className="text-xs font-black text-white/80 uppercase tracking-widest">Scan & Transfer</h4>
@@ -209,6 +248,8 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pla
                                     )}
                                 </button>
                             </form>
+                                </div>
+                            )}
                         </div>
                     </div>
                 )}
