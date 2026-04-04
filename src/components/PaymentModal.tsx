@@ -23,10 +23,11 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pla
     const [error, setError] = useState<string | null>(null);
     const [paymentMethod, setPaymentMethod] = useState<'ggsel' | 'manual'>('ggsel');
 
-    if (!isOpen || !plan || !user) return null;
+    if (!isOpen || !plan) return null;
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!user) return;
         if (!transactionId.trim()) {
             setError('Please enter your Transaction ID');
             return;
@@ -165,6 +166,21 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pla
                                             Open GGSel
                                         </a>
                                     </div>
+                                </div>
+                            ) : !user ? (
+                                <div className="space-y-6 animate-in fade-in zoom-in-95 duration-300 flex flex-col items-center justify-center p-8">
+                                    <div className="size-16 rounded-full bg-red-500/10 flex items-center justify-center border border-red-500/20 mb-4">
+                                        <AlertCircle size={24} className="text-red-400" />
+                                    </div>
+                                    <h4 className="text-white font-bold text-lg mb-2 text-center">Authentication Required</h4>
+                                    <p className="text-xs text-white/50 leading-relaxed max-w-sm mx-auto text-center mb-8">
+                                        You must be logged in to use the Manual (Crypto/QR) payment method because the admin needs to manually link the License Key to your account email after verifying the transaction.
+                                        <br/><br/>
+                                        <span className="text-primary font-bold">Tip: Use GGSel for instant automatic delivery without logging in here first!</span>
+                                    </p>
+                                    <button onClick={onClose} className="w-full h-14 bg-white/10 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-[0_0_30px_rgba(255,255,255,0.05)] hover:bg-white/20 transition-all flex items-center justify-center gap-3">
+                                        Close and Login
+                                    </button>
                                 </div>
                             ) : (
                                 <div className="space-y-8 animate-in fade-in zoom-in-95 duration-300">
