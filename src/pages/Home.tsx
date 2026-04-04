@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { motion, useReducedMotion } from "framer-motion";
 import {
-    X, QrCode, CreditCard, Send, CheckCircle2, AlertCircle, Loader2,
+    Send, CreditCard,
     Star, MessageSquare, UserCircle2, ShieldCheck, Lock, Download,
     BookOpen, Network, Zap, Shield, Cpu, Brain, Layout, Calendar,
     Award, Infinity as InfinityIcon, ChevronDown, TerminalSquare,
@@ -15,8 +15,8 @@ import {
 } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { useAuthStore } from '../store/authStore';
-import { sendTelegramMessage, ADMIN_CHAT_ID } from '../lib/telegram';
 import { StarfieldBackground } from '../components/StarfieldBackground';
+import { PaymentModal } from '../components/PaymentModal';
 
 // --- Types & Interfaces ---
 
@@ -100,200 +100,6 @@ const Reveal: React.FC<RevealProps> = ({
     );
 };
 
-interface PaymentModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-    plan: {
-        name: string;
-        price: string;
-        key: string;
-    } | null;
-}
-
-const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, plan }) => {
-    const { t } = useTranslation('common');
-    const { user, userData } = useAuthStore();
-    const [transactionId, setTransactionId] = useState('');
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [isSuccess, setIsSuccess] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-
-    if (!isOpen || !plan || !user) return null;
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!transactionId.trim()) {
-            setError('Please enter your Transaction ID');
-            return;
-        }
-
-        setIsSubmitting(true);
-        setError(null);
-
-        try {
-            const docRef = await addDoc(collection(db, 'payment_requests'), {
-                userId: user.uid,
-                userEmail: user.email,
-                userName: userData?.nickname || 'Anonymous',
-                planKey: plan.key,
-                planName: plan.name,
-                amount: plan.price,
-                transactionId: transactionId,
-                status: 'pending',
-                createdAt: serverTimestamp()
-            });
-
-            const message = `
-🚀 <b>New Payment Request!</b>
-━━━━━━━━━━━━━━━━━━
-👤 <b>User:</b> ${userData?.nickname || 'Anonymous'}
-📧 <b>Email:</b> ${user.email}
-📦 <b>Plan:</b> ${plan.name} (${plan.price} RUB)
-🆔 <b>Transaction:</b> <code>${transactionId}</code>
-━━━━━━━━━━━━━━━━━━
-<i>Verify the payment in your bank app and approve below or via Admin Dashboard.</i>
-            `;
-
-            const replyMarkup = {
-                inline_keyboard: [
-                    [
-                        { text: '✅ Approve', callback_data: `approve_${docRef.id}` },
-                        { text: '❌ Reject', callback_data: `reject_${docRef.id}` }
-                    ],
-                    [{ text: '🌐 Open Admin Dashboard', url: 'https://cod-admin-eta.vercel.app/' }]
-                ]
-            };
-
-            await sendTelegramMessage(ADMIN_CHAT_ID, message.trim(), replyMarkup);
-
-            setIsSuccess(true);
-            setTimeout(() => {
-                onClose();
-                setIsSuccess(false);
-                setTransactionId('');
-            }, 5000);
-        } catch (err) {
-            console.error('Payment submission error:', err);
-            setError('Failed to submit. Please contact admin directly.');
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
-
-    return (
-        <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-300">
-            <div className="bg-[#0a0a0a] border border-white/10 w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl relative animate-in zoom-in-95 duration-300">
-                <button onClick={onClose} className="absolute top-5 right-5 p-2 bg-white/5 hover:bg-white/10 rounded-full text-white/50 hover:text-white transition-all z-20">
-                    <X size={18} />
-                </button>
-
-                {isSuccess ? (
-                    <div className="p-12 text-center space-y-6">
-                        <div className="size-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto border border-primary/20">
-                            <CheckCircle2 size={40} className="text-primary" />
-                        </div>
-                        <h3 className="text-2xl font-bold text-white tracking-tight">Mission Transmitted</h3>
-                        <p className="text-white/50 text-sm leading-relaxed max-w-sm mx-auto">
-                            Your payment details are now being verified by the Tactical Hub. Activation will be complete within minutes.
-                        </p>
-                        <div className="pt-4">
-                            <button onClick={onClose} className="px-8 py-3 bg-white text-black font-semibold text-sm rounded-xl hover:bg-white/90 transition-colors">
-                                Acknowledged
-                            </button>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="flex flex-col h-full max-h-[90vh]">
-                        <div className="p-8 border-b border-white/5 bg-white/[0.02]">
-                            <div className="flex items-center gap-4 mb-2">
-                                <div className="size-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary border border-primary/20">
-                                    <CreditCard size={20} />
-                                </div>
-                                <h3 className="text-xl font-bold text-white tracking-tight">Strategic Acquisition</h3>
-                            </div>
-                            <p className="text-xs text-white/40 font-mono">Initializing Protocol: {plan.name}</p>
-                        </div>
-
-                        <div className="p-8 space-y-8 overflow-y-auto custom-scrollbar">
-                            <div className="space-y-4">
-                                <div className="flex items-center gap-3">
-                                    <div className="size-6 bg-white/10 rounded-md flex items-center justify-center text-white text-xs font-semibold">1</div>
-                                    <h4 className="text-sm font-semibold text-white/90">Scan & Transfer</h4>
-                                </div>
-                                <div className="p-6 rounded-2xl border border-white/5 bg-white/[0.02] flex flex-col items-center gap-6">
-                                    <div className="relative bg-white p-3 rounded-2xl shadow-xl overflow-hidden">
-                                        <img src="/QR_code.jpg" alt="Payment QR" className="w-48 h-48 md:w-56 md:h-56 object-cover rounded-lg" />
-                                    </div>
-                                    <div className="text-center space-y-1">
-                                        <div className="flex items-center justify-center gap-2 text-2xl font-bold text-white">
-                                            <span>{plan.price}</span>
-                                            <span className="text-primary text-lg">RUB</span>
-                                        </div>
-                                        <p className="text-[10px] font-bold text-primary uppercase tracking-wider mb-1">{t('home.pricing.paymentModal.sberbank')}</p>
-                                        <p className="text-xs text-white/40 font-medium">{t('home.pricing.paymentModal.scanInstructions')}</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <form onSubmit={handleSubmit} className="space-y-6">
-                                <div className="space-y-4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="size-6 bg-white/10 rounded-md flex items-center justify-center text-white text-xs font-semibold">2</div>
-                                        <h4 className="text-sm font-semibold text-white/90">{t('home.pricing.paymentModal.verifyTitle', 'Verify Transaction')}</h4>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <label className="text-xs font-medium text-white/50 ml-1">{t('home.pricing.paymentModal.referenceLabel', 'Terminal Reference (ID)')}</label>
-                                        <div className="relative group">
-                                            <input
-                                                type="text"
-                                                value={transactionId}
-                                                onChange={(e) => setTransactionId(e.target.value)}
-                                                placeholder={t('home.pricing.paymentModal.idPlaceholder', 'Enter Transaction ID from Bank...')}
-                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3.5 text-white placeholder:text-white/20 focus:outline-none focus:border-primary/50 focus:bg-white/10 transition-all text-sm"
-                                            />
-                                            <div className="absolute right-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-primary transition-colors">
-                                                <QrCode size={18} />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="p-4 bg-white/[0.03] border border-white/5 rounded-2xl space-y-2">
-                                    <div className="flex items-center gap-2 text-white/60">
-                                        <ShieldCheck size={14} className="text-primary" />
-                                        <span className="text-[10px] font-bold uppercase tracking-wider">{t('home.pricing.paymentModal.verificationTitle')}</span>
-                                    </div>
-                                    <p className="text-[11px] text-white/40 leading-relaxed">
-                                        {t('home.pricing.paymentModal.verificationDesc')}
-                                    </p>
-                                </div>
-
-                                {error && (
-                                    <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-3 text-red-400">
-                                        <AlertCircle size={16} />
-                                        <span className="text-xs font-semibold">{error}</span>
-                                    </div>
-                                )}
-
-                                <button
-                                    type="submit"
-                                    disabled={isSubmitting}
-                                    className="w-full h-12 bg-white text-black rounded-xl font-bold text-sm shadow-lg hover:bg-white/90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                                >
-                                    {isSubmitting ? (
-                                        <><Loader2 size={18} className="animate-spin" /><span>Transmitting...</span></>
-                                    ) : (
-                                        <><Send size={18} /><span>Submit Payment Proof</span></>
-                                    )}
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                )}
-            </div>
-        </div>
-    );
-};
 
 const ReviewSection: React.FC = () => {
     const { user, userData } = useAuthStore();

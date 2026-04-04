@@ -23,7 +23,13 @@ export const PaymentModal: React.FC<PaymentModalProps> = ({ isOpen, onClose, pla
     const [error, setError] = useState<string | null>(null);
     const [paymentMethod, setPaymentMethod] = useState<'ggsel' | 'manual'>('ggsel');
 
-    if (!isOpen || !plan) return null;
+    console.log("PAYMENT MODAL UPDATE:", { isOpen, plan, user });
+
+    if (!isOpen || !plan) {
+        console.log("PAYMENT MODAL RETURNING NULL, Reason:", { isOpen, planIsNull: !plan });
+        return null;
+    }
+    console.log("PAYMENT MODAL RENDERING!");
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
