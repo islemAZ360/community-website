@@ -456,8 +456,9 @@ export function Home() {
                             </div>
                         </Reveal>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-center">
                             {[
+                                { key: 'trial', icon: <Zap size={28} />, highlight: false },
                                 { key: 'monthly', icon: <Calendar size={28} />, highlight: false },
                                 { key: 'sixMonths', icon: <Award size={28} />, highlight: true, badge: t('home.pricing.sixMonths.save') },
                                 { key: 'lifetime', icon: <InfinityIcon size={28} />, highlight: false, badge: t('home.pricing.lifetime.save') }

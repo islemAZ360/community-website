@@ -84,6 +84,12 @@
             "title": "Tactical Investment Plans",
             "subtitle": "Investing in your professional future is not just a cost—it's the strongest weapon in your arsenal. Choose your tier with a massive scale-down in price.",
             "cta": "Get Instant Access",
+            "trial": {
+                "name": "Tactical Trial",
+                "price": "1",
+                "period": "2 hours",
+                "desc": "Test the stealth capabilities for 2 hours."
+            },
             "monthly": {
                 "name": "Monthly Node",
                 "price": "500",
